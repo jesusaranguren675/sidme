@@ -570,6 +570,14 @@ pre code {
   }
 }
 
+/*Agregado */
+
+@media (min-width: 992px) {
+  .modal-dialog {
+    max-width: 80% !important;
+  }
+}
+
 @media (min-width: 992px) {
   .container, .container-sm, .container-md, .container-lg {
     max-width: 960px;

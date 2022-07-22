@@ -37,7 +37,7 @@ class Presentaciones extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_presentacion' => Yii::t('app', 'Id Presentacion'),
+            'id_presentacion' => Yii::t('app', 'Presentación'),
             'nombre_presentacion' => Yii::t('app', 'Nombre Presentacion'),
         ];
     }

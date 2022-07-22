@@ -25,7 +25,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         /* Bootstrap core JavaScript */
-        'vendor/jquery/jquery.min.js',
+        //'vendor/jquery/jquery.min.js',
         'vendor/bootstrap/js/bootstrap.bundle.min.js',
         /* Core plugin JavaScript */
         'vendor/jquery-easing/jquery.easing.min.js',
@@ -41,6 +41,8 @@ class AppAsset extends AssetBundle
         "vendor/datatables/dataTables.bootstrap4.min.js",
         /*  Page level custom scripts */
         "js/demo/datatables-demo.js",
+        /* sweetalert2 */
+        "vendor/sweetalert2/sweetalert2.all.min.js",
     ];
     public $depends = [
         'yii\web\YiiAsset',

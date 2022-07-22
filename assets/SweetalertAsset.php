@@ -15,16 +15,15 @@ use yii\web\AssetBundle;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class DatatableAsset extends AssetBundle
+class SweetalertAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
         /*  Custom styles for this page */
-        'vendor/datatables/dataTables.bootstrap4.min.css',
     ];
     public $js = [
-        
+        'vendor/sweetalert2/sweetalert2.all.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -14,6 +14,9 @@ use Yii;
  */
 class Medialmaxpre extends \yii\db\ActiveRecord
 {
+    public $nombre_medicamento_almacen;
+    public $id_procedencia;
+    public $id_tipo_procedencia;
     /**
      * {@inheritdoc}
      */
@@ -41,10 +44,13 @@ class Medialmaxpre extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_medi_alma_x_pre' => Yii::t('app', 'Id Medi Alma X Pre'),
-            'id_medicamento_almacen' => Yii::t('app', 'Id Medicamento Almacen'),
-            'id_presentacion' => Yii::t('app', 'Id Presentacion'),
-            'stock' => Yii::t('app', 'Stock'),
+            'id_medi_alma_x_pre'            => Yii::t('app', 'Id Medi Alma X Pre'),
+            'id_medicamento_almacen'        => Yii::t('app', 'Medicamento'),
+            'nombre_medicamento_almacen'    => Yii::t('app', 'Nombre del Medicamento'),
+            'id_presentacion'               => Yii::t('app', 'Presentación del Medicamento'),
+            'id_procedencia'                => Yii::t('app', 'Procedencia del Medicamento'),
+            'id_tipo_procedencia'           => Yii::t('app', 'Tipo de Procedencia'),
+            'stock' => Yii::t('app', 'Cantidad que se agregara al almacen'),
         ];
     }
 
