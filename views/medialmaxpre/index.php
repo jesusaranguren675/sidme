@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="container-fluid">
             <br>
              <!-- Page Heading -->
-             <h1 class="h3 mb-2 text-gray-800">Medicamentos del Almacen</h1>
+             <h1 class="h3 mb-2 text-gray-800">Almacen</h1>
              <hr class="sidebar-divider">
             <!--<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
                                 For more information about DataTables, please visit the <a target="_blank"
