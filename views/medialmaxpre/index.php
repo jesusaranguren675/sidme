@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="container-fluid">
             <br>
              <!-- Page Heading -->
-             <h1 class="h3 mb-2 text-gray-800">Medicamentos del Almacen</h1>
+             <h1 class="h3 mb-2 text-gray-800">Almacen</h1>
              <hr class="sidebar-divider">
             <p>
                 <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal" href="<?= Url::toRoute('medialmaxpre/create'); ?>"><i class="fas fa-plus"></i> Agregar</a>
@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="modal-content">
       <div class="modal-header">
         <div style="border-bottom: none;" class="card-header py-3">
-            <h4 class="m-0 font-weight-bold text-primary"><?= Html::encode($this->title) ?></h4>
+            <h4 class="m-0 font-weight-bold text-primary">Agregar Medicamento al Almacen</h4>
         </div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>

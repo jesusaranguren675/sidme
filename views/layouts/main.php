@@ -106,27 +106,24 @@ else //Si no es invitado se mostrara el contenido siguiente
             </li>-->
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+            <li class="nav-item active">
+                <a class="nav-link" href="<?= Url::toRoute('medialmaxpre/index'); ?>">
                     <i class="fas fa-warehouse"></i>
                     <span>Almacen</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Gestionar:</h6>
-                        <!--
-                        <a class="collapse-item" href="<?= Url::toRoute('site/buttons'); ?>">Buttons</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('site/about'); ?>">About</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('site/cards'); ?>">Cards</a>
-                        -->
-                        <a class="collapse-item" href="<?= Url::toRoute('medialmaxpre/index'); ?>">Medicamentos del Almacen</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('medialmaxpre/index'); ?>">Entregas</a>
-                    </div>
-                </div>
             </li>
 
+            <li class="nav-item active">
+                <a class="nav-link" href="<?= Url::toRoute('medialmaxpre/index'); ?>">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    <span>Farmacia</span>
+                </a>
+            </li>
+
+            
+
             <!-- Nav Item - Pages Collapse Menu -->
+            <!--
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFarmacia"
                     aria-expanded="true" aria-controls="collapseFarmacia">
@@ -135,11 +132,11 @@ else //Si no es invitado se mostrara el contenido siguiente
                 </a>
                 <div id="collapseFarmacia" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!--<h6 class="collapse-header">Gestionar:</h6>-->
                         <a class="collapse-item" href="<?= Url::toRoute('medialmaxpre/index'); ?>">Asignación</a>
                     </div>
                 </div>
             </li>
+-->
 
             <!-- Divider -->
             <!--<hr class="sidebar-divider">-->
