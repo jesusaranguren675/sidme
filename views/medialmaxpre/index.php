@@ -25,13 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="container-fluid">
             <br>
              <!-- Page Heading -->
-             <h1 class="h3 mb-2 text-gray-800">Almacen</h1>
+             <h1 class="h3 mb-2 text-gray-800">Medicamentos del Almacen</h1>
              <hr class="sidebar-divider">
-            <!--<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                                For more information about DataTables, please visit the <a target="_blank"
-                                    href="https://datatables.net">official DataTables documentation</a>.</p>-->
-                <p>
-                
+            <p>
                 <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal" href="<?= Url::toRoute('medialmaxpre/create'); ?>"><i class="fas fa-plus"></i> Agregar</a>
 
                 <a class="btn btn-danger btn-sm" href="<?= Url::toRoute('medialmaxpre/create'); ?>" target="_blank"><i class="fas fa-file-pdf"></i> pdf</a>
@@ -279,6 +275,7 @@ $script = <<< JS
 
         //Fin Filtrar procedencia
         /////////////////////////
+        
 JS;
 $this->registerJs($script);
 ?>
