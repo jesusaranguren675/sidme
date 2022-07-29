@@ -10,7 +10,7 @@ use app\assets\DatatableAsset;
 /* @var $searchModel app\models\MedialmaxpreSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 DatatableAsset::register($this);
-$this->title = Yii::t('app', 'Medicamentos del Almacen');
+$this->title = Yii::t('app', 'Almacen');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
