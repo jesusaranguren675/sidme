@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Medialmaxpre;
+use app\models\Almacengeneral;
 
 /**
- * MedialmaxpreSearch represents the model behind the search form of `app\models\Medialmaxpre`.
+ * AlmacengeneralSearch represents the model behind the search form of `app\models\Almacengeneral`.
  */
-class MedialmaxpreSearch extends Medialmaxpre
+class AlmacengeneralSearch extends Almacengeneral
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class MedialmaxpreSearch extends Medialmaxpre
     public function rules()
     {
         return [
-            [['id_medi_alma_x_pre', 'id_medicamento_almacen', 'id_presentacion'], 'integer'],
-            [['stock'], 'number'],
+            [['idal_gral', 'idmedi', 'cantidad'], 'integer'],
+            [['descripcion'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class MedialmaxpreSearch extends Medialmaxpre
      */
     public function search($params)
     {
-        $query = Medialmaxpre::find();
+        $query = Almacengeneral::find();
 
         // add conditions that should always apply here
 
@@ -58,11 +58,12 @@ class MedialmaxpreSearch extends Medialmaxpre
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_medi_alma_x_pre' => $this->id_medi_alma_x_pre,
-            'id_medicamento_almacen' => $this->id_medicamento_almacen,
-            'id_presentacion' => $this->id_presentacion,
-            'stock' => $this->stock,
+            'idal_gral' => $this->idal_gral,
+            'idmedi' => $this->idmedi,
+            'cantidad' => $this->cantidad,
         ]);
+
+        $query->andFilterWhere(['ilike', 'descripcion', $this->descripcion]);
 
         return $dataProvider;
     }
