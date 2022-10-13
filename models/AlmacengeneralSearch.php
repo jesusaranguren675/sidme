@@ -6,11 +6,13 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Almacengeneral;
 
+
 /**
  * AlmacengeneralSearch represents the model behind the search form of `app\models\Almacengeneral`.
  */
 class AlmacengeneralSearch extends Almacengeneral
 {
+    public $descripcion;
     /**
      * {@inheritdoc}
      */

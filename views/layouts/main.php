@@ -106,21 +106,69 @@ else //Si no es invitado se mostrara el contenido siguiente
             </li>-->
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="<?= Url::toRoute('medialmaxpre/index'); ?>">
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                    <i class="fas fa-capsules"></i>
+                    <span>Medicamentos</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
                     <i class="fas fa-warehouse"></i>
                     <span>Almacen</span>
                 </a>
             </li>
 
-            <li class="nav-item active">
-                <a class="nav-link" href="<?= Url::toRoute('medialmaxpre/index'); ?>">
-                    <i class="fas fa-prescription-bottle-alt"></i>
-                    <span>Farmacia</span>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                    <i class="fas fa-file-signature"></i>
+                    <span>Pedidos</span>
                 </a>
             </li>
 
-            
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                    <i class="fas fa-truck-loading"></i>
+                    <span>Distribución</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                CONFIGURACIÓN
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                    <i class="fas fa-users"></i>
+                    <span>Usuarios</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                    <i class="fas fa-people-arrows"></i>
+                    <span>Tipo de Persona</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                    <i class="fas fa-prescription-bottle"></i>
+                    <span>Presentación del Medicamento</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                    <i class="fas fa-university"></i>
+                    <span>Sedes</span>
+                </a>
+            </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <!--
@@ -152,7 +200,7 @@ else //Si no es invitado se mostrara el contenido siguiente
 
 
             <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
+            <br>
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">

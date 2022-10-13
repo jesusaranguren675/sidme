@@ -9,37 +9,71 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\AlmacengeneralSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Almacengenerals';
+$this->title = 'Almacen';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="almacengeneral-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Almacengeneral', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'idal_gral',
-            'idmedi',
-            'descripcion',
-            'cantidad',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'idal_gral' => $model->idal_gral]);
-                 }
-            ],
-        ],
-    ]); ?>
+<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 
+<!-- Page Heading -->
+
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="container">
+    <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
+    <hr>
+
+    <a class="btn btn-primary btn-sm">Agregar <i class="fas fa-plus"></i></a>
+    <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
+    <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th style="text-align: center;">Unidades</th>
+                        <th style="text-align: center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>N°</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th style="text-align: center;">Unidades</th>
+                        <th style="text-align: center;">Acciones</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <?php foreach ($almacen_general as $almacen_general): ?>
+                        <tr>
+                            <td><?= $almacen_general['idal_gral'] ?></td>
+                            <td><?= $almacen_general['nombre'] ?></td>
+                            <td><?= $almacen_general['descripcion'] ?></td>
+                            <td style="text-align: center;">
+                                <button class="btn btn-success btn-circle btn-sm">
+                                <?= $almacen_general['cantidad'] ?>
+                                </button>
+                            </td>
+                            <td style="text-align: center;">
+                                <a href="" class="btn btn-primary btn-sm">
+                                    <i class="far fa-eye"></i>
+                                </a>
+                                <a href="" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+

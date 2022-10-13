@@ -1,7 +1,7 @@
 <?php
 
 namespace app\controllers;
-
+use Yii;
 use app\models\Almacengeneral;
 use app\models\AlmacengeneralSearch;
 use yii\web\Controller;
@@ -41,9 +41,19 @@ class AlmacengeneralController extends Controller
         $searchModel = new AlmacengeneralSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $almacen_general = 
+        Yii::$app->db->createCommand("SELECT almacen_general.idal_gral, medicamentos.nombre,
+        tipo_medicamento.descripcion,almacen_general.cantidad
+        FROM almacen_general AS almacen_general JOIN
+        medicamentos AS medicamentos
+        ON medicamentos.idmedi=almacen_general.idmedi
+        JOIN tipo_medicamento AS tipo_medicamento
+        ON tipo_medicamento.idtipo=almacen_general.idtipo")->queryAll();
+
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModel'           => $searchModel,
+            'dataProvider'          => $dataProvider,
+            'almacen_general'       => $almacen_general,
         ]);
     }
 
