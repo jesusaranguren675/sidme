@@ -19,6 +19,8 @@ class Almacengeneral extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $descripcion;
+
     public static function tableName()
     {
         return 'almacen_general';

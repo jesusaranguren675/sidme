@@ -9,9 +9,6 @@ use Yii;
  *
  * @property int $idmedi
  * @property string $nombre
- *
- * @property AlmacenGeneral[] $almacenGenerals
- * @property DetalleMedi[] $detalleMedis
  */
 class Medicamentos extends \yii\db\ActiveRecord
 {
@@ -30,7 +27,7 @@ class Medicamentos extends \yii\db\ActiveRecord
     {
         return [
             [['nombre'], 'required'],
-            [['nombre'], 'string', 'max' => 255],
+            [['nombre'], 'string', 'max' => 200],
         ];
     }
 
@@ -43,25 +40,5 @@ class Medicamentos extends \yii\db\ActiveRecord
             'idmedi' => 'Idmedi',
             'nombre' => 'Nombre',
         ];
-    }
-
-    /**
-     * Gets query for [[AlmacenGenerals]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAlmacenGenerals()
-    {
-        return $this->hasMany(AlmacenGeneral::className(), ['idmedi' => 'idmedi']);
-    }
-
-    /**
-     * Gets query for [[DetalleMedis]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDetalleMedis()
-    {
-        return $this->hasMany(DetalleMedi::className(), ['idmedi' => 'idmedi']);
     }
 }

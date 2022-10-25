@@ -107,7 +107,14 @@ else //Si no es invitado se mostrara el contenido siguiente
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                <a class="nav-link" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">
+                    <i class="fas fa-capsules"></i>
+                    <span>Ingreso de Medicamentos</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('medicamentos/index'); ?>">
                     <i class="fas fa-capsules"></i>
                     <span>Medicamentos</span>
                 </a>
