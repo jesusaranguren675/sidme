@@ -1,17 +1,18 @@
 <?php
 
 namespace app\controllers;
+
 use Yii;
-use app\models\Almacengeneral;
-use app\models\AlmacengeneralSearch;
+use app\models\Pedidos;
+use app\models\PedidosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AlmacengeneralController implements the CRUD actions for Almacengeneral model.
+ * PedidosController implements the CRUD actions for Pedidos model.
  */
-class AlmacengeneralController extends Controller
+class PedidosController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,57 +33,65 @@ class AlmacengeneralController extends Controller
     }
 
     /**
-     * Lists all Almacengeneral models.
+     * Lists all Pedidos models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new AlmacengeneralSearch();
+        $searchModel = new PedidosSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        $almacen_general = 
-        Yii::$app->db->createCommand("select almacen_general.idal_gral,
-        almacen_general.cantidad, medicamentos.nombre, tipo_medicamento.descripcion
-        from almacen_general join detalle_medi as detalle_medi
-        on almacen_general.idmedi=detalle_medi.id_detalle_medi
-        join medicamentos as medicamentos
-        on medicamentos.idmedi=detalle_medi.idmedi
-        join tipo_medicamento as tipo_medicamento
-        on tipo_medicamento.idtipo=detalle_medi.idtipo")->queryAll();
+        $pedidos = 
+        Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
+        pedidos.descripcion,
+        medicamentos.nombre,
+        tipo_medicamento.descripcion AS presentacion,
+        detalle_pedi.cantidad,
+        detalle_pedi.fecha
+        FROM pedidos AS pedidos
+        JOIN detalle_pedi AS detalle_pedi
+        ON detalle_pedi.idpedi=pedidos.idpedi
+        JOIN detalle_medi AS detalle_medi
+        ON detalle_medi.id_detalle_medi=detalle_pedi.idmedi
+        JOIN medicamentos AS medicamentos
+        ON medicamentos.idmedi=detalle_medi.idmedi
+        JOIN tipo_medicamento AS tipo_medicamento
+        ON tipo_medicamento.idtipo=detalle_medi.idtipo
+        ")->queryAll();
 
         return $this->render('index', [
-            'searchModel'           => $searchModel,
-            'dataProvider'          => $dataProvider,
-            'almacen_general'       => $almacen_general,
+            'searchModel'               => $searchModel,
+            'dataProvider'              => $dataProvider,
+            'pedidos'                   => $pedidos,
         ]);
     }
 
     /**
-     * Displays a single Almacengeneral model.
-     * @param int $idal_gral Idal Gral
+     * Displays a single Pedidos model.
+     * @param int $idpedi Idpedi
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($idal_gral)
+    public function actionView($idpedi)
     {
         return $this->render('view', [
-            'model' => $this->findModel($idal_gral),
+            'model' => $this->findModel($idpedi),
         ]);
     }
 
     /**
-     * Creates a new Almacengeneral model.
+     * Creates a new Pedidos model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Almacengeneral();
+        $model = new Pedidos();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'idal_gral' => $model->idal_gral]);
+                return $this->redirect(['view', 'idpedi' => $model->idpedi]);
             }
         } else {
             $model->loadDefaultValues();
@@ -94,18 +103,18 @@ class AlmacengeneralController extends Controller
     }
 
     /**
-     * Updates an existing Almacengeneral model.
+     * Updates an existing Pedidos model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $idal_gral Idal Gral
+     * @param int $idpedi Idpedi
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($idal_gral)
+    public function actionUpdate($idpedi)
     {
-        $model = $this->findModel($idal_gral);
+        $model = $this->findModel($idpedi);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'idal_gral' => $model->idal_gral]);
+            return $this->redirect(['view', 'idpedi' => $model->idpedi]);
         }
 
         return $this->render('update', [
@@ -114,29 +123,29 @@ class AlmacengeneralController extends Controller
     }
 
     /**
-     * Deletes an existing Almacengeneral model.
+     * Deletes an existing Pedidos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $idal_gral Idal Gral
+     * @param int $idpedi Idpedi
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($idal_gral)
+    public function actionDelete($idpedi)
     {
-        $this->findModel($idal_gral)->delete();
+        $this->findModel($idpedi)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Almacengeneral model based on its primary key value.
+     * Finds the Pedidos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $idal_gral Idal Gral
-     * @return Almacengeneral the loaded model
+     * @param int $idpedi Idpedi
+     * @return Pedidos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($idal_gral)
+    protected function findModel($idpedi)
     {
-        if (($model = Almacengeneral::findOne(['idal_gral' => $idal_gral])) !== null) {
+        if (($model = Pedidos::findOne(['idpedi' => $idpedi])) !== null) {
             return $model;
         }
 

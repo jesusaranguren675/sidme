@@ -43,18 +43,24 @@ class EntradasmedicamentosController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
         $model = new Entradasmedicamentos();
 
+        
+
         $entradas_medicamentos = 
         Yii::$app->db->createCommand("SELECT entradas_medicamentos.identrada, 
         entradas_medicamentos.descripcion,
-        medicamentos.nombre,
-        tipo_medicamento.descripcion as presentacion,
+        medicamentos.nombre, detalle_entra.fecha_entrada,
+        /*tipo_medicamento.descripcion as presentacion,*/
         detalle_entra.cantidad
         FROM
         entradas_medicamentos as entradas_medicamentos 
         join detalle_entra
         as detalle_entra on detalle_entra.identrada=entradas_medicamentos.identrada
-        join medicamentos as medicamentos on detalle_entra.idmedi=medicamentos.idmedi
-        join tipo_medicamento as tipo_medicamento on tipo_medicamento.idtipo=detalle_entra.idtipo")->queryAll();
+        join detalle_medi as detalle_medi
+		on detalle_medi.id_detalle_medi=detalle_entra.idmedi
+		join medicamentos as medicamentos
+		on detalle_medi.idmedi=medicamentos.idmedi
+		join tipo_medicamento as tipo_medicamento
+		on detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
 
         return $this->render('index', [
             'searchModel'               => $searchModel,
@@ -86,14 +92,15 @@ class EntradasmedicamentosController extends Controller
     {
         $model = new Entradasmedicamentos();
 
+    
         if (Yii::$app->request->isAjax) 
         {
             $descripcion    = $_POST['descripcion'];
             $idmedi         = $_POST['idmedi'];
-            $idtipo         = $_POST['idtipo'];
             $idsede         = $_POST['idsede'];
             $cantidad       = $_POST['cantidad'];
             $idusu          = Yii::$app->user->identity->id;
+            $fecha_entrada  = date('d/m/y');
 
 
             $entradas_medicamentos = Yii::$app->db->createCommand()->insert('entradas_medicamentos', [
@@ -105,8 +112,34 @@ class EntradasmedicamentosController extends Controller
 
             $detalle_entra = 
             Yii::$app->db->createCommand("INSERT INTO public.detalle_entra(
-                idmedi, idtipo, procedencia, cantidad, identrada)
-                VALUES ($idmedi, $idtipo, $idsede, $cantidad, $identrada)")->queryAll();
+                idmedi, procedencia, cantidad, identrada, fecha_entrada)
+                VALUES ($idmedi, $idsede, $cantidad, $identrada, '$fecha_entrada')")->queryAll();
+
+            $consulta_almacen = 
+            Yii::$app->db->createCommand("SELECT * 
+            FROM almacen_general WHERE idmedi=$idmedi")->queryAll();
+
+            foreach ($consulta_almacen as $consulta_almacen) {
+                $unidades = $consulta_almacen['cantidad'];
+            }
+
+            if($consulta_almacen)
+            {
+                $suma = $unidades + $cantidad;
+
+                $update_almacen = 
+                Yii::$app->db->createCommand("UPDATE public.almacen_general
+                SET cantidad=$suma
+                WHERE idal_gral=$idmedi")->queryAll();
+            }
+            else{
+                $almacen_general = 
+                Yii::$app->db->createCommand("INSERT INTO public.almacen_general(
+                    idmedi, cantidad)
+                    VALUES ($idmedi, $cantidad)")->queryAll();
+            }
+
+           
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
@@ -133,7 +166,7 @@ class EntradasmedicamentosController extends Controller
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model'         => $model,
         ]);
     }
 

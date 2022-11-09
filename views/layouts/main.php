@@ -109,7 +109,7 @@ else //Si no es invitado se mostrara el contenido siguiente
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">
                     <i class="fas fa-capsules"></i>
-                    <span>Ingreso de Medicamentos</span>
+                    <span>Recepción de Medicamentos</span>
                 </a>
             </li>
 
@@ -123,19 +123,19 @@ else //Si no es invitado se mostrara el contenido siguiente
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
                     <i class="fas fa-warehouse"></i>
-                    <span>Almacen</span>
+                    <span>Inventario</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
                     <i class="fas fa-file-signature"></i>
                     <span>Pedidos</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                <a class="nav-link" href="<?= Url::toRoute('distribucion/index'); ?>">
                     <i class="fas fa-truck-loading"></i>
                     <span>Distribución</span>
                 </a>

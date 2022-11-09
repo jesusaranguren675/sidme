@@ -1,9 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-$tipo_medicamento = \app\models\Tipomedicamento::find()->all();
+use yii\widgets\ActiveForm;
+$medicamento = \app\models\Tipomedicamento::find()->all();
 $sedes = \app\models\Sede::find()->all();
 
 $medicamentos = 
@@ -19,18 +19,18 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
 /* @var $this yii\web\View */
 /* @var $model app\models\Entradasmedicamentos */
 /* @var $form yii\widgets\ActiveForm */
+
+/* @var $this yii\web\View */
+/* @var $model app\models\Distribucion */
+/* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="entradasmedicamentos-form">
+<div class="distribucion-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
-        </div>
-
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <label for="entradasmedicamentos-idmedi">Medicamento</label>
             <select class="form-control" id="entradasmedicamentos-idmedi">
                 <?php foreach ($medicamentos as $medicamentos): ?>
@@ -39,43 +39,40 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
             </select>
         </div>
 
-        <!--<div class="col-sm-4">
-            <?php /* $form->field($model, "idtipo")->dropDownList(
-                             ArrayHelper::map($tipo_medicamento, 'idtipo', 'descripcion'),
-                             ['prompt' => 'Seleccione']); */?>
-        </div>-->
+        <div class="col-sm-4">
+            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+        </div>
 
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <?= $form->field($model, "idsede")->dropDownList(
                              ArrayHelper::map($sedes, 'idsede', 'nombre'),
                              ['prompt' => 'Seleccione']);?>  
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true, 'type' => 'number']) ?>
         </div>
     </div>
-
 
     <?php ActiveForm::end(); ?>
 
 </div>
 
+
 <?php
 $script = <<< JS
       
-      //Registrar Ingreso de Medicamento
+      //Registrar distribución de Medicamento
       //--------------------------------
 
-      $("#registrar_medicamento").click(function(event) {
+      $("#distribuir_medicamento").click(function(event) {
 
             event.preventDefault(); 
             
-            var descripcion = document.getElementById("entradasmedicamentos-descripcion").value;
             var idmedi      = document.getElementById("entradasmedicamentos-idmedi").value;
-            //var idtipo      = document.getElementById("entradasmedicamentos-idtipo").value;
-            var idsede      = document.getElementById("entradasmedicamentos-idsede").value;
-            var cantidad    = document.getElementById("entradasmedicamentos-cantidad").value;
+            var descripcion = document.getElementById("distribucion-descripcion").value;
+            var idsede      = document.getElementById("distribucion-idsede").value;
+            var cantidad    = document.getElementById("distribucion-cantidad").value;
             
             
     
@@ -85,16 +82,15 @@ $script = <<< JS
 
             //var url = document.getElementById("w0").getAttribute("action");
 
-            var url = "sidmed.ve/index.php?r=entradasmedicamentos/create";
+            var url = "sidmed.ve/index.php?r=distribucion/create";
             
             $.ajax({
                 url: url,
                 type: 'post',
                 dataType: 'json',
                 data: {
-                            descripcion                 : descripcion,
                             idmedi                      : idmedi,
-                            //idtipo                      : idtipo,
+                            descripcion                 : descripcion,
                             idsede                      : idsede,
                             cantidad                    : cantidad,
                 }
@@ -124,7 +120,7 @@ $script = <<< JS
             });
         });
 
-         //Fin registrar Ingreso de Medicamento
+         //Fin registrar distribución de Medicamento
         //-------------------------------------
 JS;
 $this->registerJs($script);
