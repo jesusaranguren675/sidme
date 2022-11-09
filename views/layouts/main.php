@@ -133,6 +133,12 @@ else //Si no es invitado se mostrara el contenido siguiente
                     <span>Distribución</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('site/dashboard'); ?>">
+                    <i class="fas fa-truck-loading"></i>
+                    <span>Sedes</span>
+                </a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
