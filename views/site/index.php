@@ -1,56 +1,20 @@
 <?php
 
-use yii\helpers\Html;
+/**@var yii\web\View $this */
+
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
+use app\assets\DatatableAsset;
+DatatableAsset::register($this);
 
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\sede */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Localidad';
+$this->title = 'Site';
 ?>
 
-<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+              
+<div class="container">
+    <h1>Bienvenido al Sistema de Distribucion de Medicamentos</h1>
 
-<!-- Page Heading -->
-
-
-<!-- DataTales Example -->
-<div class="card shadow mb-4">
-    <div class="container">
-    <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
-    <hr>
-
-    <a class="btn btn-primary btn-sm">Agregar<i class="fas fa-plus"></i></a>
-    <a class="btn btn-danger btn-sm">Modificar<i class="far fa-file-pdf"></i></a>
-    <a class="btn btn-success btn-sm">Listar<i class="far fa-file-excel"></i></a>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Nombre</th>
-                        <th>Ubicacion</th>
-                        <th>Contacto</th>
-                        <th>correo</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>N°</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Unidades</th>
-                        <th>Acciones</th>
-                    </tr>
-                </tfoot>
-               
-            </table>
-        </div>
+    <div class="form-group">
+        <a class="btn btn-primary" href="<?= Url::toRoute('site/register'); ?>">Iniciar Sesión</a>
     </div>
 </div>
