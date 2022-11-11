@@ -8,7 +8,7 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\helpers\Url;
 
-$this->title = 'Login';
+$this->title = 'sidmed';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="container">
@@ -27,7 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="p-5">
                                     <div class="text-center">
                                         <img src="<?=  Url::to('@web/img/logo.png') ?>" alt="DSDC" width="100" height="50">
+                                        <hr>
                                         <h1 style="margin-bottom: 5px !important; margin-top:5px;" class="h4 text-gray-900 mb-4">Iniciar Sesión</h1>
+                                        <hr>
                                         <p>Sistema de Distribución de Medicamentos Del Eje Centro Oeste Del Área de Salud Integral Comunitaria (ASIC).</p>
                                     </div>
                                     <?php $form = ActiveForm::begin([
