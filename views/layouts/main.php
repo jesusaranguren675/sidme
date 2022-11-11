@@ -140,7 +140,7 @@ else //Si no es invitado se mostrara el contenido siguiente
                     <span>Distribución</span>
                 </a>
             </li>
-
+            
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -171,7 +171,7 @@ else //Si no es invitado se mostrara el contenido siguiente
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                <a class="nav-link" href="<?= Url::toRoute('sede/index'); ?>">
                     <i class="fas fa-university"></i>
                     <span>Sedes</span>
                 </a>
