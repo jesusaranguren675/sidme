@@ -6,18 +6,13 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\AlmacengeneralSearch */
+/* @var $searchModel app\models\MedicamentosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Inventario';
+$this->title = 'Medicamentos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-
-<!-- Page Heading -->
-
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -26,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr>
 
     <a class="btn btn-primary btn-sm">Agregar <i class="fas fa-plus"></i></a>
-    <a class="btn btn-danger btn-sm">PDF<i class="far fa-file-pdf"></i></a>
-    <a class="btn btn-success btn-sm">EXCEL<i class="far fa-file-excel"></i></a>
+    <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
+    <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -37,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <th>N°</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
-                        <th style="text-align: center;">Unidades</th>
                         <th style="text-align: center;">Acciones</th>
                     </tr>
                 </thead>
@@ -46,26 +40,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         <th>N°</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
-                        <th style="text-align: center;">Unidades</th>
                         <th style="text-align: center;">Acciones</th>
                     </tr>
                 </tfoot>
                 <tbody>
-                    <?php foreach ($almacen_general as $almacen_general): ?>
+                    <?php foreach ($medicamentos as $medicamentos): ?>
                         <tr>
-                            <td><?= $almacen_general['idal_gral'] ?></td>
-                            <td><?= $almacen_general['nombre'] ?></td>
-                            <td><?= $almacen_general['descripcion'] ?></td>
+                            <td><?= $medicamentos['id_detalle_medi'] ?></td>
+                            <td><?= $medicamentos['nombre'] ?></td>
+                            <td><?= $medicamentos['descripcion'] ?></td>
                             <td style="text-align: center;">
-                                <button class="btn btn-success btn-circle btn-sm">
-                                <?= $almacen_general['cantidad'] ?>
-                                </button>
-                            </td>
-                            <td style="text-align: center;">
-                                <a href="<?= Url::to(['almacengeneral/view', 'idal_gral' => $almacen_general['idal_gral']]); ?>" class="btn btn-primary btn-sm">
+                                <a href="<?= Url::to(['medicamentos/view', 'id_detalle_medi' => $medicamentos['id_detalle_medi']]); ?>" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>
                                 </a>
-                                <a href="<?= Url::to(['almacengeneral/update', 'idal_gral' => $almacen_general['idal_gral']]); ?>" class="btn btn-primary btn-sm">
+                                <a href="<?= Url::to(['medicamentos/update', 'id_detalle_medi' => $medicamentos['id_detalle_medi']]); ?>" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
@@ -76,4 +64,3 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-

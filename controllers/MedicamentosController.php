@@ -1,17 +1,18 @@
 <?php
 
 namespace app\controllers;
+
 use Yii;
-use app\models\Almacengeneral;
-use app\models\AlmacengeneralSearch;
+use app\models\Medicamentos;
+use app\models\MedicamentosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AlmacengeneralController implements the CRUD actions for Almacengeneral model.
+ * MedicamentosController implements the CRUD actions for Medicamentos model.
  */
-class AlmacengeneralController extends Controller
+class MedicamentosController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,57 +33,58 @@ class AlmacengeneralController extends Controller
     }
 
     /**
-     * Lists all Almacengeneral models.
+     * Lists all Medicamentos models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new AlmacengeneralSearch();
+        $searchModel = new MedicamentosSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        $almacen_general = 
-        Yii::$app->db->createCommand("select almacen_general.idal_gral,
-        almacen_general.cantidad, medicamentos.nombre, tipo_medicamento.descripcion
-        from almacen_general join detalle_medi as detalle_medi
-        on almacen_general.idmedi=detalle_medi.id_detalle_medi
+        $medicamentos = 
+        Yii::$app->db->createCommand("select
+        detalle_medi.id_detalle_medi,
+        medicamentos.nombre, 
+        tipo_medicamento.descripcion
+        from detalle_medi as detalle_medi
         join medicamentos as medicamentos
         on medicamentos.idmedi=detalle_medi.idmedi
         join tipo_medicamento as tipo_medicamento
-        on tipo_medicamento.idtipo=detalle_medi.idtipo")->queryAll();
+        on detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
 
         return $this->render('index', [
-            'searchModel'           => $searchModel,
-            'dataProvider'          => $dataProvider,
-            'almacen_general'       => $almacen_general,
+            'searchModel'               => $searchModel,
+            'dataProvider'              => $dataProvider,
+            'medicamentos'              => $medicamentos,
         ]);
     }
 
     /**
-     * Displays a single Almacengeneral model.
-     * @param int $idal_gral Idal Gral
+     * Displays a single Medicamentos model.
+     * @param int $idmedi Idmedi
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($idal_gral)
+    public function actionView($idmedi)
     {
         return $this->render('view', [
-            'model' => $this->findModel($idal_gral),
+            'model' => $this->findModel($idmedi),
         ]);
     }
 
     /**
-     * Creates a new Almacengeneral model.
+     * Creates a new Medicamentos model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Almacengeneral();
+        $model = new Medicamentos();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'idal_gral' => $model->idal_gral]);
+                return $this->redirect(['view', 'idmedi' => $model->idmedi]);
             }
         } else {
             $model->loadDefaultValues();
@@ -94,18 +96,18 @@ class AlmacengeneralController extends Controller
     }
 
     /**
-     * Updates an existing Almacengeneral model.
+     * Updates an existing Medicamentos model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $idal_gral Idal Gral
+     * @param int $idmedi Idmedi
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($idal_gral)
+    public function actionUpdate($idmedi)
     {
-        $model = $this->findModel($idal_gral);
+        $model = $this->findModel($idmedi);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'idal_gral' => $model->idal_gral]);
+            return $this->redirect(['view', 'idmedi' => $model->idmedi]);
         }
 
         return $this->render('update', [
@@ -114,29 +116,29 @@ class AlmacengeneralController extends Controller
     }
 
     /**
-     * Deletes an existing Almacengeneral model.
+     * Deletes an existing Medicamentos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $idal_gral Idal Gral
+     * @param int $idmedi Idmedi
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($idal_gral)
+    public function actionDelete($idmedi)
     {
-        $this->findModel($idal_gral)->delete();
+        $this->findModel($idmedi)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Almacengeneral model based on its primary key value.
+     * Finds the Medicamentos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $idal_gral Idal Gral
-     * @return Almacengeneral the loaded model
+     * @param int $idmedi Idmedi
+     * @return Medicamentos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($idal_gral)
+    protected function findModel($idmedi)
     {
-        if (($model = Almacengeneral::findOne(['idal_gral' => $idal_gral])) !== null) {
+        if (($model = Medicamentos::findOne(['idmedi' => $idmedi])) !== null) {
             return $model;
         }
 
