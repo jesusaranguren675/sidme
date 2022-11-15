@@ -150,7 +150,7 @@ else //Si no es invitado se mostrara el contenido siguiente
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                <a class="nav-link" href="<?= Url::toRoute('user/index'); ?>">
                     <i class="fas fa-users"></i>
                     <span>Usuarios</span>
                 </a>
