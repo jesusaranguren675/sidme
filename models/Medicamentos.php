@@ -12,6 +12,8 @@ use Yii;
  */
 class Medicamentos extends \yii\db\ActiveRecord
 {
+    public $id_detalle_medi;
+    public $descripcion;
     /**
      * {@inheritdoc}
      */
