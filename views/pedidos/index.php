@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td><?= $pedidos['idpedi'] ?></td>
                             <td><?= $pedidos['descripcion'] ?></td>
-                            <td width="400"><?= $pedidos['nombre'] ?></td>
+                            <td width="200"><?= $pedidos['nombre'] ?></td>
                             <td><?= $pedidos['presentacion'] ?></td>
                             <td style="text-align: center;">
                                 <button class="btn btn-success btn-circle btn-sm">
@@ -65,10 +65,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             </td>
                             <td><?= $pedidos['fecha'] ?></td>
                             <td style="text-align: center;">
-                                <a onclick="ver_medica(<?php echo $pedidos['identrada']; ?>)" href="" class="btn btn-primary btn-sm">
+                                <a onclick="ver_medica(<?php echo $pedidos['idpedi']; ?>)" href="" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>
                                 </a>
-                                <a  href="<?= Url::to(['pedidos/update', 'identrada' => $pedidos['idpedi']]); ?>" class="btn btn-primary btn-sm">
+                                <a  href="<?= Url::to(['pedidos/update', 'idpedi' => $pedidos['idpedi']]); ?>" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>

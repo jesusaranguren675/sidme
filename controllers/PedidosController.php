@@ -89,12 +89,54 @@ class PedidosController extends Controller
     {
         $model = new Pedidos();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'idpedi' => $model->idpedi]);
+        var_dump($_POST); die(); 
+
+        if (Yii::$app->request->isAjax) 
+        {
+            $pedido_idmedi          = $_POST['pedido_idmedi'];
+            $pedido_descripcion     = $_POST['pedido_descripcion'];
+            $pedido_idsede          = $_POST['pedido_idsede'];
+            $pedido_cantidad        = $_POST['pedido_cantidad'];
+            $idusu                  = Yii::$app->user->identity->id;
+            $fecha                  = date('d/m/y');
+
+            /* REGISTRAR PEDIDO */
+            $pedido = Yii::$app->db->createCommand()->insert('pedidos', [
+                'descripcion'                  => $pedido_descripcion,
+                'idusu'                        => $idusu,
+            ])->execute();
+
+            $idpedi = Yii::$app->db->getLastInsertID();
+
+            $detalle_pedi = 
+            Yii::$app->db->createCommand("INSERT INTO public.detalle_dis(
+                idpedi, idmedi, procedencia, cantidad, fecha)
+                VALUES ($idpedi, $pedido_idmedi, $pedido_idsede , $pedido_cantidad, '$fecha');")->queryAll();
+            /* FIN REGISTRAR DISTRIBUCIÓN */
+
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($pedido && $detalle_pedi)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Pedido Registrado Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
             }
-        } else {
-            $model->loadDefaultValues();
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al registrar el pedido',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
 
         return $this->render('create', [

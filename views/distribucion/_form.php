@@ -25,32 +25,43 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="distribucion-form">
-
-    <?php $form = ActiveForm::begin(); ?>
+<div class="distribucion-form" id="distribucion">
+    Distribución
+    <hr>
+    <?php $form = ActiveForm::begin([
+        'enableClientValidation' => false,
+        'enableAjaxValidation' => false,
+    ]); ?>
 
     <div class="row">
-        <div class="col-sm-4">
+        <!--
+        <div class="col-sm-6">
+            <?php /* $form->field($model, 'descripcion')->textInput(['maxlength' => true]) */ ?>
+        </div>
+        -->
+
+        <div class="col-sm-6">
             <label for="entradasmedicamentos-idmedi">Medicamento</label>
-            <select class="form-control" id="entradasmedicamentos-idmedi">
+            <select required class="form-control" name="nombre_medicamento_distribucion" id="entradasmedicamentos-idmedi">
                 <?php foreach ($medicamentos as $medicamentos): ?>
                     <option value="<?= $medicamentos['id_detalle_medi'] ?>"><?= $medicamentos['nombre'] ?> <?= $medicamentos['descripcion'] ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
 
-        <div class="col-sm-4">
-            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
-        </div>
-
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <?= $form->field($model, "idsede")->dropDownList(
                              ArrayHelper::map($sedes, 'idsede', 'nombre'),
                              ['prompt' => 'Seleccione']);?>  
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true, 'type' => 'number']) ?>
+        </div>
+
+        <div class="col-sm-6">
+            <label for="">Confirma la cantidad de unidades a distribuir</label>
+            <input class="form-control" id="confirm-cantidad" type="text" >
         </div>
     </div>
 
@@ -59,69 +70,3 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
 </div>
 
 
-<?php
-$script = <<< JS
-      
-      //Registrar distribución de Medicamento
-      //--------------------------------
-
-      $("#distribuir_medicamento").click(function(event) {
-
-            event.preventDefault(); 
-            
-            var idmedi      = document.getElementById("entradasmedicamentos-idmedi").value;
-            var descripcion = document.getElementById("distribucion-descripcion").value;
-            var idsede      = document.getElementById("distribucion-idsede").value;
-            var cantidad    = document.getElementById("distribucion-cantidad").value;
-            
-            
-    
-            //Contiene la ruta del controlador que procesara los datos enviados mediante el formulario
-            //Debemos tomar en cuenta que esta ruta la obtenemos del atributo action que corresponde al formulario
-            //-----------------------------------------------------------------------------------------
-
-            //var url = document.getElementById("w0").getAttribute("action");
-
-            var url = "sidmed.ve/index.php?r=distribucion/create";
-            
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                            idmedi                      : idmedi,
-                            descripcion                 : descripcion,
-                            idsede                      : idsede,
-                            cantidad                    : cantidad,
-                }
-            })
-            .done(function(response) {
-
-                if (response.data.success == true) 
-                {
-                    Swal.fire(
-                    response.data.message,
-                    '',
-                    'success'
-                    )
-                }
-                else
-                {
-                   Swal.fire(
-                   response.data.message,
-                   '',
-                   'error'
-                   )
-                }
-             
-            })
-            .fail(function() {
-                console.log("error");
-            });
-        });
-
-         //Fin registrar distribución de Medicamento
-        //-------------------------------------
-JS;
-$this->registerJs($script);
-?>

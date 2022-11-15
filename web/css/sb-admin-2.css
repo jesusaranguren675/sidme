@@ -81,6 +81,20 @@ body {
 }
 /* Fin Arreglo Error Data Table */
 
+/*Formulario multiples pasos */
+.steps {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.step {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+/*Fin Formulario multiples pasos */
+
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important;
 }

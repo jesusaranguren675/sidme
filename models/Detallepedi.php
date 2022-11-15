@@ -19,6 +19,7 @@ class Detallepedi extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
     public static function tableName()
     {
         return 'detalle_pedi';

@@ -13,6 +13,7 @@ use Yii;
  */
 class Pedidos extends \yii\db\ActiveRecord
 {
+    public $idsede;
     /**
      * {@inheritdoc}
      */
