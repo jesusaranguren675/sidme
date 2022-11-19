@@ -116,7 +116,7 @@ else //Si no es invitado se mostrara el contenido siguiente
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
                         <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
+                        <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
                     </div>
                     
                 </div>
