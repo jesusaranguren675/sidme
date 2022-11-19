@@ -26,8 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr>
 
     <a class="btn btn-primary btn-sm">Agregar <i class="fas fa-plus"></i></a>
-    <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
-    <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
+    <a class="btn btn-danger btn-sm">PDF<i class="far fa-file-pdf"></i></a>
+    <a class="btn btn-success btn-sm">EXCEL<i class="far fa-file-excel"></i></a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
