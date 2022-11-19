@@ -48,7 +48,7 @@ class EntradasmedicamentosController extends Controller
         $entradas_medicamentos = 
         Yii::$app->db->createCommand("SELECT entradas_medicamentos.identrada, 
         entradas_medicamentos.descripcion,
-        medicamentos.nombre, detalle_entra.fecha_entrada,
+        medicamentos.nombre, tipo_medicamento.descripcion, detalle_entra.fecha_entrada,
         /*tipo_medicamento.descripcion as presentacion,*/
         detalle_entra.cantidad
         FROM

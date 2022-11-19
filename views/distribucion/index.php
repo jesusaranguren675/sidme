@@ -11,6 +11,7 @@ use yii\grid\GridView;
 
 $this->title = 'Distribución';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <!-- DataTales Example -->
@@ -20,9 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr>
 
     <a class="btn btn-primary btn-sm"  href="<?= Url::toRoute('entradasmedicamentos/create'); ?> " data-toggle="modal" data-target="#distribuirMedicamentos">
-        Agregar 
-        <i class="fas fa-plus"></i>
+        Agregar <i class="fas fa-plus"></i>
     </a>
+   
     <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
     <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
     </div>
@@ -82,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <!-- Modal Distribuir Medicamentos -->
 <div class="modal fade" id="distribuirMedicamentos" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="distribuirMedicamentosLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="distribuirMedicamentosLabel">Distribuir Medicamentos</h5>
@@ -117,9 +118,12 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="modal-footer"><!-- data-dismiss="modal" -->
         <button id="back" type="button" class="btn btn-secondary" >Atras</button>
         <button id="next" type="button" class="btn btn-primary">Siguiente</button>
-        <button id="registrar_pedido_distribucion" type="button" class="btn btn-primary">
-            Guardar
-        </button>
+        <a id="registrar_pedido_distribucion" href="#" class="btn btn-success btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-check"></i>
+            </span>
+            <span class="text">Guardar</span>
+        </a>
       </div>
     </div>
   </div>
@@ -277,7 +281,11 @@ $script = <<< JS
                    'Las unidades No Coinciden',
                    'Las unidades del Pedido no coinciden con las unidades de la distribución',
                    'error'
-            )
+                  );
+
+                  next.style.display = 'block';
+                  back.style.display = 'block';
+                  registrar_pedido_distribucion.style.display = 'none';
                 }
             }
         }
@@ -369,8 +377,38 @@ $script = <<< JS
             
     });
 
-         //Fin registrar distribución de Medicamento
-        //-------------------------------------
+//Fin registrar distribución de Medicamento
+//-------------------------------------
+$("#pedido-idmedi").change(function(event) {
+
+    let unidad = document.getElementById("pedido-idmedi").value;
+    let cantidad_de_unidades = document.getElementById("cantidad_de_unidades");
+    var url = "sidmed.ve/index.php?r=distribucion/filtrounidades";
+        
+     $.ajax({
+        url: url,
+        type: 'post',
+        dataType: 'json',
+        data: {
+                unidad : unidad
+        }
+    })
+    .done(function(response) {
+        if (response.data.success == true) 
+        {
+            cantidad_de_unidades.innerHTML = 'Disponible: '+response.data.unidades+' Unidades';
+            cantidad_de_unidades.style.backgroundColor = "#1cc88a";
+            cantidad_de_unidades.style.border = "solid 1px #1cc88a";
+            cantidad_de_unidades.style.color = "#fff";
+        }
+    })
+    .fail(function() {
+        console.log("error");
+    });
+});
+//Fin Filtrar municipio mediante el estado (Filtro comunidad)
+//-----------------------------------------------------------
+//-----------------------------------------------------------
 JS;
 $this->registerJs($script);
 ?>

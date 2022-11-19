@@ -107,19 +107,55 @@ else //Si no es invitado se mostrara el contenido siguiente
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
+                    aria-expanded="true" aria-controls="collapseMedicamentos">
+                    <i class="fas fa-capsules"></i>
+                    <span>Medicamentos</span>
+                </a>
+                <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
+                        <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
+                        <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
+                    </div>
+                    
+                </div>
+            </li>
+
+            <!--
+            <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">
                     <i class="fas fa-capsules"></i>
                     <span>Recepción de Medicamentos</span>
                 </a>
             </li>
+            -->
 
+            <!--
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('medicamentos/index'); ?>">
                     <i class="fas fa-capsules"></i>
                     <span>Medicamentos</span>
                 </a>
             </li>
+            -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDistribucion"
+                    aria-expanded="true" aria-controls="collapseDistribucion">
+                    <i class="fas fa-capsules"></i>
+                    <span>Distribución</span>
+                </a>
+                <div id="collapseDistribucion" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="<?= Url::toRoute('almacengeneral/index'); ?>"><i class="fas fa-warehouse"></i> Inventario</a>
+                        <a class="collapse-item" href="<?= Url::toRoute('pedidos/index'); ?>"><i class="fas fa-file-signature"></i> Pedidos</a>
+                        <a class="collapse-item" href="<?= Url::toRoute('distribucion/index'); ?>"><i class="fas fa-truck-loading"></i> Distribución</a>
+                    </div>
+                    
+                </div>
+            </li>
 
+            <!--
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
                     <i class="fas fa-warehouse"></i>
@@ -140,6 +176,7 @@ else //Si no es invitado se mostrara el contenido siguiente
                     <span>Distribución</span>
                 </a>
             </li>
+            -->
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -163,12 +200,14 @@ else //Si no es invitado se mostrara el contenido siguiente
                 </a>
             </li>
 
+            <!--
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
                     <i class="fas fa-prescription-bottle"></i>
                     <span>Presentación del Medicamento</span>
                 </a>
             </li>
+            -->
 
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">

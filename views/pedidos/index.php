@@ -16,15 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="container-fluid">
-    <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
-    <hr>
-
-    <a class="btn btn-primary btn-sm"  href="<?= Url::toRoute('entradasmedicamentos/create'); ?> " data-toggle="modal" data-target="#agregarMedicamentos">
-        Agregar 
-        <i class="fas fa-plus"></i>
-    </a>
-    <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
-    <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
+        <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
+        <hr>
+        <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
+        <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -59,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td width="200"><?= $pedidos['nombre'] ?></td>
                             <td><?= $pedidos['presentacion'] ?></td>
                             <td style="text-align: center;">
-                                <button class="btn btn-success btn-circle btn-sm">
+                                <button class="btn btn-danger btn-circle btn-sm">
                                 <?= $pedidos['cantidad'] ?>
                                 </button>
                             </td>

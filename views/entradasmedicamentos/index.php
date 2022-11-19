@@ -56,13 +56,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td><?= $entradas_medicamentos['identrada'] ?></td>
                             <td><?= $entradas_medicamentos['nombre'] ?></td>
-                            <td width="400"><?= $entradas_medicamentos['descripcion'] ?></td>
+                            <td><?= $entradas_medicamentos['descripcion'] ?></td>
                             <td style="text-align: center;">
                                 <button class="btn btn-success btn-circle btn-sm">
                                 <?= $entradas_medicamentos['cantidad'] ?>
                                 </button>
                             </td>
-                            <td><?= $entradas_medicamentos['fecha_entrada'] ?></td>
+                            <td width="150"><?= $entradas_medicamentos['fecha_entrada'] ?></td>
                             <td style="text-align: center;">
                                 <a onclick="ver_medica(<?php echo $entradas_medicamentos['identrada']; ?>)" href="" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>

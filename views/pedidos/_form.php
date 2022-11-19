@@ -36,6 +36,7 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
         <div class="col-sm-6">
             <label for="entradasmedicamentos-idmedi">Medicamento</label>
             <select class="form-control" name="nombre_medicamento_pedido" id="pedido-idmedi">
+                <option>Seleccionar</option>
                 <?php foreach ($medicamentos as $medicamentos): ?>
                     <option value="<?= $medicamentos['id_detalle_medi'] ?>"><?= $medicamentos['nombre'] ?> <?= $medicamentos['descripcion'] ?></option>
                 <?php endforeach; ?>
@@ -46,11 +47,17 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
         <div class="col-sm-6">
             <?= $form->field($model, "idsede")->dropDownList(
                                 ArrayHelper::map($sedes, 'idsede', 'nombre'),
-                                ['id' => 'pedido-sede']);?>  
+                                ['id' => 'pedido-sede', 'prompt' => 'Seleccionar']);?>  
         </div>
 
         <div class="col-sm-6">
-            <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true, 'type' => 'number', 'id' => 'pedido-cantidad']) ?>
+        <label for="pedido-cantidad">Unidades</label>
+            <div class="input-group">
+                <input id="pedido-cantidad" type="text" type="number" class="form-control">
+                <div class="input-group-append">
+                    <span id="cantidad_de_unidades" class="input-group-text">Disponible 0.00</span>
+                </div>
+            </div>
         </div>
 
     </div>

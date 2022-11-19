@@ -142,6 +142,7 @@ class DistribucionController extends Controller
                     ],
                         'code' => 0, // Some semantic codes that you know them for yourself
                     ];
+                    return;
                 }
             }
             /* FIN VALIDACIÓN CANTIDAD */
@@ -195,6 +196,65 @@ class DistribucionController extends Controller
             'model' => $model,
         ]);
     }
+
+    //Filtrar Unidades del Almacen
+    //--------------------------------------------------------------------
+    public function actionFiltrounidades()
+    {
+
+        if (Yii::$app->request->isAjax) 
+        {
+            $parametro = intval($_POST['unidad']);
+
+            $unidades = Yii::$app->db->createCommand("SELECT almacen_general.idal_gral,
+            almacen_general.cantidad, medicamentos.nombre, tipo_medicamento.descripcion
+            FROM almacen_general JOIN detalle_medi AS detalle_medi
+            ON almacen_general.idmedi=detalle_medi.id_detalle_medi
+            JOIN medicamentos AS medicamentos
+            ON medicamentos.idmedi=detalle_medi.idmedi
+            JOIN tipo_medicamento AS tipo_medicamento
+            ON tipo_medicamento.idtipo=detalle_medi.idtipo
+            WHERE almacen_general.idal_gral=$parametro")->queryAll();
+
+            if(empty($unidades))
+            {
+                $unidades = false;
+            }
+
+            foreach ($unidades as $unidades)
+            {
+                $unidades = $unidades['cantidad'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($_POST != "")
+            {
+                return [
+                    'data' => [
+                        'success'       => true,
+                        'message'       => 'Consulta exitosa.',
+                        'unidades'      =>  $unidades,
+                    ],
+                    'code' => 0,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error.',
+                    ],
+                'code' => 1, // Some semantic codes that you know them for yourself
+                ];
+            }
+
+        }
+
+    }
+    //Fin Filtrar Unidades del Almacen
+    //--------------------------------------------------------------------
 
     /**
      * Updates an existing Distribucion model.
