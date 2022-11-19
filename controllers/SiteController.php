@@ -75,7 +75,41 @@ class SiteController extends Controller
     
     public function actionDashboard()
     {
-        return $this->render('dashboard');
+
+        $usuarios = 
+        Yii::$app->db->createCommand("select count('id') from user;")->queryAll();
+
+        foreach ($usuarios as $usuarios) {
+            $usuarios = $usuarios['count'];
+        }
+
+        $recepciones = 
+        Yii::$app->db->createCommand("select count('idett') from entradas_medicamentos;")->queryAll();
+
+        foreach ($recepciones as $recepciones) {
+            $recepciones = $recepciones['count'];
+        }
+
+        $distribuciones = 
+        Yii::$app->db->createCommand("select count('idtt') from distribucion;")->queryAll();
+
+        foreach ($distribuciones as $distribuciones) {
+            $distribuciones = $distribuciones['count'];
+        }
+
+        $pedidos = 
+        Yii::$app->db->createCommand("select count('idpedi') from pedidos;")->queryAll();
+
+        foreach ($pedidos as $pedidos) {
+            $pedidos = $pedidos['count'];
+        }
+
+        return $this->render('dashboard', [
+            'usuarios'          => $usuarios,
+            'recepciones'       => $recepciones,
+            'distribuciones'    => $distribuciones,
+            'pedidos'           => $pedidos,
+        ]);
     }
 
     public function actionCards()
