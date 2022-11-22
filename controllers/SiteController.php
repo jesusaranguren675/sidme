@@ -76,6 +76,7 @@ class SiteController extends Controller
     public function actionDashboard()
     {
 
+
         $usuarios = 
         Yii::$app->db->createCommand("select count('id') from user;")->queryAll();
 

@@ -3,7 +3,6 @@
 /** @var yii\web\View $this */
 /** @var string $content */
 
-
 use app\assets\AppAsset;
 use app\widgets\Alert;
 use yii\bootstrap4\Breadcrumbs;
@@ -36,8 +35,6 @@ AppAsset::register($this);
 
 //Si el usuario es invitado se mostrara el contenido siguiente
 ///////////////////////////////////////////////////////////////
-
-
 if (Yii::$app->user->isGuest)
 {
     echo $content;
@@ -187,33 +184,26 @@ else //Si no es invitado se mostrara el contenido siguiente
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('user/index'); ?>">
-                    <i class="fas fa-users"></i>
-                    <span>Usuarios</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
-                    <i class="fas fa-people-arrows"></i>
-                    <span>Tipo de Persona</span>
-                </a>
-            </li>
-
-            <!--
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
-                    <i class="fas fa-prescription-bottle"></i>
-                    <span>Presentación del Medicamento</span>
-                </a>
-            </li>
-            -->
-
-            <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('sede/index'); ?>">
                     <i class="fas fa-university"></i>
                     <span>Sedes</span>
                 </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRolesypermisos"
+                    aria-expanded="true" aria-controls="collapseRolesypermisos">
+                    <i class="fas fa-user-lock"></i>
+                    <span>Usuarios y Roles</span>
+                </a>
+                <div id="collapseRolesypermisos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="<?= Url::toRoute('user/index'); ?>"><i class="fas fa-users"></i> Usuarios</a>
+                        <a class="collapse-item" href="<?= Url::toRoute('roles/index'); ?>"><i class="fas fa-user-lock"></i> Roles</a>
+                        <a class="collapse-item" href="<?= Url::toRoute('asignacionroles/index'); ?>"><i class="fas fa-people-arrows"></i> Asignaciones</a>
+                    </div>
+                    
+                </div>
             </li>
 
             <!-- Nav Item - Pages Collapse Menu -->

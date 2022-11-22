@@ -4,6 +4,44 @@
 
 use yii\helpers\Url;
 
+function accesoRol($comparacion){
+
+    $idusu = Yii::$app->user->identity->id;
+
+    $consulta_rol = 
+    Yii::$app->db->createCommand("SELECT usuario.id, 
+    usuario.username, rol.nombre_rol FROM asignacion_roles AS asignacion
+    JOIN public.user AS usuario
+    ON usuario.id=asignacion.id_usu
+    JOIN roles AS rol
+    ON rol.id_rol=asignacion.id_rol
+    WHERE usuario.id=$idusu AND rol.nombre_rol='$comparacion'")->queryAll();
+
+    foreach ($consulta_rol as $consulta_rol) {
+        $rol = $consulta_rol['nombre_rol'];
+    }
+
+    if(empty($consulta_rol) and empty($rol))
+    {
+        $rol = false;
+        //var_dump($rol); die();
+        return false;
+    }
+    else
+    {
+        if($rol === $comparacion)
+        {
+            //var_dump($rol); die();
+            return true;
+        }
+        else{
+            //ar_dump($rol); die();
+            return false;
+        }
+    }
+}
+
+
 $this->title = 'panel';
 ?>
                     <!-- Page Heading -->
@@ -17,7 +55,11 @@ $this->title = 'panel';
                     <div class="row">
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <?php  
+                        if(accesoRol('Administrador'))
+                        {
+                            ?>
+                            <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -33,7 +75,10 @@ $this->title = 'panel';
                                 </div>
                             </div>
                         </div>
-
+                            <?php
+                        }
+                        ?>
+                    
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
