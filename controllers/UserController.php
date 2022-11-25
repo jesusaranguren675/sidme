@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Usuario;
 use app\models\user;
 use app\models\UserSearch;
@@ -41,10 +42,23 @@ class UserController extends Controller
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $model = new Usuario();
+
+        $usuarios = 
+        Yii::$app->db->createCommand("SELECT usuario.id, usuario.username, 
+        usuario.email, rol.nombre_rol,
+        usuario.status AS estatus, asignacion.fecha FROM public.user AS usuario
+        JOIN asignacion_roles AS asignacion
+        ON asignacion.id_usu=usuario.id
+        JOIN roles AS rol
+        ON rol.id_rol=asignacion.id_rol")->queryAll();
+
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'searchModel'           => $searchModel,
+            'dataProvider'          => $dataProvider,
+            'usuarios'              => $usuarios,
+            'model'                 => $model,
         ]);
     }
 
@@ -70,13 +84,77 @@ class UserController extends Controller
     {
         $model = new Usuario();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->request->isAjax) 
+        {
+            $username              = $_POST['username'];
+            $password_hash         = $_POST['password_hash'];
+            $email                 = $_POST['email'];
+            $status                = $_POST['status'];
+            $rol                   = $_POST['rol'];
+            $fecha                 = date('d/m/y');
+
+            $hash = Yii::$app->getSecurity()->generatePasswordHash($password_hash);
+
+            $consulta_usuario = 
+            Yii::$app->db->createCommand("SELECT * 
+            FROM public.user WHERE email='$email' OR username='$username'")->queryAll();
+
+            if($consulta_usuario)
+            {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'El Usuario Se Encuentra Registrado.',
+                    ],
+                    'code' => 0,
+                ];
+
             }
-        } else {
-            $model->loadDefaultValues();
+            else
+            {
+                $ingresar_usuario = Yii::$app->db->createCommand()->insert('public.user', [
+                    'username'                  => $username,
+                    'password_hash'             => $hash,
+                    'email'                     => $email,
+                    'status'                    => $status,
+                ])->execute();
+    
+                $idusu = Yii::$app->db->getLastInsertID();
+    
+                $asignacion_roles = Yii::$app->db->createCommand()->insert('asignacion_roles', [
+                    'id_rol'                  => $rol,
+                    'id_usu'                  => $idusu,
+                    'fecha'                   => $fecha,
+                ])->execute();
+            }
+
+        
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($asignacion_roles)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Usuario Registrado Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al registrar el usuario',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
+
 
         return $this->render('create', [
             'model' => $model,
