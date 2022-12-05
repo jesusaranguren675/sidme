@@ -42,6 +42,8 @@ class PedidosController extends Controller
         $searchModel = new PedidosSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $model = new Pedidos();
+
         $pedidos = 
         Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
         pedidos.descripcion,
@@ -64,6 +66,7 @@ class PedidosController extends Controller
             'searchModel'               => $searchModel,
             'dataProvider'              => $dataProvider,
             'pedidos'                   => $pedidos,
+            'model'                     => $model,
         ]);
     }
 

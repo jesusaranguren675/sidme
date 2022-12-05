@@ -92,38 +92,13 @@ $this->params['breadcrumbs'][] = $this->title;
         </button>
       </div>
       <div class="modal-body">
-        <div class="row steps">
-            <div class="col-sm-3 step">
-                <button id="registro_pedido" class="btn btn-success btn-circle btn-lg active">
-                    <i class="fas fa-file-alt"></i>
-                </button>
-                <p>1 - Registrar Pedido</p>
-            </div>
-            <div class="col-sm-3 step">
-                <button id="registro_distribucion" class="btn btn-success btn-circle btn-lg">
-                    <i class="fas fa-truck-loading"></i>
-                </button>
-                <p>2 - Distribución</p>
-            </div>
-        </div>
-
-        <?= $this->render('../pedidos/create', [
-        'model' => $model,
-        ]) ?>
-
         <?= $this->render('create', [
         'model' => $model,
         ]) ?>
       </div>
       <div class="modal-footer"><!-- data-dismiss="modal" -->
-        <button id="back" type="button" class="btn btn-secondary" >Atras</button>
-        <button id="next" type="button" class="btn btn-primary">Siguiente</button>
-        <a id="registrar_pedido_distribucion" href="#" class="btn btn-success btn-icon-split">
-            <span class="icon text-white-50">
-                <i class="fas fa-check"></i>
-            </span>
-            <span class="text">Guardar</span>
-        </a>
+        <button id="back" type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
+        <button id="registrar_pedido_distribucion" type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>
   </div>
@@ -133,65 +108,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $script = <<< JS
 
-      /* Botones - Pasos - Form */
-      let registro_pedido = document.getElementById("registro_pedido");
-      let registro_distribucion = document.getElementById("registro_distribucion");
-      /*Fin Botones - Pasos - Form */
-
-      let cont_distribucion = document.getElementById("distribucion");
-      let cont_pedidos = document.getElementById("pedidos");
-      let btn_next = document.getElementById("next");
-      let btn_back = document.getElementById("back");
-      let registrar_pedido_distribucion = document.getElementById("registrar_pedido_distribucion");
-
       //Modo Inicial - Default
-      cont_distribucion.style.display = 'none';
-      btn_back.style.visibility = 'hidden';
-      document.getElementById("next").style.display = 'none';
-      document.getElementById("registrar_pedido_distribucion").style.display = 'none';
-      document.getElementById("pedido-sede").setAttribute('name', 'nombre_sede_pedido')
-      document.getElementById('pedido-sede').previousElementSibling.innerHTML = 'Destino';
       document.getElementById('distribucion-idsede').previousElementSibling.innerHTML = 'Destino';
       //Fin Modo Inicial - Default
 
-      btn_next.addEventListener("click", contDitribucion, false);
-
-      function contDitribucion()
-      {
-        var pedido_idmedi      = document.getElementById("pedido-idmedi").value;
-        var pedido_descripcion = document.getElementById("pedido-descripcion").value;
-        var pedido_idsede      = document.getElementById("pedido-sede").value;
-        var pedido_cantidad    = document.getElementById("pedido-cantidad").value;
-
-        if(pedido_idmedi != "" && pedido_descripcion != "" && pedido_idsede != "" && pedido_cantidad != "")
-        {
-        
-            cont_pedidos.style.display = 'none';
-            cont_distribucion.style.display = 'block';
-
-            registro_pedido.setAttribute('class', 'btn btn-success btn-circle btn-lg');
-            registro_distribucion.setAttribute('class', 'btn btn-success btn-circle btn-lg active');
-            btn_back.style.visibility = 'visible';
-        }else{
-            Swal.fire(
-                   'Campo Vació',
-                   'Rellena todos los campos',
-                   'error'
-            )
-        }
-      }
-
-      btn_back.addEventListener("click", contPedidos, false);
-
-      function contPedidos()
-      {
-        cont_distribucion.style.display = 'none';
-        cont_pedidos.style.display = 'block';
-
-        registro_distribucion.setAttribute('class', 'btn btn-success btn-circle btn-lg');
-        registro_pedido.setAttribute('class', 'btn btn-success btn-circle btn-lg active');
-        btn_back.style.visibility = 'hidden';
-      }
 
       var idmedi      = document.getElementById("entradasmedicamentos-idmedi").value;
       //var descripcion = document.getElementById("distribucion-descripcion").value;
@@ -293,8 +213,8 @@ $script = <<< JS
 
     
 
-    validationEventBlur(pedido_cantidad);
-    validationEventBlurSave('confirm-cantidad');
+    //validationEventBlur(pedido_cantidad);
+    //validationEventBlurSave('confirm-cantidad');
     
       
       //Registrar distribución de Medicamento
@@ -306,24 +226,8 @@ $script = <<< JS
       //var descripcion = document.getElementById("distribucion-descripcion").value;
       var idsede      = document.getElementById("distribucion-idsede").value;
       var cantidad    = document.getElementById("distribucion-cantidad").value;
-      var pedido_idmedi      = document.getElementById("pedido-idmedi").value;
-      var pedido_descripcion = document.getElementById("pedido-descripcion").value;
-      var pedido_idsede      = document.getElementById("pedido-sede").value;
-      var pedido_cantidad    = document.getElementById("pedido-cantidad").value;
 
-      if(pedido_idmedi === "" && pedido_descripcion === "" && pedido_idsede === "" && pedido_cantidad === "" && idmedi === "" && idsede === "" && cantidad === "")
-      {
-        Swal.fire(
-                   'Campo Vació',
-                   'Rellena todos los campos',
-                   'error'
-        )
 
-        return false
-      }
-
-      if(idmedi === pedido_idmedi && idsede === pedido_idsede && cantidad === pedido_cantidad)
-      {
         event.preventDefault(); 
             
             var url = "sidmed.ve/index.php?r=distribucion/create";
@@ -366,15 +270,6 @@ $script = <<< JS
             .fail(function() {
                 console.log("error");
             });
-      }else{
-        Swal.fire(
-                   'Pedido y Distribución No Coinciden',
-                   'La informaión del pedido no coincide con la información suministrada en la distribución.',
-                   'error'
-        )
-      }
-
-            
     });
 
 //Fin registrar distribución de Medicamento

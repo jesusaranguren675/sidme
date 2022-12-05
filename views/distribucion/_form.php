@@ -26,8 +26,6 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
 ?>
 
 <div class="distribucion-form" id="distribucion">
-    Distribución
-    <hr>
     <?php $form = ActiveForm::begin([
         'enableClientValidation' => false,
         'enableAjaxValidation' => false,
@@ -54,14 +52,15 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
                              ArrayHelper::map($sedes, 'idsede', 'nombre'),
                              ['prompt' => 'Seleccione']);?>  
         </div>
-
+        
         <div class="col-sm-6">
-            <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true, 'type' => 'number']) ?>
-        </div>
-
-        <div class="col-sm-6">
-            <label for="">Confirma la cantidad de unidades a distribuir</label>
-            <input class="form-control" id="confirm-cantidad" type="text" >
+        <label for="pedido-cantidad">Unidades</label>
+            <div class="input-group">
+                <input id="distribucion-cantidad" type="text" type="number" class="form-control">
+                <div class="input-group-append">
+                    <span id="cantidad_de_unidades" class="input-group-text">Disponible 0.00</span>
+                </div>
+            </div>
         </div>
     </div>
 

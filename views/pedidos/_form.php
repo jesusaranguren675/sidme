@@ -22,8 +22,6 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
 ?>
 
 <div class="pedidos-form" id="pedidos">
-    Registrar pedido
-    <hr>
     <?php $form = ActiveForm::begin([
             'enableClientValidation' => false,
             'enableAjaxValidation' => false,]); ?>
@@ -53,13 +51,12 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
         <div class="col-sm-6">
         <label for="pedido-cantidad">Unidades</label>
             <div class="input-group">
-                <input id="pedido-cantidad" type="text" type="number" class="form-control">
+                <input id="distribucion-cantidad" type="text" type="number" class="form-control">
                 <div class="input-group-append">
                     <span id="cantidad_de_unidades" class="input-group-text">Disponible 0.00</span>
                 </div>
             </div>
         </div>
-
     </div>
 
     <?php ActiveForm::end(); ?>
