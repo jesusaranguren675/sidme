@@ -51,11 +51,20 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
         <div class="col-sm-6">
         <label for="pedido-cantidad">Unidades</label>
             <div class="input-group">
-                <input id="distribucion-cantidad" type="text" type="number" class="form-control">
+                <input id="pedido-cantidad" type="text" type="number" class="form-control">
                 <div class="input-group-append">
                     <span id="cantidad_de_unidades" class="input-group-text">Disponible 0.00</span>
                 </div>
             </div>
+        </div>
+
+        <div class="col-sm-12">
+            <label for="pedido-estatus">Estatus</label>
+            <select class="form-control" name="pedido-estatus" id="pedido-estatus">
+                <option>Seleccionar</option>
+                <option value="1">Aprobado</option>
+                <option value="2">Rechazado</option>
+            </select>
         </div>
     </div>
 

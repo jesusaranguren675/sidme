@@ -49,7 +49,7 @@ class PedidosController extends Controller
         pedidos.descripcion,
         medicamentos.nombre,
         tipo_medicamento.descripcion AS presentacion,
-        detalle_pedi.cantidad,
+        detalle_pedi.cantidad, detalle_pedi.estatus,
         detalle_pedi.fecha
         FROM pedidos AS pedidos
         JOIN detalle_pedi AS detalle_pedi
@@ -92,29 +92,28 @@ class PedidosController extends Controller
     {
         $model = new Pedidos();
 
-        var_dump($_POST); die(); 
-
         if (Yii::$app->request->isAjax) 
         {
-            $pedido_idmedi          = $_POST['pedido_idmedi'];
-            $pedido_descripcion     = $_POST['pedido_descripcion'];
-            $pedido_idsede          = $_POST['pedido_idsede'];
-            $pedido_cantidad        = $_POST['pedido_cantidad'];
+            $descripcion            = $_POST['descripcion'];
+            $idmedi                 = $_POST['idmedi'];
+            $procedencia            = $_POST['procedencia'];
+            $cantidad               = $_POST['cantidad'];
+            $estatus                = $_POST['estatus'];
             $idusu                  = Yii::$app->user->identity->id;
             $fecha                  = date('d/m/y');
 
             /* REGISTRAR PEDIDO */
             $pedido = Yii::$app->db->createCommand()->insert('pedidos', [
-                'descripcion'                  => $pedido_descripcion,
+                'descripcion'                  => $descripcion,
                 'idusu'                        => $idusu,
             ])->execute();
 
             $idpedi = Yii::$app->db->getLastInsertID();
 
             $detalle_pedi = 
-            Yii::$app->db->createCommand("INSERT INTO public.detalle_dis(
-                idpedi, idmedi, procedencia, cantidad, fecha)
-                VALUES ($idpedi, $pedido_idmedi, $pedido_idsede , $pedido_cantidad, '$fecha');")->queryAll();
+            Yii::$app->db->createCommand("INSERT INTO public.detalle_pedi(
+                idpedi, idmedi, procedencia, cantidad, fecha, estatus)
+                VALUES ($idpedi, $idmedi, $procedencia, $cantidad, '$fecha', $estatus);")->queryAll();
             /* FIN REGISTRAR DISTRIBUCIÓN */
 
 

@@ -34,32 +34,36 @@ $this->params['breadcrumbs'][] = $this->title;
                         <th>Nombre</th>
                         <th>Presentación</th>
                         <th>Cantidad</th>
+                        <th>Estatus</th>
                         <th>Fecha</th>
                         <th style="text-align: center;">Acciones</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>N°</th>
-                        <th>Descripción</th>
-                        <th>Nombre</th>
-                        <th>Presentación</th>
-                        <th>Cantidad</th>
-                        <th>Fecha</th>
-                        <th style="text-align: center;">Acciones</th>
-                    </tr>
-                </tfoot>
                 <tbody>
                     <?php foreach ($pedidos as $pedidos): ?>
                         <tr>
                             <td><?= $pedidos['idpedi'] ?></td>
                             <td><?= $pedidos['descripcion'] ?></td>
-                            <td width="200"><?= $pedidos['nombre'] ?></td>
+                            <td width="100"><?= $pedidos['nombre'] ?></td>
                             <td><?= $pedidos['presentacion'] ?></td>
                             <td style="text-align: center;">
-                                <button class="btn btn-danger btn-circle btn-sm">
+                                <button class="btn btn-warning btn-sm">
                                 <?= $pedidos['cantidad'] ?>
                                 </button>
+                            </td>
+                            <td style="text-align: center;">
+                                <?php
+                                if($pedidos['estatus'] === 1)
+                                {
+                                    ?>
+                                    <button class="btn btn-success btn-sm">Aprobado</button>
+                                    <?php
+                                }else{
+                                    ?>
+                                    <button class="btn btn-danger btn-sm">Rechazado</button>
+                                    <?php
+                                }
+                                ?>
                             </td>
                             <td><?= $pedidos['fecha'] ?></td>
                             <td style="text-align: center;">
@@ -95,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
       <div class="modal-footer"><!-- data-dismiss="modal" -->
         <button id="back" type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
-        <button id="registrar_pedido_distribucion" type="button" class="btn btn-primary">Guardar</button>
+        <button id="registrar_pedido" type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>
   </div>
@@ -106,7 +110,170 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $script = <<< JS
 
+    var descripcion             = document.getElementById("pedido-descripcion").value;
+    var idmedi                  = document.getElementById("pedido-idmedi").value;
+    var procedencia             = document.getElementById("pedido-sede").value;
+    var cantidad                = document.getElementById("pedido-cantidad").value;
+    var cantidad_de_unidades    = document.getElementById("cantidad_de_unidades");
+    var estatus                 = document.getElementById("pedido-estatus").value;
+
+    function validateString(id)
+    {
+
+        document.getElementById(id).addEventListener("blur", Blur, false);
+
+        function Blur()
+        {
+            let inputString = document.getElementById(id).value;
+
+            if(inputString === ""){
+                document.getElementById(id).style.border = 'solid 1px #e31414';
+                return false;
+            }
+
+            if(inputString === null){
+                document.getElementById(id).style.border = 'solid 1px #e31414';
+                return false;
+            }
+
+            if(isNaN(inputString)) {
+                document.getElementById(id).style.border = 'solid 1px #3fe316';
+                return true;
+            }else{
+                document.getElementById(id).style.border = 'solid 1px #e31414';
+                return false;
+            }
+        }
+    }
+
+    function validateNumber(id)
+    {
+
+        document.getElementById(id).addEventListener("blur", Blur, false);
+
+        function Blur()
+        {
+            let inputNumber = document.getElementById(id).value;
+
+            if(inputNumber === ""){
+                document.getElementById(id).style.border = 'solid 1px #e31414';
+                return false;
+            }
+
+            if(inputNumber === null){
+                document.getElementById(id).style.border = 'solid 1px #e31414';
+                return false;
+            }
+
+            if(isNaN(inputNumber)){
+                document.getElementById(id).style.border = 'solid 1px #e31414';
+                return false;
+            }else{
+                document.getElementById(id).style.border = 'solid 1px #3fe316';
+                return true;
+            }
+        }
+    }
+
+    
+
+    validateString("pedido-descripcion");
+    validateNumber("pedido-idmedi");
+    validateNumber("pedido-sede");
+    validateNumber("pedido-cantidad");
+    validateNumber("pedido-estatus");
+    
     document.getElementById('pedido-sede').previousElementSibling.innerHTML = 'Procedencia';
+
+     //Registrar distribución de Medicamento
+    //--------------------------------
+
+    $("#registrar_pedido").click(function(event) {
+
+    var descripcion             = document.getElementById("pedido-descripcion").value;
+    var idmedi                  = document.getElementById("pedido-idmedi").value;
+    var procedencia             = document.getElementById("pedido-sede").value;
+    var cantidad                = document.getElementById("pedido-cantidad").value;
+    var cantidad_de_unidades    = document.getElementById("cantidad_de_unidades");
+    var estatus                 = document.getElementById("pedido-estatus").value;
+
+
+    event.preventDefault(); 
+      
+      var url = "sidmed.ve/index.php?r=pedidos/create";
+      
+      $.ajax({
+          url: url,
+          type: 'post',
+          dataType: 'json',
+          data: {
+                      descripcion               : descripcion,
+                      idmedi                    : idmedi,
+                      procedencia               : procedencia,
+                      cantidad                  : cantidad,
+                      estatus                   : estatus,
+
+          }
+      })
+      .done(function(response) {
+
+          if (response.data.success == true) 
+          {
+              Swal.fire(
+              response.data.message,
+              '',
+              'success'
+              );
+          }
+          else
+          {
+             Swal.fire(
+             response.data.message,
+             '',
+             'error'
+             )
+          }
+       
+        })
+        .fail(function() {
+          console.log("error");
+        });
+    });
+
+    //Fin registrar distribución de Medicamento
+   //-------------------------------------------
+
+   //Filtrar canidad de medicamentos disponibles
+   //-------------------------------------------
+   $("#pedido-idmedi").change(function(event) {
+
+        let unidad = document.getElementById("pedido-idmedi").value;
+        let cantidad_de_unidades = document.getElementById("cantidad_de_unidades");
+        var url = "sidmed.ve/index.php?r=distribucion/filtrounidades";
+    
+        $.ajax({
+            url: url,
+            type: 'post',
+            dataType: 'json',
+            data: {
+                    unidad : unidad
+            }
+        })
+        .done(function(response) {
+            if (response.data.success == true) 
+            {
+                cantidad_de_unidades.innerHTML = 'Disponible: '+response.data.unidades+' Unidades';
+                cantidad_de_unidades.style.backgroundColor = "#1cc88a";
+                cantidad_de_unidades.style.border = "solid 1px #1cc88a";
+                cantidad_de_unidades.style.color = "#fff";
+            }
+        })
+        .fail(function() {
+            console.log("error");
+        });
+    });
+    //Filtrar canidad de medicamentos disponibles
+   //-------------------------------------------
 
 JS;
 $this->registerJs($script);
