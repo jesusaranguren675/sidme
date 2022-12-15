@@ -43,6 +43,8 @@ class AppAsset extends AssetBundle
         "js/demo/datatables-demo.js",
         /* sweetalert2 */
         "vendor/sweetalert2/sweetalert2.all.min.js",
+        /* validacion */
+        "js/validacion.js",
     ];
     public $depends = [
         'yii\web\YiiAsset',
