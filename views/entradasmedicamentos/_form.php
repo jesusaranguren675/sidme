@@ -85,7 +85,8 @@ $script = <<< JS
 
             //var url = document.getElementById("w0").getAttribute("action");
 
-            var url = "sidmed.ve/index.php?r=entradasmedicamentos/create";
+            
+            var url = "http://sidmed.ve/index.php?r=entradasmedicamentos/create";
             
             $.ajax({
                 url: url,
