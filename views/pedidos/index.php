@@ -58,7 +58,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                     <button class="btn btn-success btn-sm">Aprobado</button>
                                     <?php
-                                }else{
+                                }
+                                if($pedidos['estatus'] === 2)
+                                {
+                                    ?>
+                                    <button class="btn btn-primary btn-sm">Pendiente</button>
+                                    <?php
+                                }
+                                if($pedidos['estatus'] === 3)
+                                {
                                     ?>
                                     <button class="btn btn-danger btn-sm">Rechazado</button>
                                     <?php
@@ -84,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <!-- Modal Distribuir Medicamentos -->
 <div class="modal fade" id="distribuirMedicamentos" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="distribuirMedicamentosLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div style="position:relative;" class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="distribuirMedicamentosLabel">Registrar Pedido</h5>
@@ -104,8 +112,11 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
   </div>
 </div>
-<!-- Fin Modal Distribuir Medicamentos -->
 
+<div class="preloader" style="display:none;">
+    <img src="<?=  Url::to('@web/img/preloader.gif') ?>" alt="">
+</div>
+<!-- Fin Modal Distribuir Medicamentos -->
 
 <?php
 $script = <<< JS
@@ -117,71 +128,11 @@ $script = <<< JS
     var cantidad_de_unidades    = document.getElementById("cantidad_de_unidades");
     var estatus                 = document.getElementById("pedido-estatus").value;
 
-    function validateString(id)
-    {
-
-        document.getElementById(id).addEventListener("blur", Blur, false);
-
-        function Blur()
-        {
-            let inputString = document.getElementById(id).value;
-
-            if(inputString === ""){
-                document.getElementById(id).style.border = 'solid 1px #e31414';
-                return false;
-            }
-
-            if(inputString === null){
-                document.getElementById(id).style.border = 'solid 1px #e31414';
-                return false;
-            }
-
-            if(isNaN(inputString)) {
-                document.getElementById(id).style.border = 'solid 1px #3fe316';
-                return true;
-            }else{
-                document.getElementById(id).style.border = 'solid 1px #e31414';
-                return false;
-            }
-        }
-    }
-
-    function validateNumber(id)
-    {
-
-        document.getElementById(id).addEventListener("blur", Blur, false);
-
-        function Blur()
-        {
-            let inputNumber = document.getElementById(id).value;
-
-            if(inputNumber === ""){
-                document.getElementById(id).style.border = 'solid 1px #e31414';
-                return false;
-            }
-
-            if(inputNumber === null){
-                document.getElementById(id).style.border = 'solid 1px #e31414';
-                return false;
-            }
-
-            if(isNaN(inputNumber)){
-                document.getElementById(id).style.border = 'solid 1px #e31414';
-                return false;
-            }else{
-                document.getElementById(id).style.border = 'solid 1px #3fe316';
-                return true;
-            }
-        }
-    }
-
-    
-
-    validateString("pedido-descripcion");
-    validateNumber("pedido-idmedi");
-    validateNumber("pedido-sede");
-    validateNumber("pedido-cantidad");
-    validateNumber("pedido-estatus");
+    validateStringBlur("pedido-descripcion");
+    validateNumberBlur("pedido-idmedi");
+    validateNumberBlur("pedido-sede");
+    validateNumberBlur("pedido-cantidad");
+    validateNumberBlur("pedido-estatus");
     
     document.getElementById('pedido-sede').previousElementSibling.innerHTML = 'Procedencia';
 
@@ -189,18 +140,54 @@ $script = <<< JS
     //--------------------------------
 
     $("#registrar_pedido").click(function(event) {
+    
+        document.querySelector(".preloader").setAttribute("style", "");
+        event.preventDefault(); 
 
-    var descripcion             = document.getElementById("pedido-descripcion").value;
-    var idmedi                  = document.getElementById("pedido-idmedi").value;
-    var procedencia             = document.getElementById("pedido-sede").value;
-    var cantidad                = document.getElementById("pedido-cantidad").value;
-    var cantidad_de_unidades    = document.getElementById("cantidad_de_unidades");
-    var estatus                 = document.getElementById("pedido-estatus").value;
+        var descripcion             = document.getElementById("pedido-descripcion").value;
+        var idmedi                  = document.getElementById("pedido-idmedi").value;
+        var procedencia             = document.getElementById("pedido-sede").value;
+        var cantidad                = document.getElementById("pedido-cantidad").value;
+        var cantidad_de_unidades    = document.getElementById("cantidad_de_unidades");
+        var estatus                 = document.getElementById("pedido-estatus").value;
 
 
-    event.preventDefault(); 
+    
       
-      var url = "sidmed.ve/index.php?r=pedidos/create";
+      var url = "http://sidmed.ve/index.php?r=pedidos/create";
+
+            //Verificar validacion
+            //---------------------
+            var VerficarValidacion = 
+            [
+                validateString("pedido-descripcion"),
+                validateNumber("pedido-idmedi"),
+                validateNumber("pedido-sede"),
+                validateNumber("pedido-cantidad"),
+                validateNumber("pedido-estatus"),
+            ];
+
+            for (ver = 0; ver < VerficarValidacion.length; ver++) {
+                if(VerficarValidacion[ver] === false)
+                {
+
+                    document.querySelector(".preloader").style.display = 'none';
+                    event.preventDefault();  //stopping submitting
+                    Swal.fire(
+                    'Error',
+                    'Verifica que los campos tengas los valores correspondientes.',
+                    'warning'
+                    );
+                    console.log(VerficarValidacion[ver]);
+                    return false;
+                }
+                else
+                {
+
+                }
+            }
+            //Fin verificar validación
+            //------------------------
       
       $.ajax({
           url: url,
@@ -218,7 +205,8 @@ $script = <<< JS
       .done(function(response) {
 
           if (response.data.success == true) 
-          {
+          {    
+              document.querySelector(".preloader").style.display = 'none';
               Swal.fire(
               response.data.message,
               '',
@@ -227,6 +215,7 @@ $script = <<< JS
           }
           else
           {
+             document.querySelector(".preloader").style.display = 'none';
              Swal.fire(
              response.data.message,
              '',
@@ -249,7 +238,7 @@ $script = <<< JS
 
         let unidad = document.getElementById("pedido-idmedi").value;
         let cantidad_de_unidades = document.getElementById("cantidad_de_unidades");
-        var url = "sidmed.ve/index.php?r=distribucion/filtrounidades";
+        var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
     
         $.ajax({
             url: url,
@@ -262,6 +251,7 @@ $script = <<< JS
         .done(function(response) {
             if (response.data.success == true) 
             {
+                document.querySelector(".preloader").style.display = 'none';
                 cantidad_de_unidades.innerHTML = 'Disponible: '+response.data.unidades+' Unidades';
                 cantidad_de_unidades.style.backgroundColor = "#1cc88a";
                 cantidad_de_unidades.style.border = "solid 1px #1cc88a";
