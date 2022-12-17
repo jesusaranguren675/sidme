@@ -63,7 +63,8 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
             <select class="form-control" name="pedido-estatus" id="pedido-estatus">
                 <option>Seleccionar</option>
                 <option value="1">Aprobado</option>
-                <option value="2">Rechazado</option>
+                <option value="2">Pendiente</option>
+                <option value="3">Rechazado</option>
             </select>
         </div>
     </div>
