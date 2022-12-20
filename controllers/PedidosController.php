@@ -153,17 +153,55 @@ class PedidosController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($idpedi)
+    public function actionUpdate()
     {
-        $model = $this->findModel($idpedi);
+        //var_dump($_POST); die();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'idpedi' => $model->idpedi]);
+        if (Yii::$app->request->isAjax) 
+        {
+            $idpedi                 = $_POST['idpedi_update'];
+            $descripcion            = $_POST['pedido_descripcion_update'];
+            $idmedi                 = $_POST['pedido_idmedi_update'];
+            $procedencia            = $_POST['pedido_sede_update'];
+            $cantidad               = $_POST['pedido_cantidad_update'];
+            $estatus                = $_POST['pedido_estatus_update'];
+            $idusu                  = Yii::$app->user->identity->id;
+
+            /* ACTUALIZAR PEDIDO */
+            $update_pedido = Yii::$app->db->createCommand("UPDATE public.pedidos
+            SET descripcion='$descripcion'
+            WHERE idpedi=$idpedi")->queryAll();
+
+            $update_detalle_pedido = Yii::$app->db->createCommand("UPDATE public.detalle_pedi
+            SET idmedi=$idmedi, procedencia=$procedencia, cantidad=$cantidad, estatus=$estatus
+            WHERE idpedi=$idpedi")->queryAll();
+            /* FIN ACTUALIZAR PEDIDO */
+
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($update_pedido && $update_detalle_pedido)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Pedido Modificado Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al modificar el pedido',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**

@@ -26,19 +26,20 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
             'enableClientValidation' => false,
             'enableAjaxValidation' => false,]); ?>
 
+    <input id="idpedi-update" type="hidden" value="">
+
     <div class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'descripcion')->textInput([
                 'maxlength'     => true, 
-                'id'            => 'pedido-descripcion',
-                'value'         => "",
-                'class'         => "form-control pedido-descripcion"]) 
+                'id'            => 'pedido-descripcion-update',
+                'value'         => ""]) 
             ?>
         </div>
 
         <div class="col-sm-6">
             <label for="entradasmedicamentos-idmedi">Medicamento</label>
-            <select class="form-control" name="nombre_medicamento_pedido" id="pedido-idmedi">
+            <select class="form-control" name="nombre_medicamento_pedido" id="pedido-idmedi-update">
                 <option>Seleccionar</option>
                 <?php foreach ($medicamentos as $medicamentos): ?>
                     <option value="<?= $medicamentos['id_detalle_medi'] ?>"><?= $medicamentos['nombre'] ?> <?= $medicamentos['descripcion'] ?></option>
@@ -50,22 +51,22 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
         <div class="col-sm-6">
             <?= $form->field($model, "idsede")->dropDownList(
                                 ArrayHelper::map($sedes, 'idsede', 'nombre'),
-                                ['id' => 'pedido-sede', 'prompt' => 'Seleccionar']);?>  
+                                ['id' => 'pedido-sede-update', 'prompt' => 'Seleccionar']);?>  
         </div>
 
         <div class="col-sm-6">
         <label for="pedido-cantidad">Unidades</label>
             <div class="input-group">
-                <input maxlength="3" id="pedido-cantidad" type="text" type="number" class="form-control">
+                <input maxlength="3" id="pedido-cantidad-update" type="text" type="number" class="form-control">
                 <div class="input-group-append">
-                    <span id="cantidad_de_unidades" class="input-group-text">Disponible 0.00</span>
+                    <span id="cantidad_de_unidades_update" class="input-group-text">Disponible 0.00</span>
                 </div>
             </div>
         </div>
 
         <div class="col-sm-12">
             <label for="pedido-estatus">Estatus</label>
-            <select class="form-control" name="pedido-estatus" id="pedido-estatus">
+            <select class="form-control" name="pedido-estatus" id="pedido-estatus-update">
                 <option>Seleccionar</option>
                 <option value="1">Aprobado</option>
                 <option value="2">Pendiente</option>

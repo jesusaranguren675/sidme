@@ -21,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <a class="btn btn-primary btn-sm"  href="<?= Url::toRoute('entradasmedicamentos/create'); ?> " data-toggle="modal" data-target="#distribuirMedicamentos">
         Agregar <i class="fas fa-plus"></i>
         </a>
-        <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
-        <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
+        <a class="btn btn-danger btn-sm">PDF <i class="far fa-file-pdf"></i></a>
+        <a class="btn btn-success btn-sm">EXCEL <i class="far fa-file-excel"></i></a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -75,10 +75,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             </td>
                             <td><?= $pedidos['fecha'] ?></td>
                             <td style="text-align: center;">
-                                <a onclick="ver_medica(<?php echo $pedidos['idpedi']; ?>)" href="" class="btn btn-primary btn-sm">
+                                <a href="" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>
                                 </a>
-                                <a  href="<?= Url::to(['pedidos/update', 'idpedi' => $pedidos['idpedi']]); ?>" class="btn btn-primary btn-sm">
+                                <a id="<?php echo $pedidos['idpedi']; ?>" 
+                                   data-descripcion="<?= $pedidos['descripcion'] ?>"
+                                   data-nombre="<?= $pedidos['nombre'] ?>"
+                                   data-presentacion="<?= $pedidos['presentacion'] ?>"
+                                   data-cantidad="<?= $pedidos['cantidad'] ?>" 
+                                   href="#" 
+                                   class="btn btn-primary btn-sm update_btn">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
@@ -90,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<!-- Modal Distribuir Medicamentos -->
+<!-- Modal Registrar Pedidos de Medicamentos -->
 <div class="modal fade" id="distribuirMedicamentos" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="distribuirMedicamentosLabel" aria-hidden="true">
   <div style="position:relative;" class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -116,7 +122,36 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="preloader" style="display:none;">
     <img src="<?=  Url::to('@web/img/preloader.gif') ?>" alt="">
 </div>
-<!-- Fin Modal Distribuir Medicamentos -->
+<!-- Fin Modal Registrar Pedidos de Medicamentos -->
+
+
+<!-- Modal Actualizar Pedidos de Medicamentos -->
+<div class="modal fade" id="actualizarMedicamentos" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="actualizarMedicamentosLabel" aria-hidden="true">
+  <div style="position:relative;" class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="actualizarMedicamentosLabel">Modificar Pedido</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?= $this->render('_update_form', [
+        'model' => $model,
+        ]) ?>
+      </div>
+      <div class="modal-footer"><!-- data-dismiss="modal" -->
+        <button id="back" type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
+        <button id="modificar_pedido" type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?= $this->render('../site/preloader', [
+        'model' => $model,
+]) ?>
+<!-- Fin Modal Actualizar Pedidos de Medicamentos -->
 
 <?php
 $script = <<< JS
@@ -136,7 +171,122 @@ $script = <<< JS
     
     document.getElementById('pedido-sede').previousElementSibling.innerHTML = 'Procedencia';
 
-     //Registrar distribución de Medicamento
+
+    //Actualizar Pedido de Medicamento
+    //---------------------------------
+
+    let update_btn = document.querySelectorAll(".update_btn");
+
+    for (let i = 0; i < update_btn.length; i++) {
+        update_btn[i].addEventListener('click', function(){
+
+            let idpedi = update_btn[i].getAttribute('id');
+            let descripcion = update_btn[i].getAttribute('data-descripcion');
+            let nombre = update_btn[i].getAttribute('data-nombre');
+            let presentacion = update_btn[i].getAttribute('data-presentacion');
+            let cantidad = update_btn[i].getAttribute('data-cantidad');
+
+            $('#actualizarMedicamentos').modal({ show:true });
+            
+            document.getElementById("pedido-descripcion-update").setAttribute("value", descripcion);
+            document.getElementById("pedido-cantidad-update").setAttribute("value", cantidad);
+            document.getElementById("idpedi-update").setAttribute("value", idpedi);
+
+        }, false);
+               
+    }
+
+    $("#modificar_pedido").click(function(event) {
+    
+        document.querySelector(".preloader").setAttribute("style", "");
+        event.preventDefault(); 
+
+        var idpedi_update                = document.getElementById("idpedi-update").value;
+        var pedido_descripcion_update    = document.getElementById("pedido-descripcion-update").value;
+        var pedido_idmedi_update         = document.getElementById("pedido-idmedi-update").value;
+        var pedido_sede_update           = document.getElementById("pedido-sede-update").value;
+        var pedido_cantidad_update       = document.getElementById("pedido-cantidad-update").value;
+        var pedido_estatus_update        = document.getElementById("pedido-estatus-update").value;
+  
+        var url = "http://sidmed.ve/index.php?r=pedidos/update";
+
+        //Verificar validacion
+        //---------------------
+        var VerficarValidacion = 
+        [
+            validateString("pedido-descripcion-update"),
+            validateNumber("pedido-idmedi-update"),
+            validateNumber("pedido-sede-update"),
+            validateNumber("pedido-cantidad-update"),
+            validateNumber("pedido-estatus-update"),
+        ];
+
+        for (ver = 0; ver < VerficarValidacion.length; ver++) {
+            if(VerficarValidacion[ver] === false)
+            {
+
+                document.querySelector(".preloader").style.display = 'none';
+                event.preventDefault();  //stopping submitting
+                Swal.fire(
+                'Error',
+                'Verifica que los campos tengan los valores correspondientes.',
+                'warning'
+                );
+                console.log(VerficarValidacion[ver]);
+                return false;
+            }
+            else
+            {
+
+            }
+        }
+        //Fin verificar validación
+        //------------------------
+  
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                            idpedi_update                 : idpedi_update , 
+                            pedido_descripcion_update     : pedido_descripcion_update,
+                            pedido_idmedi_update          : pedido_idmedi_update,
+                            pedido_sede_update            : pedido_sede_update,
+                            pedido_cantidad_update        : pedido_cantidad_update,
+                            pedido_estatus_update         : pedido_estatus_update,
+
+                }
+            })
+            .done(function(response) {
+
+                if (response.data.success == true) 
+                {    
+                    document.querySelector(".preloader").style.display = 'none';
+                    Swal.fire(
+                    response.data.message,
+                    '',
+                    'success'
+                    );
+                }
+                else
+                {
+                    document.querySelector(".preloader").style.display = 'none';
+                    Swal.fire(
+                    response.data.message,
+                    '',
+                    'error'
+                    )
+                }
+            
+                })
+                .fail(function() {
+                console.log("error");
+                });
+            });
+        //Fin Actualizar Pedido de Medicamento
+        //------------------------------------
+
+     //Registrar Pedido de Medicamento
     //--------------------------------
 
     $("#registrar_pedido").click(function(event) {
@@ -175,7 +325,7 @@ $script = <<< JS
                     event.preventDefault();  //stopping submitting
                     Swal.fire(
                     'Error',
-                    'Verifica que los campos tengas los valores correspondientes.',
+                    'Verifica que los campos tengan los valores correspondientes.',
                     'warning'
                     );
                     console.log(VerficarValidacion[ver]);
@@ -229,7 +379,7 @@ $script = <<< JS
         });
     });
 
-    //Fin registrar distribución de Medicamento
+    //Fin registrar Pedido de Medicamento
    //-------------------------------------------
 
    //Filtrar canidad de medicamentos disponibles
@@ -240,6 +390,35 @@ $script = <<< JS
         let cantidad_de_unidades = document.getElementById("cantidad_de_unidades");
         var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
     
+        $.ajax({
+            url: url,
+            type: 'post',
+            dataType: 'json',
+            data: {
+                    unidad : unidad
+            }
+        })
+        .done(function(response) {
+            if (response.data.success == true) 
+            {
+                document.querySelector(".preloader").style.display = 'none';
+                cantidad_de_unidades.innerHTML = 'Disponible: '+response.data.unidades+' Unidades';
+                cantidad_de_unidades.style.backgroundColor = "#1cc88a";
+                cantidad_de_unidades.style.border = "solid 1px #1cc88a";
+                cantidad_de_unidades.style.color = "#fff";
+            }
+        })
+        .fail(function() {
+            console.log("error");
+        });
+    });
+
+    $("#pedido-idmedi-update").change(function(event) {
+
+        let unidad = document.getElementById("pedido-idmedi-update").value;
+        let cantidad_de_unidades = document.getElementById("cantidad_de_unidades_update");
+        var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
+
         $.ajax({
             url: url,
             type: 'post',
