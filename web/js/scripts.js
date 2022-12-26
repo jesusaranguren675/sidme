@@ -18,8 +18,19 @@
 })(jQuery);
 
 
+$(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+} );
+
+
 $(document).ready( function () {
     $('#dataTable').DataTable({
+    dom: 'Bfrtip',
     language: {
         "decimal": "",
         "emptyTable": "No hay información",
@@ -39,7 +50,7 @@ $(document).ready( function () {
             "next": "Siguiente",
             "previous": "Anterior"
         }
-    },
+    }
 });
 } );
 

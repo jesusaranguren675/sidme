@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\log\Target;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\PedidosSearch */
@@ -21,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <a class="btn btn-primary btn-sm"  href="<?= Url::toRoute('entradasmedicamentos/create'); ?> " data-toggle="modal" data-target="#distribuirMedicamentos">
         Agregar <i class="fas fa-plus"></i>
         </a>
-        <a class="btn btn-danger btn-sm">PDF <i class="far fa-file-pdf"></i></a>
+        <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['pedidos/report', 'message' => 100]) ?>" target="_blank">
+            PDF <i class="far fa-file-pdf"></i>
+        </a>
         <a class="btn btn-success btn-sm">EXCEL <i class="far fa-file-excel"></i></a>
     </div>
     <div class="card-body">

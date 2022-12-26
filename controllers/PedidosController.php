@@ -8,6 +8,9 @@ use app\models\PedidosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+//use kartik\mpdf\Pdf;
+use yii\helpers\Html;
+use Mpdf\Mpdf;
 
 /**
  * PedidosController implements the CRUD actions for Pedidos model.
@@ -70,6 +73,35 @@ class PedidosController extends Controller
         ]);
     }
 
+
+public function actionReport() {
+
+    $pedidos = 
+        Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
+        pedidos.descripcion,
+        medicamentos.nombre,
+        tipo_medicamento.descripcion AS presentacion,
+        detalle_pedi.cantidad, detalle_pedi.estatus,
+        detalle_pedi.fecha
+        FROM pedidos AS pedidos
+        JOIN detalle_pedi AS detalle_pedi
+        ON detalle_pedi.idpedi=pedidos.idpedi
+        JOIN detalle_medi AS detalle_medi
+        ON detalle_medi.id_detalle_medi=detalle_pedi.idmedi
+        JOIN medicamentos AS medicamentos
+        ON medicamentos.idmedi=detalle_medi.idmedi
+        JOIN tipo_medicamento AS tipo_medicamento
+        ON tipo_medicamento.idtipo=detalle_medi.idtipo
+        ")->queryAll();
+    
+        $mpdf = new mPDF();
+        $mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg', ['style' => 'margin-bottom:50px;'])); 
+        $mpdf->setFooter('{PAGENO}'); 
+        $mpdf->WriteHTML($this->renderPartial('_reportView', ['pedidos' => $pedidos]));
+        $mpdf->Output();
+        exit;
+}
+
     /**
      * Displays a single Pedidos model.
      * @param int $idpedi Idpedi
@@ -122,7 +154,7 @@ class PedidosController extends Controller
                         'message'           => 'Consulta Exitosa',
                         'idpedi'            => $idpedi,
                         'descripcion'       => $descripcion,
-                        'nombre'           => $nombre, 
+                        'nombre'            => $nombre, 
                         'presentacion'      => $presentacion,
                         'cantidad'          => $cantidad,
                         'estatus'           => $estatus,

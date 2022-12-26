@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use kartik\mpdf\Pdf;
 
 class SiteController extends Controller
 {
@@ -55,6 +56,15 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function actionReport($message) {
+       
+        //$message = "Hola Mundo";
+
+        return $this->render('_reportView', [
+            'message'   => $message
+        ]);
     }
 
     /**
