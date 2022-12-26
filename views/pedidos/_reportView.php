@@ -31,11 +31,17 @@ use yii\helpers\Html;
 	}
 
 
-</style>
 
-<br><br><br><br><br>
-<h3 style="text-align: center; border:none;">LISTADO DE PEDIDOS</h3>
+</style>
+<div style="width: 100%;">
+    <?= Html::img('@web/img/cintillo_pdf.jpg', ['style' => "width:100%;"]) ?>
+</div>
+<h4 style="text-align: center; border:none;">LISTADO DE PEDIDOS</h4>
+
 <br>
+<b style="font-size: 9pt; color: #333;">Fecha de Reporte: <?php echo date("d/m/Y") ?></b><br>
+<b style="font-size: 9pt; color: #333;">Hora de Reporte: <?php echo date("h:i a") ?></b><br><br>
+
 
 <table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
 	<tr>
@@ -48,9 +54,10 @@ use yii\helpers\Html;
 		<th>Fecha</th>
 	</tr>
 	<?php
+    $contador = 1;
 	foreach ($pedidos as $pedidos)
 	{
-		$contador = 1;
+		
 		?>
         <tr>
             <td><?= $contador ?></td>
@@ -88,7 +95,7 @@ use yii\helpers\Html;
             <td><?= $pedidos['fecha'] ?></td>
         </tr>
 		<?php
-		$contador ++;
+		$contador = $contador + 1;
 	}
 
 	?>

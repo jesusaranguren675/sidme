@@ -95,7 +95,7 @@ public function actionReport() {
         ")->queryAll();
     
         $mpdf = new mPDF();
-        $mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg', ['style' => 'margin-bottom:50px;'])); 
+        //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
         $mpdf->setFooter('{PAGENO}'); 
         $mpdf->WriteHTML($this->renderPartial('_reportView', ['pedidos' => $pedidos]));
         $mpdf->Output();
