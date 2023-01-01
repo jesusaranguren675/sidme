@@ -73,34 +73,33 @@ class PedidosController extends Controller
         ]);
     }
 
+    public function actionReport() {
 
-public function actionReport() {
-
-    $pedidos = 
-        Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
-        pedidos.descripcion,
-        medicamentos.nombre,
-        tipo_medicamento.descripcion AS presentacion,
-        detalle_pedi.cantidad, detalle_pedi.estatus,
-        detalle_pedi.fecha
-        FROM pedidos AS pedidos
-        JOIN detalle_pedi AS detalle_pedi
-        ON detalle_pedi.idpedi=pedidos.idpedi
-        JOIN detalle_medi AS detalle_medi
-        ON detalle_medi.id_detalle_medi=detalle_pedi.idmedi
-        JOIN medicamentos AS medicamentos
-        ON medicamentos.idmedi=detalle_medi.idmedi
-        JOIN tipo_medicamento AS tipo_medicamento
-        ON tipo_medicamento.idtipo=detalle_medi.idtipo
-        ")->queryAll();
-    
-        $mpdf = new mPDF();
-        //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
-        $mpdf->setFooter('{PAGENO}'); 
-        $mpdf->WriteHTML($this->renderPartial('_reportView', ['pedidos' => $pedidos]));
-        $mpdf->Output();
-        exit;
-}
+        $pedidos = 
+            Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
+            pedidos.descripcion,
+            medicamentos.nombre,
+            tipo_medicamento.descripcion AS presentacion,
+            detalle_pedi.cantidad, detalle_pedi.estatus,
+            detalle_pedi.fecha
+            FROM pedidos AS pedidos
+            JOIN detalle_pedi AS detalle_pedi
+            ON detalle_pedi.idpedi=pedidos.idpedi
+            JOIN detalle_medi AS detalle_medi
+            ON detalle_medi.id_detalle_medi=detalle_pedi.idmedi
+            JOIN medicamentos AS medicamentos
+            ON medicamentos.idmedi=detalle_medi.idmedi
+            JOIN tipo_medicamento AS tipo_medicamento
+            ON tipo_medicamento.idtipo=detalle_medi.idtipo
+            ")->queryAll();
+        
+            $mpdf = new mPDF();
+            //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
+            $mpdf->setFooter('{PAGENO}'); 
+            $mpdf->WriteHTML($this->renderPartial('_reportView', ['pedidos' => $pedidos]));
+            $mpdf->Output();
+            exit;
+    }
 
     /**
      * Displays a single Pedidos model.
@@ -247,6 +246,77 @@ public function actionReport() {
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+
+     public function actionQueryupdate()
+     {
+ 
+         $idpedi = $_POST['data_idpedi'];
+ 
+         if (Yii::$app->request->isAjax) 
+         {
+            
+             $pedidos = 
+             Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
+             pedidos.descripcion,
+             medicamentos.nombre,
+             tipo_medicamento.descripcion AS presentacion,
+             detalle_pedi.cantidad, detalle_pedi.estatus,
+             detalle_pedi.fecha
+             FROM pedidos AS pedidos
+             JOIN detalle_pedi AS detalle_pedi
+             ON detalle_pedi.idpedi=pedidos.idpedi
+             JOIN detalle_medi AS detalle_medi
+             ON detalle_medi.id_detalle_medi=detalle_pedi.idmedi
+             JOIN medicamentos AS medicamentos
+             ON medicamentos.idmedi=detalle_medi.idmedi
+             JOIN tipo_medicamento AS tipo_medicamento
+             ON tipo_medicamento.idtipo=detalle_medi.idtipo
+             WHERE pedidos.idpedi=$idpedi")->queryAll();
+ 
+             foreach ($pedidos as $pedidos) {
+                 $idpedi         = $pedidos['idpedi'];
+                 $descripcion    = $pedidos['descripcion'];
+                 $nombre         = $pedidos['nombre'];
+                 $presentacion   = $pedidos['presentacion'];
+                 $cantidad       = $pedidos['cantidad'];
+                 $estatus        = $pedidos['estatus'];
+                 $fecha          = $pedidos['fecha'];
+             }
+ 
+             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+ 
+             if($pedidos)
+             {
+                 return [
+                     'data' => [
+                         'success'           => true,
+                         'message'           => 'Consulta Exitosa',
+                         'idpedi'            => $idpedi,
+                         'descripcion'       => $descripcion,
+                         'nombre'            => $nombre, 
+                         'presentacion'      => $presentacion,
+                         'cantidad'          => $cantidad,
+                         'estatus'           => $estatus,
+                         'fecha'             => $fecha,  
+                     ],
+                     'code' => 1,
+                 ];
+             }
+             else
+             {
+                 return [
+                     'data' => [
+                         'success' => false,
+                         'message' => 'Ocurrió un error en la consulta',
+                 ],
+                     'code' => 0, // Some semantic codes that you know them for yourself
+                 ];
+             }
+         }
+ 
+     }
+
+
     public function actionUpdate()
     {
         //var_dump($_POST); die();

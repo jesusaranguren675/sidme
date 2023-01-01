@@ -60,7 +60,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 .preloader {
   background: rgba(255, 255, 255,.6);
-  position: absolute;
+  position: fixed;
   z-index: 3000;
   top: 0px;
   left: 0px;
