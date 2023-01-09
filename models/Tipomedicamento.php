@@ -38,7 +38,7 @@ class Tipomedicamento extends \yii\db\ActiveRecord
     {
         return [
             'idtipo' => 'Idtipo',
-            'descripcion' => 'Descripcion',
+            'descripcion' => 'Descripción',
         ];
     }
 }

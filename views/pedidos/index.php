@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     //Modal Modificar Pedido
     //----------------------
-    function updatePedido(id)
+    function updatePedi(id)
     {
             event.preventDefault();
 
@@ -186,7 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                    class="btn btn-primary btn-sm view_btn">
                                     <i class="far fa-eye"></i>
                                 </a>
-                                <a onclick="updatePedido(<?php echo $pedidos['idpedi']; ?>)"
+                                <a onclick="updatePedi(<?php echo $pedidos['idpedi']; ?>)"
                                    href="#" 
                                    class="btn btn-primary btn-sm update_btn">
                                     <i class="fas fa-edit"></i>
@@ -359,7 +359,6 @@ $script = <<< JS
         for (ver = 0; ver < VerficarValidacion.length; ver++) {
             if(VerficarValidacion[ver] === false)
             {
-
                 document.querySelector(".preloader").style.display = 'none';
                 event.preventDefault();  //stopping submitting
                 Swal.fire(

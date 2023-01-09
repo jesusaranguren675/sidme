@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Tipomedicamento;
 use app\models\TipomedicamentoSearch;
 use yii\web\Controller;
@@ -38,12 +39,14 @@ class TipomedicamentoController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new TipomedicamentoSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $model = new Tipomedicamento();
+        
+        $presentaciones = 
+        Yii::$app->db->createCommand("SELECT * FROM tipo_medicamento")->queryAll();
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'model'             => $model,
+            'presentaciones'    => $presentaciones,
         ]);
     }
 
@@ -67,20 +70,113 @@ class TipomedicamentoController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Tipomedicamento();
+        if (Yii::$app->request->isAjax) 
+        {
+            $descripcion            = $_POST['descripcion'];
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'idtipo' => $model->idtipo]);
+            /* VALIDACIÓN */
+            $consulta_pre = 
+            Yii::$app->db->createCommand("SELECT * 
+            FROM tipo_medicamento WHERE descripcion='$descripcion'")->queryAll();
+
+            //var_dump($consulta_pre); die();
+
+            if($consulta_pre)
+            {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ya existe la presentación.',
+                    ],
+                    'code' => 0,
+                ];
             }
-        } else {
-            $model->loadDefaultValues();
+            else
+            {
+                /* REGISTRAR PRESENTACION */
+                $presentaciones = Yii::$app->db->createCommand()->insert('tipo_medicamento', [
+                    'descripcion'                  => $descripcion,
+                ])->execute();
+                /* FIN REGISTRAR PRESENTACIÓN */
+            }
+
+            /* FIN VALIDACIÓN */
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($presentaciones)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Presentación Registrada Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al registrar la presentación',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
+
+    
+    public function actionQueryupdate()
+    {
+
+        $data_idtipo = $_POST['data_idpedi'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            var_dump($_POST); die();
+
+            $presentacion_consul = 
+            Yii::$app->db->createCommand("SELECT * FROM tipo_medicamento 
+            WHERE idtipo=$data_idtipo")->queryAll();
+
+
+            foreach ($presentacion_consul as $presentacion){
+                $descripcion    = $presentacion['descripcion'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($presentacion_consul)
+            {
+                return [
+                    'data' => [
+                        'success'           => true,
+                        'message'           => 'Consulta Exitosa',
+                        'descripcion'       => $descripcion,
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+
+    }
+    
 
     /**
      * Updates an existing Tipomedicamento model.
