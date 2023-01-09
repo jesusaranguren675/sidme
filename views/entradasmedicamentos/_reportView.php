@@ -33,10 +33,10 @@ use yii\helpers\Html;
 
 
 </style>
-<div style="width: 100%; margin-bottom:20px;">
+<div style="width: 100%;">
     <?= Html::img('@web/img/cintillo_pdf.jpg', ['style' => "width:100%;"]) ?>
-</div><br>
-<h4 style="text-align:right; border:none;">LISTADO DE PRESENTACIONES</h4>
+</div>
+<h4 style="text-align: right; border:none;">LISTADO DE RECEPCIONES DE MEDICAMENTOS</h4>
 
 <br>
 <b style="font-size: 9pt; color: #333;">Fecha de Reporte: <?php echo date("d/m/Y") ?></b><br>
@@ -46,17 +46,31 @@ use yii\helpers\Html;
 <table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
 	<tr>
 		<th>N°</th>
-		<th>Descripción</th>
+        <th>Nombre</th>
+		<th>Presentación</th>
+		<th>Cantidad</th>
+		<th>Fecha</th>
 	</tr>
 	<?php
     $contador = 1;
-	foreach ($presentaciones as $presentaciones)
+	foreach ($recepciones as $recepciones)
 	{
 		
 		?>
         <tr>
             <td><?= $contador ?></td>
-            <td><?= $presentaciones['descripcion'] ?></td>
+            <td width="100"><?= $recepciones['nombre'] ?></td>
+            <td><?= $recepciones['presentacion'] ?></td>
+            <td style="text-align: center;">
+                <button class="btn btn-warning btn-sm">
+                    <?= $recepciones['cantidad'] ?>
+                </button>
+            </td>
+			<?php 
+                $dateString = $recepciones['fecha_entrada'];
+                $newDateString = date_format(date_create_from_format('Y-m-d', $dateString), 'd-m-Y');
+            ?>
+            <td><?= $newDateString ?></td>
         </tr>
 		<?php
 		$contador = $contador + 1;

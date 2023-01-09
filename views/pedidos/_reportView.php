@@ -36,7 +36,7 @@ use yii\helpers\Html;
 <div style="width: 100%;">
     <?= Html::img('@web/img/cintillo_pdf.jpg', ['style' => "width:100%;"]) ?>
 </div>
-<h4 style="text-align: center; border:none;">LISTADO DE PEDIDOS</h4>
+<h4 style="text-align: right; border:none;">LISTADO DE PEDIDOS</h4>
 
 <br>
 <b style="font-size: 9pt; color: #333;">Fecha de Reporte: <?php echo date("d/m/Y") ?></b><br>

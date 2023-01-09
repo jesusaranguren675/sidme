@@ -8,6 +8,7 @@ use app\models\EntradasmedicamentosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Mpdf\Mpdf;
 
 /**
  * EntradasmedicamentosController implements the CRUD actions for Entradasmedicamentos model.
@@ -70,17 +71,107 @@ class EntradasmedicamentosController extends Controller
         ]);
     }
 
+ 
+
+    public function actionReport() {
+
+        $recepciones = 
+            Yii::$app->db->createCommand("SELECT entradas_medicamentos.identrada, 
+            entradas_medicamentos.descripcion,
+            medicamentos.nombre, tipo_medicamento.descripcion as presentacion, detalle_entra.fecha_entrada,
+            /*tipo_medicamento.descripcion as presentacion,*/
+            detalle_entra.cantidad
+            FROM
+            entradas_medicamentos as entradas_medicamentos 
+            join detalle_entra
+            as detalle_entra on detalle_entra.identrada=entradas_medicamentos.identrada
+            join detalle_medi as detalle_medi
+            on detalle_medi.id_detalle_medi=detalle_entra.idmedi
+            join medicamentos as medicamentos
+            on detalle_medi.idmedi=medicamentos.idmedi
+            join tipo_medicamento as tipo_medicamento
+            on detalle_medi.idtipo=tipo_medicamento.idtipo
+            ")->queryAll();
+        
+            $mpdf = new mPDF();
+            //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
+            $mpdf->setFooter('{PAGENO}'); 
+            $mpdf->WriteHTML($this->renderPartial('_reportView', ['recepciones' => $recepciones]));
+            $mpdf->Output();
+            exit;
+    }
+
     /**
      * Displays a single Entradasmedicamentos model.
      * @param int $identrada Identrada
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($identrada)
+    public function actionView()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($identrada),
-        ]);
+
+        $identrada = $_POST['data_identrada'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $entradas_medicamentos_consul = 
+            Yii::$app->db->createCommand("SELECT entradas_medicamentos.identrada, 
+            entradas_medicamentos.descripcion,
+            medicamentos.nombre, tipo_medicamento.descripcion as presentacion, detalle_entra.fecha_entrada,
+            /*tipo_medicamento.descripcion as presentacion,*/
+            detalle_entra.cantidad
+            FROM
+            entradas_medicamentos as entradas_medicamentos 
+            join detalle_entra
+            as detalle_entra on detalle_entra.identrada=entradas_medicamentos.identrada
+            join detalle_medi as detalle_medi
+            on detalle_medi.id_detalle_medi=detalle_entra.idmedi
+            join medicamentos as medicamentos
+            on detalle_medi.idmedi=medicamentos.idmedi
+            join tipo_medicamento as tipo_medicamento
+            on detalle_medi.idtipo=tipo_medicamento.idtipo
+            where entradas_medicamentos.identrada=$identrada")->queryAll();
+
+            foreach ($entradas_medicamentos_consul as $entradas_medicamentos) {
+                $identrada      = $entradas_medicamentos['identrada'];
+                $descripcion    = $entradas_medicamentos['descripcion'];
+                $nombre         = $entradas_medicamentos['nombre'];
+                $presentacion   = $entradas_medicamentos['presentacion'];
+                $cantidad       = $entradas_medicamentos['cantidad'];
+                $fecha          = $entradas_medicamentos['fecha_entrada'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($entradas_medicamentos_consul)
+            {
+                return [
+                    'data' => [
+                        'success'           => true,
+                        'message'           => 'Consulta Exitosa',
+                        'identrada'         => $identrada,
+                        'descripcion'       => $descripcion,
+                        'nombre'            => $nombre, 
+                        'presentacion'      => $presentacion,
+                        'cantidad'          => $cantidad,
+                        'fecha'             => $fecha,  
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+
     }
 
     /**
@@ -170,6 +261,74 @@ class EntradasmedicamentosController extends Controller
         ]);
     }
 
+    public function actionQueryupdate()
+    {
+
+        $identrada = $_POST['data_identrada'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $recepciones = 
+            Yii::$app->db->createCommand("SELECT entradas_medicamentos.identrada, 
+            entradas_medicamentos.descripcion,
+            medicamentos.nombre, tipo_medicamento.descripcion as presentacion, detalle_entra.fecha_entrada,
+            /*tipo_medicamento.descripcion as presentacion,*/
+            detalle_entra.cantidad
+            FROM
+            entradas_medicamentos as entradas_medicamentos 
+            join detalle_entra
+            as detalle_entra on detalle_entra.identrada=entradas_medicamentos.identrada
+            join detalle_medi as detalle_medi
+            on detalle_medi.id_detalle_medi=detalle_entra.idmedi
+            join medicamentos as medicamentos
+            on detalle_medi.idmedi=medicamentos.idmedi
+            join tipo_medicamento as tipo_medicamento
+            on detalle_medi.idtipo=tipo_medicamento.idtipo
+            where entradas_medicamentos.identrada=$identrada")->queryAll();
+
+            foreach ($recepciones as $recepciones) {
+                $identrada         = $recepciones['identrada'];
+                $descripcion       = $recepciones['descripcion'];
+                $nombre            = $recepciones['nombre'];
+                $presentacion      = $recepciones['presentacion'];
+                $cantidad          = $recepciones['cantidad'];
+                $fecha_entrada     = $recepciones['fecha_entrada'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($recepciones)
+            {
+                return [
+                    'data' => [
+                        'success'           => true,
+                        'message'           => 'Consulta Exitosa',
+                        'identrada'         => $identrada,
+                        'descripcion'       => $descripcion,
+                        'nombre'            => $nombre, 
+                        'presentacion'      => $presentacion,
+                        'cantidad'          => $cantidad,
+                        'fecha_entrada'     => $fecha_entrada,  
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+
+
+    }
+
     /**
      * Updates an existing Entradasmedicamentos model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -177,17 +336,54 @@ class EntradasmedicamentosController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($identrada)
+    public function actionUpdate()
     {
-        $model = $this->findModel($identrada);
+        //var_dump($_POST); die();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'identrada' => $model->identrada]);
+        if (Yii::$app->request->isAjax) 
+        {
+            $identrada                  = $_POST['identrada'];
+            $descripcion                = $_POST['descripcion'];
+            $idmedi                     = $_POST['idmedi'];
+            $idsede                     = $_POST['idsede'];
+            $cantidad                   = $_POST['cantidad'];
+            $idusu                      = Yii::$app->user->identity->id;
+
+            /* ACTUALIZAR ENTRADA DE MEDICAMENTO */
+            $update_entrada = Yii::$app->db->createCommand("UPDATE public.entradas_medicamentos
+            SET identrada=$identrada, descripcion='$descripcion', idusu=$idusu
+            WHERE identrada=$identrada")->queryAll();
+
+            $update_detalle_entrada = Yii::$app->db->createCommand("UPDATE public.detalle_entra
+            SET idmedi=$idmedi, procedencia=$idsede, cantidad=$cantidad
+            WHERE identrada=$identrada")->queryAll();
+            /* FIN ACTUALIZAR ENTRADA DE MEDICAMENTO */
+
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($update_entrada && $update_detalle_entrada)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Recepción Modificada Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al modificar la recepción',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
