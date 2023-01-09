@@ -85,9 +85,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     document.querySelector(".preloader").style.display = 'none';
                     
                     
+                    document.getElementById("idtipo-update").setAttribute("value", response.data.idtipo);
                     document.getElementById("tipomedicamento-descripcion-update").setAttribute("value", response.data.descripcion);
                     
-
                     //document.getElementById("viewPedidoLabel").innerHTML = response.data.nombre+ " " + response.data.presentacion;
                 }
             })
@@ -246,9 +246,88 @@ $script = <<< JS
           console.log("error");
         });
     });
-
     //Fin registrar Presentación del Medicamento
    //-------------------------------------------
+
+   //Actualizar Pedido de Medicamento
+   //--------------------------------
+   $("#modificar_presentacion").click(function(event) {
+
+        document.querySelector(".preloader").setAttribute("style", "");
+        event.preventDefault(); 
+
+        var presentacion_idtipo_update         = document.getElementById("idtipo-update").value;
+        var presentacion_descripcion_update    = document.getElementById("tipomedicamento-descripcion-update").value;
+
+
+        var url = "http://sidmed.ve/index.php?r=tipomedicamento/update";
+
+        //Verificar validacion
+        //---------------------
+        var VerficarValidacion = 
+        [
+            validateString("tipomedicamento-descripcion-update"),
+        ];
+
+        for (ver = 0; ver < VerficarValidacion.length; ver++) {
+            if(VerficarValidacion[ver] === false)
+            {
+                document.querySelector(".preloader").style.display = 'none';
+                event.preventDefault();  //stopping submitting
+                Swal.fire(
+                'Error',
+                'Verifica que los campos tengan los valores correspondientes.',
+                'warning'
+                );
+                console.log(VerficarValidacion[ver]);
+                return false;
+            }
+            else
+            {
+
+            }
+        }
+        //Fin verificar validación
+        //------------------------
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            dataType: 'json',
+            data: {
+                        presentacion_idtipo_update          : presentacion_idtipo_update,
+                        presentacion_descripcion_update     : presentacion_descripcion_update,
+            }
+        })
+        .done(function(response) {
+
+            if (response.data.success == true) 
+            {    
+                document.querySelector(".preloader").style.display = 'none';
+                Swal.fire(
+                response.data.message,
+                '',
+                'success'
+                );
+            }
+            else
+            {
+                document.querySelector(".preloader").style.display = 'none';
+                Swal.fire(
+                response.data.message,
+                '',
+                'error'
+                )
+            }
+
+            })
+            .fail(function() {
+            console.log("error");
+            });
+        });
+
+//Fin Actualizar Pedido de Medicamento
+//------------------------------------
 JS;
 $this->registerJs($script);
 ?>

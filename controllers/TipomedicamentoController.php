@@ -208,6 +208,7 @@ class TipomedicamentoController extends Controller
             foreach ($presentacion_consul as $presentacion)
             {
                 $descripcion    = $presentacion['descripcion'];
+                $idtipo         = $presentacion['idtipo'];
             }
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -218,6 +219,7 @@ class TipomedicamentoController extends Controller
                     'data' => [
                         'success'           => true,
                         'message'           => 'Consulta Exitosa',
+                        'idtipo'            => $idtipo,
                         'descripcion'       => $descripcion,
                     ],
                     'code' => 1,
@@ -245,17 +247,44 @@ class TipomedicamentoController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($idtipo)
+    public function actionUpdate()
     {
-        $model = $this->findModel($idtipo);
+        if (Yii::$app->request->isAjax) 
+        {
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'idtipo' => $model->idtipo]);
+            $idtipo      = $_POST['presentacion_idtipo_update'];
+            $descripcion = $_POST['presentacion_descripcion_update'];
+
+            /* ACTUALIZAR PRESENTACION */
+            $update_pedido = Yii::$app->db->createCommand("UPDATE public.tipo_medicamento
+            SET descripcion='$descripcion'
+            WHERE idtipo=$idtipo")->queryAll();
+            /* FIN ACTUALIZAR PRESENTACION */
+
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($update_pedido)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Presentación Modificada Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al modificar la presentación',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**

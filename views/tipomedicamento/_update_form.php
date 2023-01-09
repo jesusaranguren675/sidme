@@ -13,6 +13,8 @@ use yii\helpers\ArrayHelper;
             'enableClientValidation' => false,
             'enableAjaxValidation' => false,]); ?>
 
+    <input id="idtipo-update" type="hidden" value="">
+
     <div class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'id' => 'tipomedicamento-descripcion-update']) ?>
