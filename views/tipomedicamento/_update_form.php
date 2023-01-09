@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
 
     <div class="row">
         <div class="col-sm-6">
-            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'id' => 'tipomedicamento-descripcion-update']) ?>
         </div>
     </div>
 

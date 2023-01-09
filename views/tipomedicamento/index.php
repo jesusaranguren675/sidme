@@ -14,20 +14,21 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <script>
-        //Modal Modificar Pedido
-    //----------------------
-    function updatePre(id)
+
+    //Modal ver Pedido
+    //----------------
+    function view(id) 
     {
-            event.preventDefault();
 
-            document.querySelector(".preloader").style.display = '';
+        event.preventDefault();
+
+        document.querySelector(".preloader").style.display = '';
     
-            let data_idtipo = id;
+        let data_idtipo = id;
 
-            $('#actualizarPre').modal({ show:true });
+        $('#viewPresentaciones').modal({ show:true });
 
-            /*
-            var url = "http://sidmed.ve/index.php?r=tipo_medicamento/queryupdate";
+        var url = "http://sidmed.ve/index.php?r=tipomedicamento/view";
     
             $.ajax({
                 url: url,
@@ -42,10 +43,50 @@ $this->params['breadcrumbs'][] = $this->title;
                 {
                     document.querySelector(".preloader").style.display = 'none';
                     
-                    document.getElementById("pedido-descripcion-update").setAttribute("value", response.data.descripcion);
-                    document.getElementById("pedido-cantidad-update").setAttribute("value", response.data.cantidad);
-                    document.getElementById("idpedi-update").setAttribute("value", response.data.idpedi);
+                    document.getElementById("data_1").innerHTML = response.data.idtipo;
+                    document.getElementById("data_2").innerHTML = response.data.descripcion;
 
+                    document.getElementById("viewPresentacionesLabel").innerHTML = response.data.descripcion;
+
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            });
+    }
+    //Fin Modal ver Pedido
+    //--------------------
+
+    //Modal Modificar Presentaciones
+    //----------------------
+    function updatePre(id)
+    {
+            event.preventDefault();
+
+            document.querySelector(".preloader").style.display = '';
+    
+            let data_idtipo = id;
+
+            $('#actualizarPre').modal({ show:true });
+
+            var url = "http://sidmed.ve/index.php?r=tipomedicamento/queryupdate";    
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    data_idtipo : data_idtipo,
+                }
+            })
+            .done(function(response) {
+                if (response.data.success == true) 
+                {
+                    document.querySelector(".preloader").style.display = 'none';
+                    
+                    
+                    document.getElementById("tipomedicamento-descripcion-update").setAttribute("value", response.data.descripcion);
+                    
 
                     //document.getElementById("viewPedidoLabel").innerHTML = response.data.nombre+ " " + response.data.presentacion;
                 }
@@ -53,10 +94,10 @@ $this->params['breadcrumbs'][] = $this->title;
             .fail(function() {
                 console.log("error");
             });
-            */
+            
     }
-    //Fin Modificar Modal ver Pedido
-    //------------------------------
+    //Fin Modificar Modal Modificar Presentaciones
+    //--------------------------------------------
 </script>
 
 <div class="card shadow mb-4">
@@ -66,10 +107,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <a class="btn btn-primary btn-sm"  href="#" data-toggle="modal" data-target="#modalPresentacion">
         Agregar <i class="fas fa-plus"></i>
         </a>
-        <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['pedidos/report']) ?>" target="_blank">
+        <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['tipomedicamento/report']) ?>" target="_blank">
             PDF <i class="far fa-file-pdf"></i>
         </a>
-        <a class="btn btn-success btn-sm">EXCEL <i class="far fa-file-excel"></i></a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -113,7 +153,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
 ]) ?>
 
-<?= $this->render('modal_registrar_presentacion', [
+<?= $this->render('modal_update_presentacion', [
+        'model' => $model,
+]) ?>
+
+<?= $this->render('modal_view_presentaciones', [
         'model' => $model,
 ]) ?>
 

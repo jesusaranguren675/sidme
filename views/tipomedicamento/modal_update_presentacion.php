@@ -4,7 +4,7 @@ use Yii\helpers\Html;
 use Yii\helpers\Url;
 ?>
 
-<!-- Modal Actualizar Pedidos de Medicamentos -->
+<!-- Modal Actualizar Presentaciones de Medicamentos -->
 <div class="modal fade" id="actualizarPre" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="actualizarPreLabel" aria-hidden="true">
   <div style="position:relative;" class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -26,4 +26,4 @@ use Yii\helpers\Url;
     </div>
   </div>
 </div>
-<!-- Fin Modal Actualizar Pedidos de Medicamentos -->
+<!-- Fin Modal Actualizar Presentaciones de Medicamentos -->

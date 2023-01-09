@@ -8,6 +8,7 @@ use app\models\TipomedicamentoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Mpdf\Mpdf;
 
 /**
  * TipomedicamentoController implements the CRUD actions for Tipomedicamento model.
@@ -50,17 +51,78 @@ class TipomedicamentoController extends Controller
         ]);
     }
 
+    public function actionReport() {
+
+        $presentaciones = 
+            Yii::$app->db->createCommand("SELECT * FROM tipo_medicamento
+            ")->queryAll();
+        
+            $mpdf = new mPDF();
+            //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
+            $mpdf->setFooter('{PAGENO}'); 
+            $mpdf->WriteHTML($this->renderPartial('_reportView', ['presentaciones' => $presentaciones]));
+            $mpdf->Output();
+            exit;
+    }
+
     /**
      * Displays a single Tipomedicamento model.
      * @param int $idtipo Idtipo
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    /*
     public function actionView($idtipo)
     {
         return $this->render('view', [
             'model' => $this->findModel($idtipo),
         ]);
+    }
+    */
+
+    public function actionView()
+    {
+
+        $idtipo = $_POST['data_idtipo'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $presentacion_consul = 
+            Yii::$app->db->createCommand("SELECT * FROM tipo_medicamento 
+            WHERE idtipo=$idtipo")->queryAll();
+
+            foreach ($presentacion_consul as $presentacion) {
+                $idtipo         = $presentacion['idtipo'];
+                $descripcion    = $presentacion['descripcion'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($presentacion_consul)
+            {
+                return [
+                    'data' => [
+                        'success'           => true,
+                        'message'           => 'Consulta Exitosa',
+                        'idtipo'            => $idtipo,
+                        'descripcion'       => $descripcion,
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+
     }
 
     /**
@@ -134,19 +196,17 @@ class TipomedicamentoController extends Controller
     public function actionQueryupdate()
     {
 
-        $data_idtipo = $_POST['data_idpedi'];
+        $data_idtipo = $_POST['data_idtipo'];
 
         if (Yii::$app->request->isAjax) 
         {
            
-            var_dump($_POST); die();
-
             $presentacion_consul = 
             Yii::$app->db->createCommand("SELECT * FROM tipo_medicamento 
             WHERE idtipo=$data_idtipo")->queryAll();
 
-
-            foreach ($presentacion_consul as $presentacion){
+            foreach ($presentacion_consul as $presentacion)
+            {
                 $descripcion    = $presentacion['descripcion'];
             }
 
