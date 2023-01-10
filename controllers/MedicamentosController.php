@@ -40,6 +40,8 @@ class MedicamentosController extends Controller
     public function actionIndex()
     {
         $searchModel = new MedicamentosSearch();
+
+        $model = new Medicamentos();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         $medicamentos = 
@@ -57,6 +59,7 @@ class MedicamentosController extends Controller
             'searchModel'               => $searchModel,
             'dataProvider'              => $dataProvider,
             'medicamentos'              => $medicamentos,
+            'model'                     => $model,
         ]);
     }
 
@@ -80,19 +83,129 @@ class MedicamentosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Medicamentos();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'idmedi' => $model->idmedi]);
+        if (Yii::$app->request->isAjax) 
+        {
+            $nombre         = $_POST['nombre'];
+            $presentacion   = $_POST['presentacion'];
+            /* VALIDACIÓN */
+            $consulta_medicamento = 
+            Yii::$app->db->createCommand("SELECT * 
+            FROM medicamentos WHERE nombre='$nombre'")->queryAll();
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($consulta_medicamento)
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'El Medicamento Ya Existe.',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
             }
-        } else {
-            $model->loadDefaultValues();
+            else{
+                /* REGISTRAR MEDICAMENTO */
+                $medicamento = Yii::$app->db->createCommand()->insert('medicamentos', [
+                    'nombre'                  => "$nombre",
+                ])->execute();
+
+                $idmedi = Yii::$app->db->getLastInsertID();
+
+                $detalle_medi = Yii::$app->db->createCommand()->insert('detalle_medi', [
+                    'idmedi'                  => $idmedi,
+                    'idtipo'                  => $presentacion,
+                ])->execute();
+                /* FIN REGISTRAR MEDICAMENTO */
+
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                if($medicamento && $detalle_medi)
+                {
+                    return [
+                        'data' => [
+                            'success' => true,
+                            'message' => 'Medicamento Registrado Exitosamente.',
+                        ],
+                        'code' => 1,
+                    ];
+                }
+                else
+                {
+                    return [
+                        'data' => [
+                            'success' => false,
+                            'message' => 'Ocurrió un error al registrar el medicamento.',
+                    ],
+                        'code' => 0, // Some semantic codes that you know them for yourself
+                    ];
+                }
+            }
+
+            /* VALIDACIÓN */
+
+
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+    }
+
+    public function actionQueryupdate()
+    {
+
+        $id_detalle_medi = $_POST['id_detalle_medi'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $detalle_medi = 
+            Yii::$app->db->createCommand("SELECT
+            detalle_medi.id_detalle_medi,
+            medicamentos.idmedi,
+            medicamentos.nombre, 
+            tipo_medicamento.descripcion
+            from detalle_medi as detalle_medi
+            join medicamentos as medicamentos
+            on medicamentos.idmedi=detalle_medi.idmedi
+            join tipo_medicamento as tipo_medicamento
+            on detalle_medi.idtipo=tipo_medicamento.idtipo
+            WHERE id_detalle_medi=$id_detalle_medi")->queryAll();
+
+            foreach ($detalle_medi as $detalle_medi) {
+                $idmedi             = $detalle_medi['idmedi'];
+                $id_detalle_medi    = $detalle_medi['id_detalle_medi'];
+                $nombre             = $detalle_medi['nombre'];
+                $descripcion        = $detalle_medi['descripcion'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($detalle_medi)
+            {
+                return [
+                    'data' => [
+                        'success'           => true,
+                        'message'           => 'Consulta Exitosa',
+                        'idmedi'            => $idmedi,
+                        'id_detalle_medi'   => $id_detalle_medi,
+                        'descripcion'       => $descripcion,
+                        'nombre'            => $nombre, 
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+
     }
 
     /**
@@ -102,17 +215,50 @@ class MedicamentosController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($idmedi)
+    public function actionUpdate()
     {
-        $model = $this->findModel($idmedi);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'idmedi' => $model->idmedi]);
+        if (Yii::$app->request->isAjax) 
+        {
+            $idmedi                        = $_POST['idmedi'];
+            $id_detalle_medi               = $_POST['id_detalle_medi'];
+            $nombre_update                 = $_POST['nombre_update'];
+            $presentacion_update           = $_POST['presentacion_update'];
+
+            /* ACTUALIZAR MEDICAMENTO */
+            $update_medicamento = Yii::$app->db->createCommand("UPDATE public.medicamentos
+            SET nombre='$nombre_update'
+            WHERE idmedi=$idmedi")->queryAll();
+
+            $update_detalle_medi = Yii::$app->db->createCommand("UPDATE public.detalle_medi
+            SET idmedi=$idmedi, idtipo=$presentacion_update
+            WHERE id_detalle_medi=$id_detalle_medi")->queryAll();
+            /* FIN ACTUALIZAR MEDICAMENTO */
+
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($update_medicamento && $update_detalle_medi)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Medicamento Modificado Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al modificar el medicamento',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**

@@ -319,8 +319,6 @@ class PedidosController extends Controller
 
     public function actionUpdate()
     {
-        //var_dump($_POST); die();
-
         if (Yii::$app->request->isAjax) 
         {
             $idpedi                 = $_POST['idpedi_update'];

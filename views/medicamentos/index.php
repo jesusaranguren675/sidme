@@ -14,13 +14,58 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+<script>
+    //Modal Modificar Recepción
+    //-------------------------
+    function updateMe(id)
+    {
+            event.preventDefault();
+
+            document.querySelector(".preloader").style.display = '';
+    
+            let id_detalle_medi = id;
+
+            $('#actualizarMedicamentos').modal({ show:true });
+          
+            var url = "http://sidmed.ve/index.php?r=medicamentos/queryupdate";
+    
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    id_detalle_medi : id_detalle_medi
+                }
+            })
+            .done(function(response) {
+                if (response.data.success == true) 
+                {
+                    document.querySelector(".preloader").style.display = 'none';
+                    
+                    document.getElementById("id_detalle_medi-update").setAttribute("value", response.data.id_detalle_medi);
+                    document.getElementById("nombre-update").setAttribute("value", response.data.nombre);
+                    document.getElementById("idmedi-update").setAttribute("value", response.data.idmedi);
+                    
+                    //document.getElementById("viewPedidoLabel").innerHTML = response.data.nombre+ " " + response.data.presentacion;
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            });
+    }
+    //Fin Modificar Modal Recepcion
+    //------------------------------
+</script>
+
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="container">
     <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
     <hr>
 
-    <a class="btn btn-primary btn-sm">Agregar <i class="fas fa-plus"></i></a>
+    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#medicamento">
+        Agregar <i class="fas fa-plus"></i>
+    </a>
     <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
     <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
     </div>
@@ -35,14 +80,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <th style="text-align: center;">Acciones</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>N°</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th style="text-align: center;">Acciones</th>
-                    </tr>
-                </tfoot>
                 <tbody>
                     <?php foreach ($medicamentos as $medicamentos): ?>
                         <tr>
@@ -53,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <a href="<?= Url::to(['medicamentos/view', 'id_detalle_medi' => $medicamentos['id_detalle_medi']]); ?>" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>
                                 </a>
-                                <a href="<?= Url::to(['medicamentos/update', 'id_detalle_medi' => $medicamentos['id_detalle_medi']]); ?>" class="btn btn-primary btn-sm">
+                                <a onclick="updateMe(<?= $medicamentos['id_detalle_medi']; ?>)" href="#" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
@@ -64,3 +101,188 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<?= $this->render('modal_registrar_medicamento', [
+        'model' => $model,
+]) ?>
+
+<?= $this->render('modal_update_medicamento', [
+        'model' => $model,
+]) ?>
+
+<?= $this->render('../site/preloader') ?>
+
+<?php
+$script = <<< JS
+
+    var nombre  = document.getElementById("medicamentos-nombre").value;
+
+    validateStringBlur("medicamentos-nombre");
+    validateStringBlur("presentacion");
+
+    //Registrar Medicamento
+    //--------------------------------
+
+    $("#registrar_medicamento").click(function(event) {
+    
+        document.querySelector(".preloader").setAttribute("style", "");
+        event.preventDefault(); 
+        
+        var nombre  = document.getElementById("medicamentos-nombre").value;
+        var presentacion  = document.getElementById("presentacion").value;
+  
+        var url = "http://sidmed.ve/index.php?r=medicamentos/create";
+
+            //Verificar validacion
+            //---------------------
+            var VerficarValidacion = 
+            [
+                validateString("medicamentos-nombre"),
+                validateString("presentacion"),
+            ];
+
+            for (ver = 0; ver < VerficarValidacion.length; ver++) {
+                if(VerficarValidacion[ver] === false)
+                {
+
+                    document.querySelector(".preloader").style.display = 'none';
+                    event.preventDefault();  //stopping submitting
+                    Swal.fire(
+                    'Error',
+                    'Verifica que los campos tengan los valores correspondientes.',
+                    'warning'
+                    );
+                    return false;
+                }
+                else
+                {
+
+                }
+            }
+            //Fin verificar validación
+            //------------------------
+      
+      $.ajax({
+          url: url,
+          type: 'post',
+          dataType: 'json',
+          data: {
+                      nombre            : nombre,
+                      presentacion      : presentacion,
+          }
+      })
+      .done(function(response) {
+
+          if (response.data.success == true) 
+          {    
+              document.querySelector(".preloader").style.display = 'none';
+              Swal.fire(
+              response.data.message,
+              '',
+              'success'
+              );
+          }
+          else
+          {
+             document.querySelector(".preloader").style.display = 'none';
+             Swal.fire(
+             response.data.message,
+             '',
+             'error'
+             )
+          }
+       
+        })
+        .fail(function() {
+          console.log("error");
+        });
+    });
+    //Fin registrar Medicamento
+   //--------------------------
+
+   //Actualizar Pedido de Medicamento
+   //--------------------------------
+   $("#modificar_medicamento").click(function(event) {
+
+document.querySelector(".preloader").setAttribute("style", "");
+event.preventDefault(); 
+
+var id_detalle_medi        = document.getElementById("id_detalle_medi-update").value;
+var idmedi                 = document.getElementById("idmedi-update").value;
+var nombre_update          = document.getElementById("nombre-update").value;
+var presentacion_update    = document.getElementById("presentacion-update").value;
+
+var url = "http://sidmed.ve/index.php?r=medicamentos/update";
+
+//Verificar validacion
+//---------------------
+var VerficarValidacion = 
+[
+    validateString("nombre-update"),
+    validateNumber("presentacion-update"),
+];
+
+for (ver = 0; ver < VerficarValidacion.length; ver++) {
+    if(VerficarValidacion[ver] === false)
+    {
+        document.querySelector(".preloader").style.display = 'none';
+        event.preventDefault();  //stopping submitting
+        Swal.fire(
+        'Error',
+        'Verifica que los campos tengan los valores correspondientes.',
+        'warning'
+        );
+        return false;
+    }
+    else
+    {
+
+    }
+}
+//Fin verificar validación
+//------------------------
+
+$.ajax({
+    url: url,
+    type: 'post',
+    dataType: 'json',
+    data: {
+                idmedi                        : idmedi,
+                id_detalle_medi               : id_detalle_medi, 
+                nombre_update                 : nombre_update, 
+                presentacion_update           : presentacion_update,
+    }
+})
+.done(function(response) {
+
+    if (response.data.success == true) 
+    {    
+        document.querySelector(".preloader").style.display = 'none';
+        Swal.fire(
+        response.data.message,
+        '',
+        'success'
+        );
+    }
+    else
+    {
+        document.querySelector(".preloader").style.display = 'none';
+        Swal.fire(
+        response.data.message,
+        '',
+        'error'
+        )
+    }
+
+    })
+    .fail(function() {
+    console.log("error");
+    });
+});
+
+
+//Fin Actualizar Pedido de Medicamento
+//------------------------------------
+JS;
+$this->registerJs($script);
+?>
