@@ -9,6 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\BackendUser;
+use app\models\BackendUser as ModelsBackendUser;
 use kartik\mpdf\Pdf;
 
 class SiteController extends Controller
@@ -74,8 +76,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $model = new \app\models\LoginForm();
+
+        return $this->render('login', ['model' => $model]);
         //return $this->render('index');
-        return $this->redirect(['login']);
+        //return $this->redirect(['login']);
     }
 
     public function actionButtons()

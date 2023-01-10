@@ -15,6 +15,6 @@ $this->title = 'Site';
     <h1>Bienvenido al Sistema de Distribucion de Medicamentos</h1>
 
     <div class="form-group">
-        <a class="btn btn-primary" href="<?= Url::toRoute('site/register'); ?>">Iniciar Sesión</a>
+        <a class="btn btn-primary" href="<?= Url::toRoute('site/login'); ?>">Iniciar Sesión</a>
     </div>
 </div>

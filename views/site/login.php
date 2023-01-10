@@ -33,7 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <p>Sistema de Distribución de Medicamentos Del Eje Centro Oeste Del Área de Salud Integral Comunitaria (ASIC).</p>
                                         </div>
                                         <?php $form = ActiveForm::begin([
-                                            'id' => 'login-form',
+                                            'id'        => 'login-form',
+                                            'action'    => '/index.php?r=site%2Flogin',
                                             //'layout' => 'horizontal',
                                             //'fieldConfig' => [
                                                 //'template' => "{label}\n{input}\n{error}",
