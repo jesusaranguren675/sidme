@@ -15,6 +15,48 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 <script>
+    //Modal ver Pedido
+    //----------------
+    function view(id) 
+    {
+
+            event.preventDefault();
+
+            document.querySelector(".preloader").style.display = '';
+    
+            let data_id_detalle_medi = id;
+
+            $('#viewMedicamento').modal({ show:true });
+
+            var url = "http://sidmed.ve/index.php?r=medicamentos/view";
+    
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    data_id_detalle_medi : data_id_detalle_medi
+                }
+            })
+            .done(function(response) {
+                if (response.data.success == true) 
+                {
+                    document.querySelector(".preloader").style.display = 'none';
+                    
+                    document.getElementById("data_1").innerHTML = response.data.id_detalle_medi;
+                    document.getElementById("data_2").innerHTML = response.data.nombre;
+                    document.getElementById("data_3").innerHTML = response.data.descripcion;
+
+                    document.getElementById("viewMedicamentoLabel").innerHTML = response.data.nombre+ " " + response.data.descripcion;
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            });
+    //Fin Modal ver Pedido
+    //--------------------
+    }
+
     //Modal Modificar Recepción
     //-------------------------
     function updateMe(id)
@@ -66,8 +108,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#medicamento">
         Agregar <i class="fas fa-plus"></i>
     </a>
-    <a class="btn btn-danger btn-sm">pdf <i class="far fa-file-pdf"></i></a>
-    <a class="btn btn-success btn-sm">excel <i class="far fa-file-excel"></i></a>
+    <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['medicamentos/report']) ?>" target="_blank">
+        PDF <i class="far fa-file-pdf"></i>
+    </a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -87,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $medicamentos['nombre'] ?></td>
                             <td><?= $medicamentos['descripcion'] ?></td>
                             <td style="text-align: center;">
-                                <a href="<?= Url::to(['medicamentos/view', 'id_detalle_medi' => $medicamentos['id_detalle_medi']]); ?>" class="btn btn-primary btn-sm">
+                                <a onclick="view(<?= $medicamentos['id_detalle_medi']; ?>)" href="#" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>
                                 </a>
                                 <a onclick="updateMe(<?= $medicamentos['id_detalle_medi']; ?>)" href="#" class="btn btn-primary btn-sm">
@@ -103,6 +146,10 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?= $this->render('modal_registrar_medicamento', [
+        'model' => $model,
+]) ?>
+
+<?= $this->render('modal_view_medicamento', [
         'model' => $model,
 ]) ?>
 
