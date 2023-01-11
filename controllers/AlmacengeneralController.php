@@ -7,6 +7,7 @@ use app\models\AlmacengeneralSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Mpdf\Mpdf;
 
 /**
  * AlmacengeneralController implements the CRUD actions for Almacengeneral model.
@@ -40,6 +41,7 @@ class AlmacengeneralController extends Controller
     {
         $searchModel = new AlmacengeneralSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $model = new Almacengeneral();
 
         $almacen_general = 
         Yii::$app->db->createCommand("select almacen_general.idal_gral,
@@ -55,7 +57,28 @@ class AlmacengeneralController extends Controller
             'searchModel'           => $searchModel,
             'dataProvider'          => $dataProvider,
             'almacen_general'       => $almacen_general,
+            'model'                 => $model,
         ]);
+    }
+
+    public function actionReport() {
+
+        $almacen_general = 
+            Yii::$app->db->createCommand("SELECT almacen_general.idal_gral,
+            medicamentos.nombre, tipo_medicamento.descripcion as presentacion, almacen_general.cantidad
+            from almacen_general join detalle_medi as detalle_medi
+            on almacen_general.idmedi=detalle_medi.id_detalle_medi
+            join medicamentos as medicamentos
+            on medicamentos.idmedi=detalle_medi.idmedi
+            join tipo_medicamento as tipo_medicamento
+            on tipo_medicamento.idtipo=detalle_medi.idtipo")->queryAll();
+        
+            $mpdf = new mPDF();
+            //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
+            $mpdf->setFooter('{PAGENO}'); 
+            $mpdf->WriteHTML($this->renderPartial('_reportView', ['almacen_general' => $almacen_general]));
+            $mpdf->Output();
+            exit;
     }
 
     /**
@@ -64,11 +87,59 @@ class AlmacengeneralController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($idal_gral)
+    public function actionView()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($idal_gral),
-        ]);
+        $data_idal_gral = $_POST['data_idal_gral'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $almacen_general_consul = 
+            Yii::$app->db->createCommand("SELECT almacen_general.idal_gral,
+            medicamentos.nombre, tipo_medicamento.descripcion as presentacion, almacen_general.cantidad
+            from almacen_general join detalle_medi as detalle_medi
+            on almacen_general.idmedi=detalle_medi.id_detalle_medi
+            join medicamentos as medicamentos
+            on medicamentos.idmedi=detalle_medi.idmedi
+            join tipo_medicamento as tipo_medicamento
+            on tipo_medicamento.idtipo=detalle_medi.idtipo
+            WHERE almacen_general.idal_gral=$data_idal_gral")->queryAll();
+
+            foreach ($almacen_general_consul as $almacen_general) {
+                $idal_gral      = $almacen_general['idal_gral'];
+                $nombre         = $almacen_general['nombre'];
+                $presentacion   = $almacen_general['presentacion'];
+                $cantidad       = $almacen_general['cantidad'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($almacen_general_consul)
+            {
+                return [
+                    'data' => [
+                        'success'           => true,
+                        'message'           => 'Consulta Exitosa',
+                        'idal_gral'         => $idal_gral,
+                        'nombre'            => $nombre, 
+                        'presentacion'      => $presentacion,
+                        'cantidad'          => $cantidad,
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+
     }
 
     /**
