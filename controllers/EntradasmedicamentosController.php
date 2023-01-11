@@ -263,7 +263,7 @@ class EntradasmedicamentosController extends Controller
 
     public function actionQueryupdate()
     {
-
+        
         $identrada = $_POST['data_identrada'];
 
         if (Yii::$app->request->isAjax) 
@@ -325,8 +325,6 @@ class EntradasmedicamentosController extends Controller
                 ];
             }
         }
-
-
     }
 
     /**

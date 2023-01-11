@@ -110,6 +110,7 @@ class AlmacengeneralController extends Controller
                 $nombre         = $almacen_general['nombre'];
                 $presentacion   = $almacen_general['presentacion'];
                 $cantidad       = $almacen_general['cantidad'];
+
             }
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -147,6 +148,62 @@ class AlmacengeneralController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+
+     public function actionQueryupdate()
+     {
+
+         $idal_gral = $_POST['data_idal_gral'];
+ 
+         if (Yii::$app->request->isAjax) 
+         {
+            
+             $almacen_general_consul = 
+             Yii::$app->db->createCommand("SELECT almacen_general.idal_gral,
+             medicamentos.nombre, tipo_medicamento.descripcion as presentacion, almacen_general.cantidad
+             from almacen_general join detalle_medi as detalle_medi
+             on almacen_general.idmedi=detalle_medi.id_detalle_medi
+             join medicamentos as medicamentos
+             on medicamentos.idmedi=detalle_medi.idmedi
+             join tipo_medicamento as tipo_medicamento
+             on tipo_medicamento.idtipo=detalle_medi.idtipo
+             WHERE almacen_general.idal_gral=$idal_gral")->queryAll();
+ 
+             foreach ($almacen_general_consul as $almacen_general) {
+                 $idal_gral         = $almacen_general['idal_gral'];
+                 $nombre            = $almacen_general['nombre'];
+                 $presentacion      = $almacen_general['presentacion'];
+                 $cantidad          = $almacen_general['cantidad'];
+             }
+ 
+             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+ 
+             if($almacen_general_consul)
+             {
+                 return [
+                     'data' => [
+                         'success'           => true,
+                         'message'           => 'Consulta Exitosa',
+                         'idal_gral'         => $idal_gral,
+                         'nombre'            => $nombre, 
+                         'presentacion'      => $presentacion,
+                         'cantidad'          => $cantidad,  
+                     ],
+                     'code' => 1,
+                 ];
+             }
+             else
+             {
+                 return [
+                     'data' => [
+                         'success' => false,
+                         'message' => 'Ocurrió un error en la consulta',
+                 ],
+                     'code' => 0, // Some semantic codes that you know them for yourself
+                 ];
+             }
+         }
+    }
+
     public function actionCreate()
     {
         $model = new Almacengeneral();
@@ -171,18 +228,45 @@ class AlmacengeneralController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($idal_gral)
+    public function actionUpdate()
     {
-        $model = $this->findModel($idal_gral);
+        $idal_gral_update   = $_POST['idal_gral_update'];
+        $cantidad_update    = $_POST['cantidad_update'];
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'idal_gral' => $model->idal_gral]);
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $almacen_general_update = 
+            Yii::$app->db->createCommand("UPDATE public.almacen_general
+            SET cantidad=$cantidad_update
+            WHERE idal_gral=$idal_gral_update")->queryAll();
+
+        
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($almacen_general_update)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Inventario Modificada Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al modificar el Inventario',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
+
 
     /**
      * Deletes an existing Almacengeneral model.
