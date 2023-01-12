@@ -185,7 +185,7 @@ $script = <<< JS
             var VerficarValidacion = 
             [
                 validateString("medicamentos-nombre"),
-                validateString("presentacion"),
+                validateNumber("presentacion"),
             ];
 
             for (ver = 0; ver < VerficarValidacion.length; ver++) {

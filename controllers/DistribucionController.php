@@ -8,6 +8,7 @@ use app\models\DistribucionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Mpdf\Mpdf;
 
 /**
  * DistribucionController implements the CRUD actions for Distribucion model.
@@ -69,6 +70,33 @@ class DistribucionController extends Controller
         ]);
     }
 
+    public function actionReport() {
+
+        $distribuciones = 
+            Yii::$app->db->createCommand("SELECT distribucion.iddis,
+            distribucion.descripcion,
+            medicamentos.nombre,
+            tipo_medicamento.descripcion AS presentacion,
+            detalle_dis.cantidad,
+            detalle_dis.fecha
+            FROM distribucion AS distribucion
+            JOIN detalle_dis AS detalle_dis
+            ON distribucion.iddis=detalle_dis.iddis
+            JOIN detalle_medi AS detalle_medi
+            ON detalle_medi.id_detalle_medi=detalle_dis.idmedi
+            JOIN medicamentos AS medicamentos
+            ON medicamentos.idmedi=detalle_medi.idmedi
+            JOIN tipo_medicamento AS tipo_medicamento
+            ON tipo_medicamento.idtipo=detalle_medi.idtipo")->queryAll();
+        
+            $mpdf = new mPDF();
+            //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
+            $mpdf->setFooter('{PAGENO}'); 
+            $mpdf->WriteHTML($this->renderPartial('_reportView', ['distribuciones' => $distribuciones]));
+            $mpdf->Output();
+            exit;
+    }
+
     /**
      * Displays a single Distribucion model.
      * @param int $iddis Iddis
@@ -93,30 +121,15 @@ class DistribucionController extends Controller
 
         if (Yii::$app->request->isAjax) 
         {
-            $pedido_idmedi          = $_POST['pedido_idmedi'];
-            $pedido_descripcion     = $_POST['pedido_descripcion'];
-            $pedido_idsede          = $_POST['pedido_idsede'];
-            $pedido_cantidad        = $_POST['pedido_cantidad'];
+
             $idmedi         = $_POST['idmedi'];
-            //$descripcion    = $_POST['descripcion'];
-            $idsede         = $_POST['idsede'];
+            $descripcion    = $_POST['descripcion'];
+            $destino         = $_POST['destino'];
             $cantidad       = $_POST['cantidad'];
             $idusu          = Yii::$app->user->identity->id;
             $fecha  = date('d/m/y');
 
-            /* REGISTRAR PEDIDO */
-            $pedido = Yii::$app->db->createCommand()->insert('pedidos', [
-                'descripcion'                  => $pedido_descripcion,
-                'idusu'                        => $idusu,
-            ])->execute();
 
-            $idpedi = Yii::$app->db->getLastInsertID();
-
-            $detalle_pedi = 
-            Yii::$app->db->createCommand("INSERT INTO public.detalle_pedi(
-                idpedi, idmedi, procedencia, cantidad, fecha)
-                VALUES ($idpedi, $pedido_idmedi, $pedido_idsede , $pedido_cantidad, '$fecha')")->queryAll();
-            /* FIN REGISTRAR DISTRIBUCIÓN */
 
             /* VALIDACIÓN CANTIDAD */
             $consulta_almacen = 
@@ -149,7 +162,7 @@ class DistribucionController extends Controller
 
             /* REGISTRAR DISTRIBUCIÓN */
             $distribucion = Yii::$app->db->createCommand()->insert('distribucion', [
-                'descripcion'                  => $pedido_descripcion,
+                'descripcion'                  => $descripcion,
                 'idusu'                        => $idusu,
             ])->execute();
 
@@ -158,7 +171,7 @@ class DistribucionController extends Controller
             $detalle_dis = 
             Yii::$app->db->createCommand("INSERT INTO public.detalle_dis(
                 idmedi, iddis, destino, cantidad, fecha)
-                VALUES ($idmedi, $iddis, $idsede, $cantidad, '$fecha')")->queryAll();
+                VALUES ($idmedi, $iddis, $destino, $cantidad, '$fecha')")->queryAll();
             /* FIN REGISTRAR DISTRIBUCIÓN */
 
             $resta = $unidades - $cantidad;

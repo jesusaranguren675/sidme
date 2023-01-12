@@ -32,15 +32,15 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
     ]); ?>
 
     <div class="row">
-        <!--
+        
         <div class="col-sm-6">
-            <?php /* $form->field($model, 'descripcion')->textInput(['maxlength' => true]) */ ?>
+            <label for="distribucion-descripcion">Descripción</label>
+            <input class="form-control" type="text" id="distribucion-descripcion" maxlength="35">
         </div>
-        -->
-
+        
         <div class="col-sm-6">
             <label for="entradasmedicamentos-idmedi">Medicamento</label>
-            <select required class="form-control" name="nombre_medicamento_distribucion" id="entradasmedicamentos-idmedi">
+            <select required class="form-control" name="nombre_medicamento_distribucion" id="distribucion-idmedi">
                 <?php foreach ($medicamentos as $medicamentos): ?>
                     <option value="<?= $medicamentos['id_detalle_medi'] ?>"><?= $medicamentos['nombre'] ?> <?= $medicamentos['descripcion'] ?></option>
                 <?php endforeach; ?>
@@ -54,9 +54,9 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
         </div>
         
         <div class="col-sm-6">
-        <label for="pedido-cantidad">Unidades</label>
+        <label for="distribucion-cantidad">Unidades</label>
             <div class="input-group">
-                <input id="distribucion-cantidad" type="text" type="number" class="form-control">
+                <input maxlength="3" id="distribucion-cantidad" type="text" type="number" class="form-control">
                 <div class="input-group-append">
                     <span id="cantidad_de_unidades" class="input-group-text">Disponible 0.00</span>
                 </div>
