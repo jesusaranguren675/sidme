@@ -336,7 +336,6 @@ class EntradasmedicamentosController extends Controller
      */
     public function actionUpdate()
     {
-        //var_dump($_POST); die();
 
         if (Yii::$app->request->isAjax) 
         {
