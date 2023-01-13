@@ -136,6 +136,8 @@ else //Si no es invitado se mostrara el contenido siguiente
                 </a>
             </li>
             -->
+
+            <!--
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDistribucion"
                     aria-expanded="true" aria-controls="collapseDistribucion">
@@ -151,8 +153,9 @@ else //Si no es invitado se mostrara el contenido siguiente
                     
                 </div>
             </li>
+            -->
 
-            <!--
+            
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
                     <i class="fas fa-warehouse"></i>
@@ -173,7 +176,7 @@ else //Si no es invitado se mostrara el contenido siguiente
                     <span>Distribución</span>
                 </a>
             </li>
-                        -->
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">
