@@ -1,503 +1,367 @@
 <?php
+
+use app\models\Sede;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\grid\ActionColumn;
+use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-use yii\helpers\Url;
-use app\assets\DatatableAsset;
-DatatableAsset::register($this);
+/** @var app\models\SedeSearch $searchModel */
+/** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Sede';
+$this->title = 'Sedes';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Sedes ACIC</h1>
-</div>
 
-<!-- Content Row -->
-<div class="row">
+<script>
+    //Modal ver Sede
+    //----------------
+    function view(id) 
+    {
 
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Principal (San Martin)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 1</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="<?= Url::toRoute('Sede/wiew'); ?>" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Materdidad</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 2</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Las Casitas</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 3</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Los Bomberos</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 4</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+            event.preventDefault();
 
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        La Yaguara</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 5</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+            document.querySelector(".preloader").style.display = '';
+    
+            let data_idsede = id;
+
+            $('#viewSede').modal({ show:true });
+
+            var url = "http://sidmed.ve/index.php?r=sede/view";
+    
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    data_idsede : data_idsede
+                }
+            })
+            .done(function(response) {
+                if (response.data.success == true) 
+                {
+                    console.log(response.data);
+
+                    document.querySelector(".preloader").style.display = 'none';
+                                        
+                    document.getElementById("data_1").innerHTML = response.data.idsede;
+
+                    document.getElementById("data_2").innerHTML = response.data.nombre;
+                    document.getElementById("data_3").innerHTML = response.data.ubicacion;
+                    document.getElementById("data_4").innerHTML = response.data.telefono;
+                    document.getElementById("data_5").innerHTML = response.data.correo;
+
+
+                    document.getElementById("viewRecepcionLabel").innerHTML = response.data.nombre+ " " + response.data.presentacion;
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            });
+    //Fin Modal ver Sede
+    //--------------------
+    }
+
+    //Modal Modificar Sede
+    //----------------------
+    function updateSe(id)
+    {
+            event.preventDefault();
+
+            document.querySelector(".preloader").style.display = '';
+    
+            let data_idsede = id;
+
+            $('#actualizarSedes').modal({ show:true });
+
+            var url = "http://sidmed.ve/index.php?r=sede/queryupdate";
+    
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    data_idsede : data_idsede
+                }
+            })
+            .done(function(response) {
+                if (response.data.success == true) 
+                {
+                    document.querySelector(".preloader").style.display = 'none';
+                    
+                    document.getElementById("idsede-update").setAttribute("value", response.data.idsede);
+                    document.getElementById("nombre-update").setAttribute("value", response.data.nombre);
+                    document.getElementById("ubicacion-update").setAttribute("value", response.data.ubicacion);
+                    document.getElementById("telefono-update").setAttribute("value", response.data.telefono);
+                    document.getElementById("correo-update").setAttribute("value", response.data.correo);
+
+
+                    //document.getElementById("viewPedidoLabel").innerHTML = response.data.nombre+ " " + response.data.presentacion;
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            });
+    }
+    //Fin Modificar Modal ver Sede
+    //------------------------------
+</script>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
+    <hr>
+
+    <a class="btn btn-primary btn-sm"  href="<?= Url::toRoute('entradasmedicamentos/create'); ?> " data-toggle="modal" data-target="#registrarSede">
+        Agregar 
+        <i class="fas fa-plus"></i>
+    </a>
+    <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['sede/report']) ?>" target="_blank">
+            PDF <i class="far fa-file-pdf"></i>
+        </a>
+
     </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Sta. Teresa</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 6</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Montalban</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 7</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Quebradita</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 8</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Mamera</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 9</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Zona Industrial</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 10</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        El Pinar</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 11</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Pedro Fontes</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 12</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Sefar</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 13</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        UD 4</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 14</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        UD 6</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 15</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        UD 1</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">ACIC 16</div>
-                    </div>
-                    <div class="col-auto">
-                        <a href="#" class="btn btn-info btn-circle">
-                            <i class="fas fa-info-circle"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
- 
-</div>
-<!-- Content Row -->
-<div class="row">
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Principal (San Martin)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                        ASIC 1 (UD4)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">ASIC 2 (Maternidad)
-                        </div>
-                        <div class="row no-gutters align-items-center">
-                            <div class="col-auto">
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                            </div>
-                            <div class="col">
-                                <div class="progress progress-sm mr-2">
-                                    <div class="progress-bar bg-info" role="progressbar"
-                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                    aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pending Requests Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                        ASIC 3 (Las Casitas</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Nombre</th>
+                        <th>ubicación</th>
+                        <th>Telefono</th>
+                        <th>Correo</th>
+                        <th style="text-align: center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $contador = 1; ?>
+                    <?php foreach ($sedes as $sedes): ?>
+                        <tr>
+                            <td><?= $contador ?></td>
+                            <td><?= $sedes['nombre'] ?></td>
+                            <td><?= $sedes['ubicacion'] ?></td>
+                            <td><?= $sedes['telefono'] ?></td>
+                            <td><?= $sedes['correo'] ?></td>
+                            <td style="text-align: center;">
+                                <a onclick="view(<?= $sedes['idsede']; ?>)" href="" class="btn btn-primary btn-sm">
+                                    <i class="far fa-eye"></i>
+                                </a>
+                                <a onclick="updateSe(<?= $sedes['idsede']; ?>)" href="#" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php $contador = $contador + 1; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-        
+<?= $this->render('modal_registrar_sede', [
+        'model' => $model,
+]) ?>
 
-                            <!-- Color System -->
-                            <div class="row">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-primary text-white shadow">
-                                        <div class="card-body">
-                                            Primary
-                                            <div class="text-white-50 small">#4e73df</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-success text-white shadow">
-                                        <div class="card-body">
-                                            Success
-                                            <div class="text-white-50 small">#1cc88a</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-info text-white shadow">
-                                        <div class="card-body">
-                                            Info
-                                            <div class="text-white-50 small">#36b9cc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-warning text-white shadow">
-                                        <div class="card-body">
-                                            Warning
-                                            <div class="text-white-50 small">#f6c23e</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-danger text-white shadow">
-                                        <div class="card-body">
-                                            Danger
-                                            <div class="text-white-50 small">#e74a3b</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-secondary text-white shadow">
-                                        <div class="card-body">
-                                            Secondary
-                                            <div class="text-white-50 small">#858796</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-light text-black shadow">
-                                        <div class="card-body">
-                                            Light
-                                            <div class="text-black-50 small">#f8f9fc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-dark text-white shadow">
-                                        <div class="card-body">
-                                            Dark
-                                            <div class="text-white-50 small">#5a5c69</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<?= $this->render('modal_view_sede', [
+        'model' => $model,
+]) ?>
 
-                        </div>
+<?= $this->render('modal_update_sede', [
+        'model' => $model,
+]) ?>
 
-                        <div class="col-lg-6 mb-4">
+<?= $this->render('../site/preloader') ?>
 
-                            <!-- Illustrations -->
-                           
+<?php
+$script = <<< JS
+      
+      //Registrar Ingreso de Medicamento
+      //--------------------------------
 
-                            <!-- Approach -->
-                        
-                                    
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-
-                            </div>
-
-                        </div>
-                    </div>
+      validateStringBlur("sede-nombre"),
+      validateStringBlur("sede-ubicacion"),
+      validateNumberBlur("sede-telefono"),
+      validateStringBlur("sede-correo"),
 
 
+      $("#registrar_sede").click(function(event) {
+            document.querySelector(".preloader").setAttribute("style", "");
+
+            event.preventDefault(); 
+            
+            var nombre          = document.getElementById("sede-nombre").value;
+            var ubicacion       = document.getElementById("sede-ubicacion").value;
+            var telefono        = document.getElementById("sede-telefono").value;
+            var correo          = document.getElementById("sede-correo").value;            
+            //Verificar validacion
+            //---------------------
+            var VerficarValidacion = 
+            [
+                validateString("sede-nombre"),
+                validateString("sede-ubicacion"),
+                validateNumber("sede-telefono"),
+                validateString("sede-correo"),
+            ];
+
+            for (ver = 0; ver < VerficarValidacion.length; ver++) {
+                if(VerficarValidacion[ver] === false)
+                {
+                    document.querySelector(".preloader").style.display = 'none';
+                    event.preventDefault();  //stopping submitting
+                    Swal.fire(
+                    'Error',
+                    'Verifica que los campos tengan los valores correspondientes.',
+                    'warning'
+                    );
+                    console.log(VerficarValidacion[ver]);
+                    return false;
+                }
+                else
+                {
+
+                }
+            }
+            //Fin verificar validación
+            //------------------------
+            
+            var url = "http://sidmed.ve/index.php?r=sede/create";
+            
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                            nombre                : nombre,
+                            ubicacion             : ubicacion,
+                            telefono              : telefono,
+                            correo                : correo,
+                }
+            })
+            .done(function(response) {
+
+                if (response.data.success == true) 
+                {
+                    document.querySelector(".preloader").style.display = 'none';
+                    Swal.fire(
+                    response.data.message,
+                    '',
+                    'success'
+                    )
+
+                }
+                else
+                {
+                   document.querySelector(".preloader").style.display = 'none';
+                   Swal.fire(
+                   response.data.message,
+                   '',
+                   'error'
+                   )
+                }
+             
+            })
+            .fail(function() {
+                console.log("error");
+            });
+        });
+
+         //Fin registrar Ingreso de Medicamento
+        //-------------------------------------
+
+//Actualizar Sede
+   //--------------------------------
+   $("#modificar_sede").click(function(event) {
+
+    document.querySelector(".preloader").setAttribute("style", "");
+    event.preventDefault(); 
+
+    var idsede                = document.getElementById("idsede-update").value;
+    var nombre                = document.getElementById("nombre-update").value;
+    var ubicacion             = document.getElementById("ubicacion-update").value;
+    var telefono              = document.getElementById("telefono-update").value;
+    var correo                = document.getElementById("correo-update").value;
 
 
+    var url = "http://sidmed.ve/index.php?r=sede/update";
 
+    //Verificar validacion
+    //---------------------
+    var VerficarValidacion = 
+    [
+        validateString("nombre-update"),
+        validateString("ubicacion-update"),
+        validateNumber("telefono-update"),
+        validateString("correo-update"),
+    ];
+
+    for (ver = 0; ver < VerficarValidacion.length; ver++) {
+        if(VerficarValidacion[ver] === false)
+        {
+            document.querySelector(".preloader").style.display = 'none';
+            event.preventDefault();  //stopping submitting
+            Swal.fire(
+            'Error',
+            'Verifica que los campos tengan los valores correspondientes.',
+            'warning'
+            );
+            console.log(VerficarValidacion[ver]);
+            return false;
+        }
+        else
+        {
+
+        }
+    }
+    //Fin verificar validación
+    //------------------------
+
+    $.ajax({
+        url: url,
+        type: 'post',
+        dataType: 'json',
+        data: {
+                    idsede                 : idsede , 
+                    nombre                 : nombre,
+                    ubicacion              : ubicacion,
+                    telefono               : telefono,
+                    correo                 : correo
+        }
+    })
+    .done(function(response) {
+
+        if (response.data.success == true) 
+        {    
+            document.querySelector(".preloader").style.display = 'none';
+            Swal.fire(
+            response.data.message,
+            '',
+            'success'
+            );
+        }
+        else
+        {
+            document.querySelector(".preloader").style.display = 'none';
+            Swal.fire(
+            response.data.message,
+            '',
+            'error'
+            )
+        }
+
+        })
+        .fail(function() {
+        console.log("error");
+        });
+    });
+    //Fin Actualizar Sede
+    //------------------------------------
+
+
+   
+JS;
+$this->registerJs($script);
+?>
