@@ -126,7 +126,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['pedidos/report']) ?>" target="_blank">
             PDF <i class="far fa-file-pdf"></i>
         </a>
-        <a class="btn btn-success btn-sm">EXCEL <i class="far fa-file-excel"></i></a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -134,9 +133,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <thead>
                     <tr>
                         <th>N°</th>
+                        <th>Orden</th>
                         <th>Descripción</th>
                         <th>Nombre</th>
                         <th>Presentación</th>
+                        <th>Destino</th>
                         <th>Cantidad</th>
                         <th>Estatus</th>
                         <th>Fecha</th>
@@ -148,9 +149,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php foreach ($pedidos as $pedidos): ?>
                         <tr>
                             <td><?= $contador ?></td>
+                            <td><?= $pedidos['id_orden'] ?></td>
                             <td><?= $pedidos['descripcion'] ?></td>
                             <td width="100"><?= $pedidos['nombre'] ?></td>
                             <td><?= $pedidos['presentacion'] ?></td>
+                            <td width="100"><?= $pedidos['procedencia'] ?></td>
                             <td style="text-align: center;">
                                 <button class="btn btn-warning btn-sm">
                                 <?= $pedidos['cantidad'] ?>
@@ -178,7 +181,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                                 ?>
                             </td>
-                            <td><?= $pedidos['fecha'] ?></td>
+                            <?php 
+                                $dateString = $pedidos['fecha'];
+                                $newDateString = date_format(date_create_from_format('Y-m-d', $dateString), 'd-m-Y');
+                            ?>
+                            <td><?= $newDateString ?></td>
+            
                             <td style="text-align: center;">
                                 <a onclick="view(<?php echo $pedidos['idpedi']; ?>)" id="view_<?php echo $pedidos['idpedi']; ?>"
                                    data-idpedi="<?php echo $pedidos['idpedi']; ?>" 
@@ -190,6 +198,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                    href="#" 
                                    class="btn btn-primary btn-sm update_btn">
                                     <i class="fas fa-edit"></i>
+                                </a>
+
+                                <a title="Generar Orden del Pedido N° <?= $pedidos['id_orden'] ?>" class="btn btn-danger btn-sm" href="<?= $url = Url::toRoute(['pedidos/notaentrega', 'id' => $pedidos['idpedi']]); ?>" target="_blank">
+                                    <i class="fas fa-file-alt"></i>
                                 </a>
                             </td>
                         </tr>
@@ -225,13 +237,13 @@ $script = <<< JS
     var procedencia             = document.getElementById("pedido-sede").value;
     var cantidad                = document.getElementById("pedido-cantidad").value;
     var cantidad_de_unidades    = document.getElementById("cantidad_de_unidades");
-    var estatus                 = document.getElementById("pedido-estatus").value;
+    //var estatus                 = document.getElementById("pedido-estatus").value;
 
     validateStringBlur("pedido-descripcion");
     validateNumberBlur("pedido-idmedi");
     validateNumberBlur("pedido-sede");
     validateNumberBlur("pedido-cantidad");
-    validateNumberBlur("pedido-estatus");
+    //validateNumberBlur("pedido-estatus");
     
     document.getElementById('pedido-sede').previousElementSibling.innerHTML = 'Procedencia';
 
@@ -249,7 +261,7 @@ $script = <<< JS
         var procedencia             = document.getElementById("pedido-sede").value;
         var cantidad                = document.getElementById("pedido-cantidad").value;
         var cantidad_de_unidades    = document.getElementById("cantidad_de_unidades");
-        var estatus                 = document.getElementById("pedido-estatus").value;
+        //var estatus                 = document.getElementById("pedido-estatus").value;
         var url = "http://sidmed.ve/index.php?r=pedidos/create";
 
             //Verificar validacion
@@ -260,7 +272,7 @@ $script = <<< JS
                 validateNumber("pedido-idmedi"),
                 validateNumber("pedido-sede"),
                 validateNumber("pedido-cantidad"),
-                validateNumber("pedido-estatus"),
+                //validateNumber("pedido-estatus"),
             ];
 
             for (ver = 0; ver < VerficarValidacion.length; ver++) {
@@ -294,7 +306,7 @@ $script = <<< JS
                       idmedi                    : idmedi,
                       procedencia               : procedencia,
                       cantidad                  : cantidad,
-                      estatus                   : estatus,
+                      //estatus                   : estatus,
 
           }
       })

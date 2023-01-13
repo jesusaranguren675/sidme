@@ -63,6 +63,7 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
             </div>
         </div>
 
+        <!--
         <div class="col-sm-12">
             <label for="pedido-estatus">Estatus</label>
             <select class="form-control" name="pedido-estatus" id="pedido-estatus">
@@ -72,6 +73,7 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
                 <option value="3">Rechazado</option>
             </select>
         </div>
+        -->
     </div>
 
     <?php ActiveForm::end(); ?>
