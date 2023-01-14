@@ -167,6 +167,7 @@ $script = <<< JS
                     '',
                     'success'
                     );
+                    $('#viewMedicamento').modal({ show:false });
                 }
                 else
                 {

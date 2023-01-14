@@ -115,6 +115,26 @@ $this->params['breadcrumbs'][] = $this->title;
     //------------------------------
 </script>
 
+<style>
+    .select2-selection--single {
+        background-color: #fff !important;
+        border: 1px solid #d1d3e2 !important;
+        border-radius: 4px !important;
+
+        
+    }
+    .select2-selection--single{
+        height: 38px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #6e707e !important;
+    line-height: 28px !important;
+}
+</style>
+
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="container-fluid">
@@ -232,6 +252,26 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $script = <<< JS
 
+$(document).ready(function() {
+    $('.js-example-basic-single').select2({
+        dropdownParent: $('#distribuirMedicamentos .modal-body'),
+    });
+
+    $('#pedido-idmedi-update').select2({
+        dropdownParent: $('#actualizarMedicamentos .modal-body'),
+    });
+
+    $('#pedido-sede-update').select2({
+        dropdownParent: $('#actualizarMedicamentos .modal-body'),
+    });
+
+    $('#pedido-estatus-update').select2({
+        dropdownParent: $('#actualizarMedicamentos .modal-body'),
+    });
+
+
+});
+
     var descripcion             = document.getElementById("pedido-descripcion").value;
     var idmedi                  = document.getElementById("pedido-idmedi").value;
     var procedencia             = document.getElementById("pedido-sede").value;
@@ -320,6 +360,10 @@ $script = <<< JS
               '',
               'success'
               );
+
+              $('#distribuirMedicamentos').modal('hide')
+              $('input[type="text"]').val('');
+              $('input[type="text"]').style.borderColor = '#d1d3e2';
           }
           else
           {
@@ -413,6 +457,8 @@ $script = <<< JS
                 '',
                 'success'
                 );
+                $('#actualizarMedicamentos').modal('hide')
+                $('input[type="text"]').val('');
             }
             else
             {

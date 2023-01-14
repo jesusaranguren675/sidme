@@ -19,7 +19,11 @@ JOIN medicamentos AS medicamentos
 ON medicamentos.idmedi=detalle_medi.idmedi
 JOIN tipo_medicamento AS tipo_medicamento
 ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
+
+$sedes = 
+Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
 ?>
+
 
 <div class="pedidos-form" id="pedidos">
     <?php $form = ActiveForm::begin([
@@ -38,20 +42,21 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
         </div>
 
         <div class="col-sm-6">
-            <label for="entradasmedicamentos-idmedi">Medicamento</label>
-            <select class="form-control" name="nombre_medicamento_pedido" id="pedido-idmedi-update">
-                <option>Seleccionar</option>
+            <label for="pedido-idmedi-update">Medicamento</label>
+            <select id="pedido-idmedi-update" style="width: 100%" class="js-example-basic-single" name="state">
                 <?php foreach ($medicamentos as $medicamentos): ?>
                     <option value="<?= $medicamentos['id_detalle_medi'] ?>"><?= $medicamentos['nombre'] ?> <?= $medicamentos['descripcion'] ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
 
-
         <div class="col-sm-6">
-            <?= $form->field($model, "idsede")->dropDownList(
-                                ArrayHelper::map($sedes, 'idsede', 'nombre'),
-                                ['id' => 'pedido-sede-update', 'prompt' => 'Seleccionar']);?>  
+            <label for="pedido-sede-update">Procedencia</label>
+            <select id="pedido-sede-update" style="width: 100%" class="js-example-basic-single" name="state">
+                <?php foreach ($sedes as $sedes): ?>
+                    <option value="<?= $sedes['idsede'] ?>"><?= $sedes['nombre'] ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <div class="col-sm-6">
@@ -64,17 +69,21 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
             </div>
         </div>
 
+
         <div class="col-sm-12">
-            <label for="pedido-estatus">Estatus</label>
-            <select class="form-control" name="pedido-estatus" id="pedido-estatus-update">
-                <option>Seleccionar</option>
+            <label for="pedido-estatus-update">Estatus</label>
+            <select id="pedido-estatus-update" style="width: 100%" class="js-example-basic-single" name="state">
                 <option value="1">Aprobado</option>
                 <option value="2">Pendiente</option>
                 <option value="3">Rechazado</option>
             </select>
         </div>
+
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
+
+
+

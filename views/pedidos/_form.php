@@ -9,6 +9,7 @@ $sedes = \app\models\Sede::find()->all();
 /* @var $model app\models\Pedidos */
 /* @var $form yii\widgets\ActiveForm */
 
+
 $medicamentos = 
 Yii::$app->db->createCommand("SELECT
 detalle_medi.id_detalle_medi,
@@ -19,6 +20,9 @@ JOIN medicamentos AS medicamentos
 ON medicamentos.idmedi=detalle_medi.idmedi
 JOIN tipo_medicamento AS tipo_medicamento
 ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
+
+$sedes = 
+Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
 ?>
 
 <div class="pedidos-form" id="pedidos">
@@ -37,20 +41,21 @@ ON detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
         </div>
 
         <div class="col-sm-6">
-            <label for="entradasmedicamentos-idmedi">Medicamento</label>
-            <select class="form-control" name="nombre_medicamento_pedido" id="pedido-idmedi">
-                <option>Seleccionar</option>
+            <label for="pedido-idmedi">Medicamento</label>
+            <select id="pedido-idmedi" style="width: 100%" class="js-example-basic-single" name="state">
                 <?php foreach ($medicamentos as $medicamentos): ?>
                     <option value="<?= $medicamentos['id_detalle_medi'] ?>"><?= $medicamentos['nombre'] ?> <?= $medicamentos['descripcion'] ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
 
-
         <div class="col-sm-6">
-            <?= $form->field($model, "idsede")->dropDownList(
-                                ArrayHelper::map($sedes, 'idsede', 'nombre'),
-                                ['id' => 'pedido-sede', 'prompt' => 'Seleccionar']);?>  
+            <label for="pedido-sede">Procedencia</label>
+            <select id="pedido-sede" style="width: 100%" class="js-example-basic-single" name="state">
+                <?php foreach ($sedes as $sedes): ?>
+                    <option value="<?= $sedes['idsede'] ?>"><?= $sedes['nombre'] ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <div class="col-sm-6">
