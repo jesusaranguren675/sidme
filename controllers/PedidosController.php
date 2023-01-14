@@ -52,8 +52,9 @@ class PedidosController extends Controller
         pedidos.descripcion,
         medicamentos.nombre,
         tipo_medicamento.descripcion AS presentacion,
+        sede.nombre AS procedencia,
         detalle_pedi.cantidad, detalle_pedi.estatus,
-        detalle_pedi.fecha
+        detalle_pedi.fecha, detalle_pedi.correlativo as id_orden
         FROM pedidos AS pedidos
         JOIN detalle_pedi AS detalle_pedi
         ON detalle_pedi.idpedi=pedidos.idpedi
@@ -63,6 +64,8 @@ class PedidosController extends Controller
         ON medicamentos.idmedi=detalle_medi.idmedi
         JOIN tipo_medicamento AS tipo_medicamento
         ON tipo_medicamento.idtipo=detalle_medi.idtipo
+        JOIN sede AS sede
+        ON sede.idsede=detalle_pedi.procedencia
         ")->queryAll();
 
         return $this->render('index', [
@@ -81,7 +84,7 @@ class PedidosController extends Controller
             medicamentos.nombre,
             tipo_medicamento.descripcion AS presentacion,
             detalle_pedi.cantidad, detalle_pedi.estatus,
-            detalle_pedi.fecha
+            detalle_pedi.fecha, detalle_pedi.correlativo
             FROM pedidos AS pedidos
             JOIN detalle_pedi AS detalle_pedi
             ON detalle_pedi.idpedi=pedidos.idpedi
@@ -97,6 +100,43 @@ class PedidosController extends Controller
             //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
             $mpdf->setFooter('{PAGENO}'); 
             $mpdf->WriteHTML($this->renderPartial('_reportView', ['pedidos' => $pedidos]));
+            $mpdf->Output();
+            exit;
+    }
+
+    public function actionNotaentrega($id) {
+
+        $pedidos = 
+            Yii::$app->db->createCommand("SELECT pedidos.idpedi,
+			detalle_pedi.correlativo AS orden,
+            pedidos.descripcion,
+            medicamentos.nombre,
+            tipo_medicamento.descripcion AS presentacion,
+			sede.nombre AS procedencia,
+            detalle_pedi.cantidad, detalle_pedi.estatus,
+            detalle_pedi.fecha
+            FROM pedidos AS pedidos
+            JOIN detalle_pedi AS detalle_pedi
+            ON detalle_pedi.idpedi=pedidos.idpedi
+            JOIN detalle_medi AS detalle_medi
+            ON detalle_medi.id_detalle_medi=detalle_pedi.idmedi
+            JOIN medicamentos AS medicamentos
+            ON medicamentos.idmedi=detalle_medi.idmedi
+            JOIN tipo_medicamento AS tipo_medicamento
+            ON tipo_medicamento.idtipo=detalle_medi.idtipo
+			JOIN sede AS sede
+        	ON sede.idsede=detalle_pedi.procedencia
+			WHERE pedidos.idpedi=$id
+            ")->queryAll();
+
+            foreach ($pedidos as $pedidos_p) {
+                $orden = $pedidos_p['orden'];
+            }
+
+            $mpdf = new mPDF();
+            //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
+            $mpdf->setFooter('{PAGENO}'); 
+            $mpdf->WriteHTML($this->renderPartial('_notaEntrega', ['pedidos' => $pedidos, 'orden' => $orden]));
             $mpdf->Output();
             exit;
     }
@@ -121,7 +161,7 @@ class PedidosController extends Controller
             medicamentos.nombre,
             tipo_medicamento.descripcion AS presentacion,
             detalle_pedi.cantidad, detalle_pedi.estatus,
-            detalle_pedi.fecha
+            detalle_pedi.fecha, detalle_pedi.correlativo as id_orden
             FROM pedidos AS pedidos
             JOIN detalle_pedi AS detalle_pedi
             ON detalle_pedi.idpedi=pedidos.idpedi
@@ -141,6 +181,7 @@ class PedidosController extends Controller
                 $cantidad       = $pedidos['cantidad'];
                 $estatus        = $pedidos['estatus'];
                 $fecha          = $pedidos['fecha'];
+                $id_orden       = $pedidos['id_orden'];
             }
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -191,9 +232,12 @@ class PedidosController extends Controller
             $idmedi                 = $_POST['idmedi'];
             $procedencia            = $_POST['procedencia'];
             $cantidad               = $_POST['cantidad'];
-            $estatus                = $_POST['estatus'];
+            $estatus                = 2;
             $idusu                  = Yii::$app->user->identity->id;
             $fecha                  = date('d/m/y');
+            $dia                    = date('d');
+            $mes                    = date('m');
+            $anio                   = date('y');
 
             /* REGISTRAR PEDIDO */
             $pedido = Yii::$app->db->createCommand()->insert('pedidos', [
@@ -203,11 +247,67 @@ class PedidosController extends Controller
 
             $idpedi = Yii::$app->db->getLastInsertID();
 
+            $correlativo = "$idpedi"."-"."$dia$mes$anio";
+
             $detalle_pedi = 
             Yii::$app->db->createCommand("INSERT INTO public.detalle_pedi(
-                idpedi, idmedi, procedencia, cantidad, fecha, estatus)
-                VALUES ($idpedi, $idmedi, $procedencia, $cantidad, '$fecha', $estatus);")->queryAll();
-            /* FIN REGISTRAR DISTRIBUCIÓN */
+                idpedi, idmedi, procedencia, cantidad, fecha, estatus, correlativo)
+                VALUES ($idpedi, $idmedi, $procedencia, $cantidad, '$fecha', $estatus, '$correlativo');")->queryAll();
+
+            $idpedi = Yii::$app->db->getLastInsertID();
+            /* FIN REGISTRAR PEDIDO */
+
+            /* CONSULTAR PEDIDO REGISTRADO ANTERIORMENTE */
+
+            $pedidos = 
+            Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
+            pedidos.descripcion,
+            medicamentos.nombre,
+            tipo_medicamento.descripcion AS presentacion,
+            detalle_pedi.cantidad, detalle_pedi.estatus,
+            detalle_pedi.fecha, detalle_pedi.correlativo as id_orden
+            FROM pedidos AS pedidos
+            JOIN detalle_pedi AS detalle_pedi
+            ON detalle_pedi.idpedi=pedidos.idpedi
+            JOIN detalle_medi AS detalle_medi
+            ON detalle_medi.id_detalle_medi=detalle_pedi.idmedi
+            JOIN medicamentos AS medicamentos
+            ON medicamentos.idmedi=detalle_medi.idmedi
+            JOIN tipo_medicamento AS tipo_medicamento
+            ON tipo_medicamento.idtipo=detalle_medi.idtipo
+            WHERE pedidos.idpedi=$idpedi")->queryAll();
+
+            foreach ($pedidos as $pedidos) {
+                $idpedi         = $pedidos['idpedi'];
+                $descripcion    = $pedidos['descripcion'];
+                $nombre         = $pedidos['nombre'];
+                $presentacion   = $pedidos['presentacion'];
+                $cantidad       = $pedidos['cantidad'];
+                $estatus        = $pedidos['estatus'];
+                $fecha          = $pedidos['fecha'];
+                $id_orden       = $pedidos['id_orden'];
+            }
+
+            /* FIN CONSULTAR PEDIDO REGISTRADO ANTERIORMENTE */
+
+            //Enviar correo a los integrantes
+            //-----------------------------------
+                Yii::$app->mailer->compose()
+                ->setFrom('jesusaranguren675@gmail.com')
+                ->setTo('jesusaranguren675@gmail.com')
+                ->setSubject('Se ha registrado un pedido con el N° '.$id_orden.'')
+                ->setTextBody('')
+                //->setHtmlBody('<b>La Universidad Politécnica Territorial de Caracas "Mariscal Sucre" informa que su proyecto ha sido registrado exitosamente bajo el número '.$id_proyecto.', y se encuentra a la espera de aprobación."</b></br>http://localhost:8080/sigepsi/web/index.php')
+                ->setHtmlBody('
+                                <strong>Descripción:</strong> '.$descripcion.''.'<br>'.
+                                '<strong>Medicamento:</strong> '.$nombre.' '.$presentacion.'<br>'.
+                                '<strong>Fecha:</strong> '.$fecha.'<br>'.
+                                '<strong>Estatus:</strong> '.$estatus.'<br>'.
+                                '<strong>A la espera de aprobación</strong>'
+                )
+                ->send();
+            //Fin enviar correo a los integrantes
+            //-----------------------------------
 
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

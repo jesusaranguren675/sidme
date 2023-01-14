@@ -28,6 +28,7 @@ use yii\helpers\Html;
 		border: solid 1px #000;
 		font-size: 11.5px;
         padding: 5px;
+        
 	}
 
 
@@ -36,23 +37,36 @@ use yii\helpers\Html;
 <div style="width: 100%;">
     <?= Html::img('@web/img/cintillo_pdf.jpg', ['style' => "width:100%;"]) ?>
 </div>
-<h4 style="text-align: right; border:none;">LISTADO DE PEDIDOS</h4>
+
+<h5 style="text-align: center; border:none;">SOLICITADO AL EJE CENTRO - DISTRITO SANITARIO N° 3</h5>
+<h4 style="text-align: center; border:none;">ORDEN DEL PEDIDO</h4>
 
 <br>
-<b style="font-size: 9pt; color: #333;">Fecha de Reporte: <?php echo date("d/m/Y") ?></b><br>
-<b style="font-size: 9pt; color: #333;">Hora de Reporte: <?php echo date("h:i a") ?></b><br><br>
+<table>
+    <tr>
+        <th style="text-align: left;">Fecha de la orden: <?php echo date("d/m/Y") ?></th>
+        <th></th>
+    </tr>
+    <tr>
+        <th style="text-align: left;">Hora de la orden: <?php echo date("h:i a") ?></th>
+        <th style="text-align: right;">
+            N° Orden:
+            <?= $orden ?>
+        </th>
+    </tr>
+</table><br>
 
 
 <table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
 	<tr>
-		<th>N°</th>
-        <th>Orden</th>
-		<th>Descripción</th>
-		<th>Nombre</th>
-		<th>Presentación</th>
-		<th>Cantidad</th>
-		<th>Estatus</th>
-		<th>Fecha</th>
+        <th>N°</th>
+        <th>Descripción</th>
+        <th>Nombre</th>
+        <th>Presentación</th>
+        <th>Destino</th>
+        <th>Cantidad</th>
+        <th>Estatus</th>
+        <th>Fecha</th>
 	</tr>
 	<?php
     $contador = 1;
@@ -62,14 +76,13 @@ use yii\helpers\Html;
 		?>
         <tr>
             <td><?= $contador ?></td>
-            <!--<td><?php // $pedidos['idpedi'] ?></td>-->
-            <td><?= $pedidos['correlativo'] ?></td>
             <td><?= $pedidos['descripcion'] ?></td>
             <td width="100"><?= $pedidos['nombre'] ?></td>
             <td><?= $pedidos['presentacion'] ?></td>
+            <td width="100"><?= $pedidos['procedencia'] ?></td>
             <td style="text-align: center;">
                 <button class="btn btn-warning btn-sm">
-                    <?= $pedidos['cantidad'] ?>
+                <?= $pedidos['cantidad'] ?>
                 </button>
             </td>
             <td style="text-align: center;">
@@ -77,23 +90,23 @@ use yii\helpers\Html;
                     if($pedidos['estatus'] === 1)
                     {
                         ?>
-                            <button class="btn btn-success btn-sm">Aprobado</button>
+                        <button class="btn btn-success btn-sm">Aprobado</button>
                         <?php
                     }
                     if($pedidos['estatus'] === 2)
                     {
                         ?>
-                            <button class="btn btn-primary btn-sm">Pendiente</button>
+                        <button class="btn btn-primary btn-sm">Pendiente</button>
                         <?php
-                    }
+                        }
                     if($pedidos['estatus'] === 3)
                     {
                         ?>
-                            <button class="btn btn-danger btn-sm">Rechazado</button>
+                        <button class="btn btn-danger btn-sm">Rechazado</button>
                         <?php
                     }
-                ?>
-            </td>
+                    ?>
+                    </td>
             <td><?= $pedidos['fecha'] ?></td>
         </tr>
 		<?php

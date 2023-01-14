@@ -9,6 +9,7 @@ use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Mpdf\Mpdf;
 
 /**
  * UserController implements the CRUD actions for Usuario model.
@@ -68,12 +69,144 @@ class UserController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+
+        $data_id = $_POST['data_id'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $usuarios_consul = 
+            Yii::$app->db->createCommand("SELECT usuario.id, usuario.username, 
+            usuario.email, rol.nombre_rol,
+            usuario.status AS estatus, asignacion.fecha FROM public.user AS usuario
+            JOIN asignacion_roles AS asignacion
+            ON asignacion.id_usu=usuario.id
+            JOIN roles AS rol
+            ON rol.id_rol=asignacion.id_rol
+            WHERE usuario.id=$data_id")->queryAll();
+
+            foreach ($usuarios_consul as $usuarios) {
+                $id             = $usuarios['id'];
+                $username       = $usuarios['username'];
+                $email          = $usuarios['email'];
+                $nombre_rol     = $usuarios['nombre_rol'];
+                $estatus        = $usuarios['estatus'];
+                $fecha          = $usuarios['fecha'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($usuarios_consul)
+            {
+                return [
+                    'data' => [
+                        'success'           => true,
+                        'message'           => 'Consulta Exitosa',
+                        'id'                => $id,
+                        'username'          => $username,
+                        'email'             => $email, 
+                        'nombre_rol'        => $nombre_rol,
+                        'estatus'           => $estatus,
+                        'fecha'             => $fecha,  
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+
     }
+
+    public function actionReport() {
+
+        $usuarios = 
+            Yii::$app->db->createCommand("SELECT usuario.id, usuario.username, 
+            usuario.email, rol.nombre_rol,
+            usuario.status AS estatus, asignacion.fecha FROM public.user AS usuario
+            JOIN asignacion_roles AS asignacion
+            ON asignacion.id_usu=usuario.id
+            JOIN roles AS rol
+            ON rol.id_rol=asignacion.id_rol")->queryAll();
+        
+            $mpdf = new mPDF();
+            //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
+            $mpdf->setFooter('{PAGENO}'); 
+            $mpdf->WriteHTML($this->renderPartial('_reportView', ['usuarios' => $usuarios]));
+            $mpdf->Output();
+            exit;
+    }
+
+    public function actionQueryupdate()
+    {
+
+
+        $data_id = $_POST['data_id'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $usuarios_consul = 
+            Yii::$app->db->createCommand("SELECT usuario.id, usuario.username, 
+            usuario.email, rol.nombre_rol,
+            usuario.status AS estatus, asignacion.fecha FROM public.user AS usuario
+            JOIN asignacion_roles AS asignacion
+            ON asignacion.id_usu=usuario.id
+            JOIN roles AS rol
+            ON rol.id_rol=asignacion.id_rol
+            WHERE usuario.id=$data_id")->queryAll();
+
+            foreach ($usuarios_consul as $usuarios) {
+                $id             = $usuarios['id'];
+                $username       = $usuarios['username'];
+                $email          = $usuarios['email'];
+                $nombre_rol     = $usuarios['nombre_rol'];
+                $estatus        = $usuarios['estatus'];
+                $fecha          = $usuarios['fecha'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($usuarios_consul)
+            {
+                return [
+                    'data' => [
+                        'success'           => true,
+                        'message'           => 'Consulta Exitosa',
+                        'id'                => $id,
+                        'username'          => $username,
+                        'email'             => $email, 
+                        'nombre_rol'        => $nombre_rol,
+                        'estatus'           => $estatus,
+                        'fecha'             => $fecha,  
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+
+    }
+
 
     /**
      * Creates a new Usuario model.
@@ -168,17 +301,51 @@ class UserController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate()
     {
-        $model = $this->findModel($id);
+        if (Yii::$app->request->isAjax) 
+        {
+            $id                    = $_POST['id'];
+            $username              = $_POST['username'];
+            $password_hash         = $_POST['password_hash'];
+            $email                 = $_POST['email'];
+            $status                = $_POST['status'];
+            $rol                   = $_POST['rol'];
+            /* ACTUALIZAR ENTRADA DE MEDICAMENTO */
+            $update_usuario = Yii::$app->db->createCommand("UPDATE public.user
+            SET username='$username', password_hash='$password_hash', email='$email', status=$status
+            WHERE id=$id")->queryAll();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $update_rol = Yii::$app->db->createCommand("UPDATE public.asignacion_roles
+            SET id_rol=$rol
+            WHERE id_rol=$rol")->queryAll();
+
+            /* FIN ACTUALIZAR ENTRADA DE MEDICAMENTO */
+
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($update_usuario && $update_rol)
+            {
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'Usuario Modificado Exitosamente',
+                    ],
+                    'code' => 1,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al modificar el usuario',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**

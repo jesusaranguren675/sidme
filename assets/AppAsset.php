@@ -22,6 +22,8 @@ class AppAsset extends AssetBundle
     public $css = [
         'vendor/fontawesome-free/css/all.css',
         'css/sb-admin-2.css',
+        /* Select2 */
+        'css/select2.min.css',
     ];
     public $js = [
         /* Bootstrap core JavaScript */
@@ -45,6 +47,8 @@ class AppAsset extends AssetBundle
         "vendor/sweetalert2/sweetalert2.all.min.js",
         /* validacion */
         "js/validacion.js",
+        /* Select 2 */
+        "js/select2.min.js"
     ];
     public $depends = [
         'yii\web\YiiAsset',

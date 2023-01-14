@@ -20,12 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
     <hr>
 
-    <a class="btn btn-primary btn-sm"  href="<?= Url::toRoute('entradasmedicamentos/create'); ?> " data-toggle="modal" data-target="#distribuirMedicamentos">
+    <a class="btn btn-primary btn-sm" title="Agregar una Distribución"  href="<?= Url::toRoute('entradasmedicamentos/create'); ?> " data-toggle="modal" data-target="#distribuirMedicamentos">
         Agregar <i class="fas fa-plus"></i>
     </a>
    
-    <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['distribucion/report']) ?>" target="_blank">
+    <a class="btn btn-danger btn-sm" title="Exportar Datos en Formato PDF" href="<?= $url = Url::to(['distribucion/report']) ?>" target="_blank">
         PDF <i class="far fa-file-pdf"></i>
+    </a>
+
+    <a class="btn btn-danger btn-sm" title="Responder Pedido" href="<?= $url = Url::to(['distribucion/report']) ?>" target="_blank">
+        PEDIDO <i class="fas fa-file-signature"></i></i>
     </a>
 
     </div>
@@ -61,10 +65,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ?>
                             <td><?= $newDateString ?></td>
                             <td style="text-align: center;">
-                                <a onclick="ver_medica(<?php echo $distribucion['iddis']; ?>)" href="" class="btn btn-primary btn-sm">
+                                <a onclick="ver_medica(<?php echo $distribucion['iddis']; ?>)" title="Ver Registro" href="" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>
                                 </a>
-                                <a  href="<?= Url::to(['distribucion/update', 'iddis' => $distribucion['iddis']]); ?>" class="btn btn-primary btn-sm">
+                                <a  href="<?= Url::to(['distribucion/update', 'iddis' => $distribucion['iddis']]); ?>" title="Modificar Registro" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
@@ -163,6 +167,7 @@ $script = <<< JS
                     '',
                     'success'
                     );
+                    $('#viewMedicamento').modal({ show:false });
                 }
                 else
                 {

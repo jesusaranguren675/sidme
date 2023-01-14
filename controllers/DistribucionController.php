@@ -8,6 +8,7 @@ use app\models\DistribucionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use conquer\select2\Select2Action;
 use Mpdf\Mpdf;
 
 /**
