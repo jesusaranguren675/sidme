@@ -12,6 +12,23 @@ use yii\log\Target;
 
 $this->title = 'Pedidos';
 $this->params['breadcrumbs'][] = $this->title;
+
+
+$idusu = Yii::$app->user->identity->id;
+$roles = Yii::$app->db->createCommand("SELECT usuario.id, 
+        usuario.username, rol.nombre_rol FROM asignacion_roles AS asignacion
+        JOIN public.user AS usuario
+        ON usuario.id=asignacion.id_usu
+        JOIN roles AS rol
+        ON rol.id_rol=asignacion.id_rol
+        WHERE usuario.id=$idusu")->queryAll();
+
+foreach ($roles as $roles) 
+{
+$usuario = $roles['username'];
+$rol     = $roles['nombre_rol'];
+}
+
 ?>
 
 <script>
@@ -220,11 +237,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                    class="btn btn-primary btn-sm view_btn">
                                     <i class="far fa-eye"></i>
                                 </a>
-                                <a onclick="updatePedi(<?php echo $pedidos['idpedi']; ?>)"
-                                   href="#" 
-                                   class="btn btn-primary btn-sm update_btn">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                
+                                <?php
+                                   if($rol == 'Empleado')
+                                   {
+                                       
+                                   }
+                                   else if($rol == 'Administrador')
+                                   {
+                                    ?>
+                                    <a onclick="updatePedi(<?php echo $pedidos['idpedi']; ?>)"
+                                    href="#" 
+                                    class="btn btn-primary btn-sm update_btn">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <?php
+                                   }
+                                ?>
 
                                 <a title="Generar Orden del Pedido N° <?= $pedidos['id_orden'] ?>" class="btn btn-danger btn-sm" href="<?= $url = Url::toRoute(['pedidos/notaentrega', 'id' => $pedidos['idpedi']]); ?>" target="_blank">
                                     <i class="fas fa-file-alt"></i>

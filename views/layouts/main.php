@@ -33,6 +33,8 @@ AppAsset::register($this);
 
 <?php
 
+
+
 //Si el usuario es invitado se mostrara el contenido siguiente
 ///////////////////////////////////////////////////////////////
 if (Yii::$app->user->isGuest)
@@ -42,6 +44,20 @@ if (Yii::$app->user->isGuest)
 else //Si no es invitado se mostrara el contenido siguiente
 {
 
+    $idusu = Yii::$app->user->identity->id;
+    $roles = Yii::$app->db->createCommand("SELECT usuario.id, 
+            usuario.username, rol.nombre_rol FROM asignacion_roles AS asignacion
+            JOIN public.user AS usuario
+            ON usuario.id=asignacion.id_usu
+            JOIN roles AS rol
+            ON rol.id_rol=asignacion.id_rol
+            WHERE usuario.id=$idusu")->queryAll();
+
+foreach ($roles as $roles) 
+{
+    $usuario = $roles['username'];
+    $rol     = $roles['nombre_rol'];
+}
 
 ?>
 
@@ -81,22 +97,50 @@ else //Si no es invitado se mostrara el contenido siguiente
 
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
-                    aria-expanded="true" aria-controls="collapseMedicamentos">
-                    <i class="fas fa-capsules"></i>
-                    <span>Medicamentos</span>
-                </a>
-                <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
-                    </div>
-                    
-                </div>
-            </li>
+            <?php
 
+            
+            if($rol == 'Administrador')
+            {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
+                        aria-expanded="true" aria-controls="collapseMedicamentos">
+                        <i class="fas fa-capsules"></i>
+                        <span>Medicamentos</span>
+                    </a>
+                    <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
+                        </div>
+                        
+                    </div>
+                </li>
+                <?php
+            }
+            if($rol == 'Empleado')
+            {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
+                        aria-expanded="true" aria-controls="collapseMedicamentos">
+                        <i class="fas fa-capsules"></i>
+                        <span>Medicamentos</span>
+                    </a>
+                    <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
+                        </div>
+                        
+                    </div>
+                </li>
+                <?php
+            }
+            ?>
+            
             <!--
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">
@@ -133,21 +177,17 @@ else //Si no es invitado se mostrara el contenido siguiente
             </li>
             -->
 
-            
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
-                    <i class="fas fa-warehouse"></i>
-                    <span>Inventario</span>
-                </a>
-            </li>
+    
 
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
-                    <i class="fas fa-file-signature"></i>
-                    <span>Pedidos</span>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
+                        <i class="fas fa-file-signature"></i>
+                        <span>Pedidos</span>
+                    </a>
+                </li>
 
+   
+        
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('distribucion/index'); ?>">
                     <i class="fas fa-truck-loading"></i>
@@ -171,7 +211,15 @@ else //Si no es invitado se mostrara el contenido siguiente
                 </a>
             </li>
 
-            <li class="nav-item">
+            <?php
+            if($rol == 'Empleado')
+            {
+                
+            }
+            else if($rol == 'Administrador')
+            {
+                ?>
+                <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRolesypermisos"
                     aria-expanded="true" aria-controls="collapseRolesypermisos">
                     <i class="fas fa-user-lock"></i>
@@ -185,8 +233,11 @@ else //Si no es invitado se mostrara el contenido siguiente
                     </div>
                     
                 </div>
-            </li>
-
+                </li>
+                <?php
+            }
+            ?>
+            
             <!-- Nav Item - Pages Collapse Menu -->
             <!--
             <li class="nav-item">

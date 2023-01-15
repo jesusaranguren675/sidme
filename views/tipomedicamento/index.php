@@ -11,6 +11,22 @@ use yii\grid\GridView;
 
 $this->title = 'Presentaciones';
 $this->params['breadcrumbs'][] = $this->title;
+
+$idusu = Yii::$app->user->identity->id;
+$roles = Yii::$app->db->createCommand("SELECT usuario.id, 
+        usuario.username, rol.nombre_rol FROM asignacion_roles AS asignacion
+        JOIN public.user AS usuario
+        ON usuario.id=asignacion.id_usu
+        JOIN roles AS rol
+        ON rol.id_rol=asignacion.id_rol
+        WHERE usuario.id=$idusu")->queryAll();
+
+foreach ($roles as $roles) 
+{
+$usuario = $roles['username'];
+$rol     = $roles['nombre_rol'];
+}
+
 ?>
 
 <script>
@@ -104,9 +120,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="container-fluid">
         <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
         <hr>
-        <a class="btn btn-primary btn-sm"  href="#" data-toggle="modal" data-target="#modalPresentacion">
-        Agregar <i class="fas fa-plus"></i>
-        </a>
+        <?php
+
+            if($rol == 'Empleado')
+            {
+
+            }
+            else if($rol == 'Administrador')
+            {
+                ?>
+                <a class="btn btn-primary btn-sm"  href="#" data-toggle="modal" data-target="#modalPresentacion">
+                    Agregar <i class="fas fa-plus"></i>
+                </a>
+                <?php
+            }
+
+        ?>
         <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['tipomedicamento/report']) ?>" target="_blank">
             PDF <i class="far fa-file-pdf"></i>
         </a>
@@ -134,11 +163,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                    class="btn btn-primary btn-sm view_btn">
                                     <i class="far fa-eye"></i>
                                 </a>
+                                <?php
+                                if($rol == 'Empleado')
+                                {
+                                    
+                                }
+                                else if($rol == 'Administrador')
+                                {
+                                    ?>
                                 <a onclick="updatePre(<?php echo $presentaciones['idtipo']; ?>)"
                                    href="#" 
                                    class="btn btn-primary btn-sm update_btn">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                    <?php
+                                }
+                                ?>
                             </td>
                         </tr>
                         <?php $contador = $contador + 1; ?>
