@@ -105,6 +105,12 @@ use yii\helpers\Html;
                         <button class="btn btn-danger btn-sm">Rechazado</button>
                         <?php
                     }
+                    if($pedidos['estatus'] === 4)
+                    {
+                        ?>
+                        <button class="btn btn-danger btn-sm">Culminado</button>
+                        <?php
+                    }
                     ?>
                     </td>
             <td><?= $pedidos['fecha'] ?></td>

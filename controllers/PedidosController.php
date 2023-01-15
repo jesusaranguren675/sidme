@@ -228,7 +228,7 @@ class PedidosController extends Controller
 
         if (Yii::$app->request->isAjax) 
         {
-            $descripcion            = $_POST['descripcion'];
+            $descripcion            = strtolower($_POST['descripcion']);
             $idmedi                 = $_POST['idmedi'];
             $procedencia            = $_POST['procedencia'];
             $cantidad               = $_POST['cantidad'];
@@ -302,7 +302,6 @@ class PedidosController extends Controller
                                 <strong>Descripción:</strong> '.$descripcion.''.'<br>'.
                                 '<strong>Medicamento:</strong> '.$nombre.' '.$presentacion.'<br>'.
                                 '<strong>Fecha:</strong> '.$fecha.'<br>'.
-                                '<strong>Estatus:</strong> '.$estatus.'<br>'.
                                 '<strong>A la espera de aprobación</strong>'
                 )
                 ->send();
@@ -318,6 +317,14 @@ class PedidosController extends Controller
                     'data' => [
                         'success' => true,
                         'message' => 'Pedido Registrado Exitosamente',
+                        'idpedi'            => $idpedi,
+                        'descripcion'       => $descripcion,
+                        'nombre'            => $nombre, 
+                        'presentacion'      => $presentacion,
+                        'cantidad'          => $cantidad,
+                        'estatus'           => $estatus,
+                        'fecha'             => $fecha,
+                        'id_orden'          => $id_orden,  
                     ],
                     'code' => 1,
                 ];

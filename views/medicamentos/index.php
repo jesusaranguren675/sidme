@@ -11,6 +11,22 @@ use yii\grid\GridView;
 
 $this->title = 'Medicamentos';
 $this->params['breadcrumbs'][] = $this->title;
+
+$idusu = Yii::$app->user->identity->id;
+$roles = Yii::$app->db->createCommand("SELECT usuario.id, 
+        usuario.username, rol.nombre_rol FROM asignacion_roles AS asignacion
+        JOIN public.user AS usuario
+        ON usuario.id=asignacion.id_usu
+        JOIN roles AS rol
+        ON rol.id_rol=asignacion.id_rol
+        WHERE usuario.id=$idusu")->queryAll();
+
+foreach ($roles as $roles) 
+{
+$usuario = $roles['username'];
+$rol     = $roles['nombre_rol'];
+}
+
 ?>
 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -105,9 +121,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
     <hr>
 
-    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#medicamento">
+    <?php
+
+    if($rol == 'Empleado')
+    {
+        
+    }
+    else if($rol == 'Administrador')
+    {
+        ?>
+        <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#medicamento">
         Agregar <i class="fas fa-plus"></i>
-    </a>
+        </a>
+        <?php
+    }
+
+    ?>
+    
     <a class="btn btn-danger btn-sm" href="<?= $url = Url::to(['medicamentos/report']) ?>" target="_blank">
         PDF <i class="far fa-file-pdf"></i>
     </a>
@@ -133,9 +163,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <a onclick="view(<?= $medicamentos['id_detalle_medi']; ?>)" href="#" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>
                                 </a>
-                                <a onclick="updateMe(<?= $medicamentos['id_detalle_medi']; ?>)" href="#" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                <?php
+                                if($rol == 'Empleado')
+                                {
+
+                                }
+                                else if($rol == 'Administrador')
+                                {
+                                    ?>
+                                    <a onclick="updateMe(<?= $medicamentos['id_detalle_medi']; ?>)" href="#" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <?php
+                                }
+                                ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

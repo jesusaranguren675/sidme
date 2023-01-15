@@ -39,7 +39,7 @@ class MedicamentosController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
+    {   
         $searchModel = new MedicamentosSearch();
 
         $model = new Medicamentos();

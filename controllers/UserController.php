@@ -311,9 +311,12 @@ class UserController extends Controller
             $email                 = $_POST['email'];
             $status                = $_POST['status'];
             $rol                   = $_POST['rol'];
+
+            $hash = Yii::$app->getSecurity()->generatePasswordHash($password_hash);
+
             /* ACTUALIZAR ENTRADA DE MEDICAMENTO */
             $update_usuario = Yii::$app->db->createCommand("UPDATE public.user
-            SET username='$username', password_hash='$password_hash', email='$email', status=$status
+            SET username='$username', password_hash='$hash', email='$email', status=$status
             WHERE id=$id")->queryAll();
 
             $update_rol = Yii::$app->db->createCommand("UPDATE public.asignacion_roles

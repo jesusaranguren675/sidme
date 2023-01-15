@@ -33,6 +33,8 @@ AppAsset::register($this);
 
 <?php
 
+
+
 //Si el usuario es invitado se mostrara el contenido siguiente
 ///////////////////////////////////////////////////////////////
 if (Yii::$app->user->isGuest)
@@ -42,6 +44,20 @@ if (Yii::$app->user->isGuest)
 else //Si no es invitado se mostrara el contenido siguiente
 {
 
+    $idusu = Yii::$app->user->identity->id;
+    $roles = Yii::$app->db->createCommand("SELECT usuario.id, 
+            usuario.username, rol.nombre_rol FROM asignacion_roles AS asignacion
+            JOIN public.user AS usuario
+            ON usuario.id=asignacion.id_usu
+            JOIN roles AS rol
+            ON rol.id_rol=asignacion.id_rol
+            WHERE usuario.id=$idusu")->queryAll();
+
+foreach ($roles as $roles) 
+{
+    $usuario = $roles['username'];
+    $rol     = $roles['nombre_rol'];
+}
 
 ?>
 
@@ -79,46 +95,52 @@ else //Si no es invitado se mostrara el contenido siguiente
                 PRINCIPAL
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <!--
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-heartbeat"></i>
-                    <span>Medicamentos</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Gestionar:</h6>-->
-                        <!--
-                        <a class="collapse-item" href="<?= Url::toRoute('site/buttons'); ?>">Buttons</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('site/about'); ?>">About</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('site/cards'); ?>">Cards</a>
-                        -->
-                        <!--
-                        <a class="collapse-item" href="<?= Url::toRoute('medialmaxpre/index'); ?>">Almacen</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('medialmaxpre/index'); ?>">Farmacia</a>
-                    </div>
-                </div>
-            </li>-->
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
-                    aria-expanded="true" aria-controls="collapseMedicamentos">
-                    <i class="fas fa-capsules"></i>
-                    <span>Medicamentos</span>
-                </a>
-                <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
-                    </div>
-                    
-                </div>
-            </li>
+            <?php
 
+            
+            if($rol == 'Administrador')
+            {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
+                        aria-expanded="true" aria-controls="collapseMedicamentos">
+                        <i class="fas fa-capsules"></i>
+                        <span>Medicamentos</span>
+                    </a>
+                    <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
+                        </div>
+                        
+                    </div>
+                </li>
+                <?php
+            }
+            if($rol == 'Empleado')
+            {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
+                        aria-expanded="true" aria-controls="collapseMedicamentos">
+                        <i class="fas fa-capsules"></i>
+                        <span>Medicamentos</span>
+                    </a>
+                    <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
+                        </div>
+                        
+                    </div>
+                </li>
+                <?php
+            }
+            ?>
+            
             <!--
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">
@@ -155,21 +177,17 @@ else //Si no es invitado se mostrara el contenido siguiente
             </li>
             -->
 
-            
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
-                    <i class="fas fa-warehouse"></i>
-                    <span>Inventario</span>
-                </a>
-            </li>
+    
 
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
-                    <i class="fas fa-file-signature"></i>
-                    <span>Pedidos</span>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
+                        <i class="fas fa-file-signature"></i>
+                        <span>Pedidos</span>
+                    </a>
+                </li>
 
+   
+        
             <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('distribucion/index'); ?>">
                     <i class="fas fa-truck-loading"></i>
@@ -193,7 +211,15 @@ else //Si no es invitado se mostrara el contenido siguiente
                 </a>
             </li>
 
-            <li class="nav-item">
+            <?php
+            if($rol == 'Empleado')
+            {
+                
+            }
+            else if($rol == 'Administrador')
+            {
+                ?>
+                <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRolesypermisos"
                     aria-expanded="true" aria-controls="collapseRolesypermisos">
                     <i class="fas fa-user-lock"></i>
@@ -207,8 +233,11 @@ else //Si no es invitado se mostrara el contenido siguiente
                     </div>
                     
                 </div>
-            </li>
-
+                </li>
+                <?php
+            }
+            ?>
+            
             <!-- Nav Item - Pages Collapse Menu -->
             <!--
             <li class="nav-item">
@@ -303,126 +332,7 @@ else //Si no es invitado se mostrara el contenido siguiente
                             </div>
                         </li>
 
-                        <!-- Nav Item - Alerts -->
-                        <!--
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                Counter - Alerts
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                            Dropdown - Alerts
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </li>
-                        -->
-
-                        <!-- Nav Item - Messages -->
-                        <!--
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                Counter - Messages
-                                <span class="badge badge-danger badge-counter">7</span>
-                            </a>
-                            Dropdown - Messages
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Message Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                            </div>
-                        </li>-->
-
+                       
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
