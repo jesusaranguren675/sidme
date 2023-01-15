@@ -184,19 +184,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                 if($pedidos['estatus'] === 1)
                                 {
                                     ?>
-                                    <button class="btn btn-success btn-sm">Aprobado</button>
+                                    <button class="btn btn-primary btn-sm">Aprobado</button>
                                     <?php
                                 }
                                 if($pedidos['estatus'] === 2)
                                 {
                                     ?>
-                                    <button class="btn btn-primary btn-sm">Pendiente</button>
+                                    <button class="btn btn-warning btn-sm">Pendiente</button>
                                     <?php
                                 }
                                 if($pedidos['estatus'] === 3)
                                 {
                                     ?>
                                     <button class="btn btn-danger btn-sm">Rechazado</button>
+                                    <?php
+                                }
+                                if($pedidos['estatus'] === 4)
+                                {
+                                    ?>
+                                    <button class="btn btn-success btn-sm">Culminado</button>
                                     <?php
                                 }
                                 ?>
