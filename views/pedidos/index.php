@@ -170,12 +170,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td><?= $contador ?></td>
                             <td><?= $pedidos['id_orden'] ?></td>
-                            <td><?= $pedidos['descripcion'] ?></td>
+                            <td><?= ucwords($pedidos['descripcion']) ?></td>
                             <td width="100"><?= $pedidos['nombre'] ?></td>
                             <td><?= $pedidos['presentacion'] ?></td>
                             <td width="100"><?= $pedidos['procedencia'] ?></td>
                             <td style="text-align: center;">
-                                <button class="btn btn-warning btn-sm">
+                                <button class="btn btn-success btn-sm">
                                 <?= $pedidos['cantidad'] ?>
                                 </button>
                             </td>
@@ -363,7 +363,7 @@ $(document).ready(function() {
               document.querySelector(".preloader").style.display = 'none';
               Swal.fire(
               response.data.message,
-              '',
+              'El pedido se registro con el N° de Orden '+ response.data.id_orden +'',
               'success'
               );
 
@@ -463,8 +463,6 @@ $(document).ready(function() {
                 '',
                 'success'
                 );
-                $('#actualizarMedicamentos').modal('hide')
-                $('input[type="text"]').val('');
             }
             else
             {

@@ -452,6 +452,8 @@ class DistribucionController extends Controller
                 $unidades = $consulta_almacen['cantidad'];
             }
 
+            var_dump($unidades); die();
+
             if($consulta_almacen)
             {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
