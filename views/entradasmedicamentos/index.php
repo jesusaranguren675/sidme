@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $('#viewRecepcion').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=entradasmedicamentos/view";
+            var url = window.location.protocol+"/index.php?r=entradasmedicamentos/view";
     
             $.ajax({
                 url: url,
@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $('#actualizarRecepciones').modal({ show:true });
           
-            var url = "http://sidmed.ve/index.php?r=entradasmedicamentos/queryupdate";
+            var url = window.location.protocol+"/index.php?r=entradasmedicamentos/queryupdate";
     
             $.ajax({
                 url: url,
@@ -234,7 +234,7 @@ $script = <<< JS
             //Fin verificar validación
             //------------------------
             
-            var url = "http://sidmed.ve/index.php?r=entradasmedicamentos/create";
+            var url = window.location.protocol+"/index.php?r=entradasmedicamentos/create";
             
             $.ajax({
                 url: url,
@@ -293,7 +293,7 @@ var cantidad                 = document.getElementById("entradasmedicamentos-can
 
 
 
-var url = "http://sidmed.ve/index.php?r=entradasmedicamentos/update";
+var url = window.location.protocol+"/index.php?r=entradasmedicamentos/update";
 
 //Verificar validacion
 //---------------------

@@ -44,7 +44,7 @@ $rol     = $roles['nombre_rol'];
 
         $('#viewPresentaciones').modal({ show:true });
 
-        var url = "http://sidmed.ve/index.php?r=tipomedicamento/view";
+        var url =  window.location.protocol+"/index.php?r=tipomedicamento/view";
     
             $.ajax({
                 url: url,
@@ -85,7 +85,7 @@ $rol     = $roles['nombre_rol'];
 
             $('#actualizarPre').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=tipomedicamento/queryupdate";    
+            var url =  window.location.protocol+"/index.php?r=tipomedicamento/queryupdate";    
 
             $.ajax({
                 url: url,
@@ -221,7 +221,7 @@ $script = <<< JS
 
         var descripcion             = document.getElementById("tipomedicamento-descripcion").value;
 
-        var url = "http://sidmed.ve/index.php?r=tipomedicamento/create";
+        var url = window.location.protocol+"/index.php?r=tipomedicamento/create";
 
             //Verificar validacion
             //---------------------
@@ -300,7 +300,7 @@ $script = <<< JS
         var presentacion_descripcion_update    = document.getElementById("tipomedicamento-descripcion-update").value;
 
 
-        var url = "http://sidmed.ve/index.php?r=tipomedicamento/update";
+        var url = window.location.protocol+"/index.php?r=tipomedicamento/update";
 
         //Verificar validacion
         //---------------------

@@ -44,7 +44,7 @@ $rol     = $roles['nombre_rol'];
 
             $('#viewMedicamento').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=medicamentos/view";
+            var url = window.location.protocol+"/index.php?r=medicamentos/view";
     
             $.ajax({
                 url: url,
@@ -85,7 +85,7 @@ $rol     = $roles['nombre_rol'];
 
             $('#actualizarMedicamentos').modal({ show:true });
           
-            var url = "http://sidmed.ve/index.php?r=medicamentos/queryupdate";
+            var url = window.location.protocol+"/index.php?r=medicamentos/queryupdate";
     
             $.ajax({
                 url: url,
@@ -219,7 +219,7 @@ $script = <<< JS
         var nombre  = document.getElementById("medicamentos-nombre").value;
         var presentacion  = document.getElementById("presentacion").value;
   
-        var url = "http://sidmed.ve/index.php?r=medicamentos/create";
+        var url =   window.location.protocol+"/index.php?r=medicamentos/create";
 
             //Verificar validacion
             //---------------------
@@ -300,7 +300,7 @@ var idmedi                 = document.getElementById("idmedi-update").value;
 var nombre_update          = document.getElementById("nombre-update").value;
 var presentacion_update    = document.getElementById("presentacion-update").value;
 
-var url = "http://sidmed.ve/index.php?r=medicamentos/update";
+var url = window.location.protocol+"/index.php?r=medicamentos/update";
 
 //Verificar validacion
 //---------------------

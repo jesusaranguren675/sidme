@@ -42,7 +42,7 @@ $rol     = $roles['nombre_rol'];
 
             $('#viewDistribucion').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=distribucion/view";
+            var url = window.location.protocol+"/index.php?r=distribucion/view";
     
             $.ajax({
                 url: url,
@@ -88,7 +88,7 @@ $rol     = $roles['nombre_rol'];
 
             $('#actualizarDisttribucion').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=distribucion/queryupdate";
+            var url = window.location.protocol+"/index.php?r=distribucion/queryupdate";
     
             $.ajax({
                 url: url,
@@ -483,7 +483,7 @@ var distribucion_sede_update           = document.getElementById("distribucion-i
 var distribucion_cantidad_update       = document.getElementById("distribucion-cantidad-update").value;
 
 
-var url = "http://sidmed.ve/index.php?r=distribucion/update";
+var url = window.location.protocol+"/index.php?r=distribucion/update";
 
 //Verificar validacion
 //---------------------
@@ -569,7 +569,7 @@ $("#distribucion-idmedi").change(function(event) {
 
 let unidad = document.getElementById("distribucion-idmedi").value;
 let cantidad_de_unidades = document.getElementById("cantidad_de_unidades");
-var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
+var url = window.location.protocol+"/index.php?r=distribucion/filtrounidades";
 
 $.ajax({
     url: url,
@@ -599,7 +599,7 @@ $("#responder-idmedi").change(function(event) {
 
 let unidad = document.getElementById("responder-idmedi").value;
 let cantidad_de_unidades = document.getElementById("reponder_cantidad_de_unidades");
-var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
+var url = window.location.protocol+"/index.php?r=distribucion/filtrounidades";
 
 $.ajax({
     url: url,

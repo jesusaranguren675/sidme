@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $('#viewUsuario').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=user/view";
+            var url = window.location.protocol+"/index.php?r=user/view";
     
             $.ajax({
                 url: url,
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $('#actualizarUsuarios').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=user/queryupdate";
+            var url = window.location.protocol+"/index.php?r=user/queryupdate";
     
             $.ajax({
                 url: url,
@@ -287,7 +287,7 @@ var email              = document.getElementById("email-update").value;
 var status             = document.getElementById("etatus-update").value;
 var rol                = document.getElementById("rol-update").value;
 
-var url = "http://sidmed.ve/index.php?r=user/update";
+var url = window.location.protocol+"/index.php?r=user/update";
 
 //Verificar validacion
 //---------------------

@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $('#viewSede').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=sede/view";
+            var url = window.location.protocol+"/index.php?r=sede/view";
     
             $.ajax({
                 url: url,
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $('#actualizarSedes').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=sede/queryupdate";
+            var url = window.location.protocol+"/index.php?r=sede/queryupdate";
     
             $.ajax({
                 url: url,
@@ -228,7 +228,7 @@ $script = <<< JS
             //Fin verificar validación
             //------------------------
             
-            var url = "http://sidmed.ve/index.php?r=sede/create";
+            var url = window.location.protocol+"/index.php?r=sede/create";
             
             $.ajax({
                 url: url,
@@ -286,7 +286,7 @@ $script = <<< JS
     var correo                = document.getElementById("correo-update").value;
 
 
-    var url = "http://sidmed.ve/index.php?r=sede/update";
+    var url = window.location.protocol+"/index.php?r=sede/update";
 
     //Verificar validacion
     //---------------------

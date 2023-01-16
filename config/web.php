@@ -66,6 +66,7 @@ $config = [
                 'password' => 'hyaxumxvknhcznpd',
                 'port' => '587',
                 'encryption' => 'tls',
+                
             ],
         ],
         'log' => [

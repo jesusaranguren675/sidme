@@ -45,7 +45,7 @@ $rol     = $roles['nombre_rol'];
 
             $('#viewPedido').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=pedidos/view";
+            var url = window.location.protocol+"/index.php?r=pedidos/view";
     
             $.ajax({
                 url: url,
@@ -101,7 +101,7 @@ $rol     = $roles['nombre_rol'];
 
             $('#actualizarMedicamentos').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=pedidos/queryupdate";
+            var url = window.location.protocol+"/index.php?r=pedidos/queryupdate";
     
             $.ajax({
                 url: url,
@@ -337,7 +337,7 @@ $(document).ready(function() {
         var cantidad                = document.getElementById("pedido-cantidad").value;
         var cantidad_de_unidades    = document.getElementById("cantidad_de_unidades");
         //var estatus                 = document.getElementById("pedido-estatus").value;
-        var url = "http://sidmed.ve/index.php?r=pedidos/create";
+        var url = window.location.protocol+"/index.php?r=pedidos/create";
 
             //Verificar validacion
             //---------------------
@@ -434,7 +434,7 @@ $(document).ready(function() {
         var pedido_cantidad_update       = document.getElementById("pedido-cantidad-update").value;
         var pedido_estatus_update        = document.getElementById("pedido-estatus-update").value;
 
-        var url = "http://sidmed.ve/index.php?r=pedidos/update";
+        var url = window.location.protocol+"/index.php?r=pedidos/update";
 
         //Verificar validacion
         //---------------------
@@ -523,7 +523,7 @@ $(document).ready(function() {
 
         let unidad = document.getElementById("pedido-idmedi").value;
         let cantidad_de_unidades = document.getElementById("cantidad_de_unidades");
-        var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
+        var url = window.location.protocol+"/index.php?r=distribucion/filtrounidades";
     
         $.ajax({
             url: url,
@@ -552,7 +552,7 @@ $(document).ready(function() {
 
         let unidad = document.getElementById("pedido-idmedi-update").value;
         let cantidad_de_unidades = document.getElementById("cantidad_de_unidades_update");
-        var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
+        var url = window.location.protocol+"/index.php?r=distribucion/filtrounidades";
 
         $.ajax({
             url: url,

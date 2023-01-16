@@ -290,29 +290,31 @@ class PedidosController extends Controller
 
             /* FIN CONSULTAR PEDIDO REGISTRADO ANTERIORMENTE */
 
-            //Enviar correo a los integrantes
-            //-----------------------------------
-                Yii::$app->mailer->compose()
-                ->setFrom('jesusaranguren675@gmail.com')
-                ->setTo('jesusaranguren675@gmail.com')
-                ->setSubject('Se ha registrado un pedido con el N° '.$id_orden.'')
-                ->setTextBody('')
-                //->setHtmlBody('<b>La Universidad Politécnica Territorial de Caracas "Mariscal Sucre" informa que su proyecto ha sido registrado exitosamente bajo el número '.$id_proyecto.', y se encuentra a la espera de aprobación."</b></br>http://localhost:8080/sigepsi/web/index.php')
-                ->setHtmlBody('
-                                <strong>Descripción:</strong> '.$descripcion.''.'<br>'.
-                                '<strong>Medicamento:</strong> '.$nombre.' '.$presentacion.'<br>'.
-                                '<strong>Fecha:</strong> '.$fecha.'<br>'.
-                                '<strong>A la espera de aprobación</strong>'
-                )
-                ->send();
-            //Fin enviar correo a los integrantes
-            //-----------------------------------
+            // //Enviar correo a los integrantes
+            // //-----------------------------------
+            //     Yii::$app->mailer->compose()
+            //     ->setFrom('jesusaranguren675@gmail.com')
+            //     ->setTo('jesusaranguren675@gmail.com')
+            //     ->setSubject('Se ha registrado un pedido con el N° '.$id_orden.'')
+            //     ->setTextBody('')
+            //     //->setHtmlBody('<b>La Universidad Politécnica Territorial de Caracas "Mariscal Sucre" informa que su proyecto ha sido registrado exitosamente bajo el número '.$id_proyecto.', y se encuentra a la espera de aprobación."</b></br>http://localhost:8080/sigepsi/web/index.php')
+            //     ->setHtmlBody('
+            //                     <strong>Descripción:</strong> '.$descripcion.''.'<br>'.
+            //                     '<strong>Medicamento:</strong> '.$nombre.' '.$presentacion.'<br>'.
+            //                     '<strong>Fecha:</strong> '.$fecha.'<br>'.
+            //                     '<strong>A la espera de aprobación</strong>'
+            //     )
+            //     ->send();
+            // //Fin enviar correo a los integrantes
+            // //-----------------------------------
 
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
+            // return $this->redirect(Yii::$app->request->baseUrl."/index.php?r=pedidos/index");
             if($pedido && $detalle_pedi)
             {
+
                 return [
                     'data' => [
                         'success' => true,

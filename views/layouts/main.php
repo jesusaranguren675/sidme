@@ -53,14 +53,13 @@ else //Si no es invitado se mostrara el contenido siguiente
             ON rol.id_rol=asignacion.id_rol
             WHERE usuario.id=$idusu")->queryAll();
 
-foreach ($roles as $roles) 
+foreach ($roles as $role) 
 {
-    $usuario = $roles['username'];
-    $rol     = $roles['nombre_rol'];
+    $usuario = $role['username'];
+    $rol     = $role['nombre_rol'];
 }
 
 ?>
-
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -98,7 +97,7 @@ foreach ($roles as $roles)
 
             <!-- Nav Item - Pages Collapse Menu -->
             <?php
-
+            
             
             if($rol == 'Administrador')
             {

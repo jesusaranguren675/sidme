@@ -170,6 +170,7 @@ class TipomedicamentoController extends Controller
 
             if($presentaciones)
             {
+                // $this->redirect(Yii::$app->request->baseUrl."/index.php?r=tipomedicamento/index");
                 return [
                     'data' => [
                         'success' => true,

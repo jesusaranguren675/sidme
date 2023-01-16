@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $('#viewInventario').modal({ show:true });
 
-            var url = "http://sidmed.ve/index.php?r=almacengeneral/view";
+            var url = window.location.protocol+"/index.php?r=almacengeneral/view";
     
             $.ajax({
                 url: url,
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $('#actualizarInventario').modal({ show:true });
           
-            var url = "http://sidmed.ve/index.php?r=almacengeneral/queryupdate";
+            var url = window.location.protocol+"/index.php?r=almacengeneral/queryupdate";
     
             $.ajax({
                 url: url,
@@ -190,7 +190,7 @@ $script = <<< JS
         var idal_gral_update      = document.getElementById("idal_gral_update").value;
         var cantidad_update       = document.getElementById("cantidad-update").value;
 
-        var url = "http://sidmed.ve/index.php?r=almacengeneral/update";
+        var url = window.location.protocol+"/index.php?r=almacengeneral/update";
 
         //Verificar validacion
         //---------------------
@@ -270,7 +270,7 @@ $script = <<< JS
 
         let unidad = document.getElementById("pedido-idmedi").value;
         let cantidad_de_unidades = document.getElementById("cantidad_de_unidades");
-        var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
+        var url = window.location.protocol+"/index.php?r=distribucion/filtrounidades";
     
         $.ajax({
             url: url,
@@ -299,7 +299,7 @@ $script = <<< JS
 
         let unidad = document.getElementById("pedido-idmedi-update").value;
         let cantidad_de_unidades = document.getElementById("cantidad_de_unidades_update");
-        var url = "http://sidmed.ve/index.php?r=distribucion/filtrounidades";
+        var url = window.location.protocol+"/index.php?r=distribucion/filtrounidades";
 
         $.ajax({
             url: url,

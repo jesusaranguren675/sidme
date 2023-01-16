@@ -20,7 +20,7 @@ use Yii\helpers\Url;
         ]) ?>
       </div>
       <div class="modal-footer"><!-- data-dismiss="modal" -->
-        <button id="back" type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
+        <a id="back" type="button" class="btn btn-secondary" href="<?= Url::toRoute('medicamentos/index'); ?>" >Cerrar</a>
         <button id="registrar_medicamento" type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>
