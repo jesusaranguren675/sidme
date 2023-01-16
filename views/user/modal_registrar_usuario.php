@@ -21,7 +21,7 @@ use Yii\helpers\Url;
         ]) ?>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <a type="button" class="btn btn-secondary"  href="<?= Url::toRoute('user/index'); ?>" >Cerrar</a>
         <button id="registrar_usuario" type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>

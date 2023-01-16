@@ -177,6 +177,12 @@ foreach ($roles as $role)
             -->
 
     
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
+                        <i class="fas fa-file-signature"></i>
+                        <span>Inventario</span>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">

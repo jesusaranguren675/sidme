@@ -321,7 +321,7 @@ class UserController extends Controller
 
             $update_rol = Yii::$app->db->createCommand("UPDATE public.asignacion_roles
             SET id_rol=$rol
-            WHERE id_rol=$rol")->queryAll();
+            WHERE id_usu=$id")->queryAll();
 
             /* FIN ACTUALIZAR ENTRADA DE MEDICAMENTO */
 

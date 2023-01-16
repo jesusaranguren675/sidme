@@ -115,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;"><?= Html::encode($this->title) ?></h1>
     <hr>
 
-    <a class="btn btn-primary btn-sm"  href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">
+    <a class="btn btn-primary btn-sm"   href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">
         Agregar 
         <i class="fas fa-plus"></i>
     </a>

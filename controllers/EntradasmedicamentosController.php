@@ -212,6 +212,7 @@ class EntradasmedicamentosController extends Controller
 
             foreach ($consulta_almacen as $consulta_almacen) {
                 $unidades = $consulta_almacen['cantidad'];
+                $idal_gral = $consulta_almacen['idal_gral'];
             }
 
             if($consulta_almacen)
@@ -221,7 +222,7 @@ class EntradasmedicamentosController extends Controller
                 $update_almacen = 
                 Yii::$app->db->createCommand("UPDATE public.almacen_general
                 SET cantidad=$suma
-                WHERE idal_gral=$idmedi")->queryAll();
+                WHERE idal_gral= $idal_gral")->queryAll();
             }
             else{
                 $almacen_general = 

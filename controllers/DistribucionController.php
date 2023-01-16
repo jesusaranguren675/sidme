@@ -240,14 +240,17 @@ class DistribucionController extends Controller
 
             /* VALIDACIÓN CANTIDAD */
             $consulta_almacen = 
-            Yii::$app->db->createCommand("SELECT almacen_general.cantidad 
+            Yii::$app->db->createCommand("SELECT *
             FROM almacen_general AS almacen_general
             WHERE idmedi=$idmedi")->queryAll();
 
             foreach ($consulta_almacen as $consulta_almacen)
             {
                 $unidades = $consulta_almacen['cantidad'];
+                $idal_gral = $consulta_almacen['idal_gral'];
             }
+
+            // var_dump($consulta_almacen); die();
 
             if($consulta_almacen)
             {
@@ -288,7 +291,7 @@ class DistribucionController extends Controller
             $update_almacen = 
             Yii::$app->db->createCommand("UPDATE public.almacen_general
             SET cantidad=$resta
-            WHERE idal_gral=$idmedi")->queryAll();
+            WHERE idal_gral=$idal_gral")->queryAll();
 
             $distribucion = 
             Yii::$app->db->createCommand("SELECT distribucion.iddis,
@@ -443,16 +446,17 @@ class DistribucionController extends Controller
 
             /* VALIDACIÓN CANTIDAD */
             $consulta_almacen = 
-            Yii::$app->db->createCommand("SELECT almacen_general.cantidad 
+            Yii::$app->db->createCommand("SELECT almacen_general.cantidad , almacen_general.idal_gral
             FROM almacen_general AS almacen_general
             WHERE idmedi=$idmedi")->queryAll();
 
             foreach ($consulta_almacen as $consulta_almacen)
             {
                 $unidades = $consulta_almacen['cantidad'];
+                $idal_gral = $consulta_almacen['idal_gral'];
             }
 
-            var_dump($unidades); die();
+            // var_dump($unidades); die();
 
             if($consulta_almacen)
             {
@@ -493,7 +497,7 @@ class DistribucionController extends Controller
             $update_almacen = 
             Yii::$app->db->createCommand("UPDATE public.almacen_general
             SET cantidad=$resta
-            WHERE idal_gral=$idmedi")->queryAll();
+            WHERE idal_gral=$idal_gral")->queryAll();
 
             $update_pedido = 
             Yii::$app->db->createCommand("UPDATE public.detalle_pedi

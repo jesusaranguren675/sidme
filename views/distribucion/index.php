@@ -331,7 +331,7 @@ $script = <<< JS
             //Fin verificar validación
             //------------------------
             
-            var url = "sidmed.ve/index.php?r=distribucion/create";
+            var url = window.location.protocol+"/index.php?r=distribucion/create";;
             
             $.ajax({
                 url: url,
@@ -423,7 +423,7 @@ var cantidad        = document.getElementById("responder-cantidad").value;
     //Fin verificar validación
     //------------------------
     
-    var url = "sidmed.ve/index.php?r=distribucion/responderpedido";
+    var url = window.location.protocol+"/index.php?r=distribucion/responderpedido";
     
     $.ajax({
         url: url,

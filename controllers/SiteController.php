@@ -93,7 +93,7 @@ class SiteController extends Controller
 
 
         $usuarios = 
-        Yii::$app->db->createCommand("select count('id') from user;")->queryAll();
+        Yii::$app->db->createCommand("select count('id') from public.user;")->queryAll();
 
         foreach ($usuarios as $usuarios) {
             $usuarios = $usuarios['count'];
