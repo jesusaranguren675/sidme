@@ -83,8 +83,10 @@ class PedidosController extends Controller
             pedidos.descripcion,
             medicamentos.nombre,
             tipo_medicamento.descripcion AS presentacion,
+            sede.nombre AS procedencia,
             detalle_pedi.cantidad, detalle_pedi.estatus,
-            detalle_pedi.fecha, detalle_pedi.correlativo
+            detalle_pedi.fecha, detalle_pedi.correlativo as correlativo,
+            detalle_pedi.estatus as estatus
             FROM pedidos AS pedidos
             JOIN detalle_pedi AS detalle_pedi
             ON detalle_pedi.idpedi=pedidos.idpedi
@@ -94,7 +96,8 @@ class PedidosController extends Controller
             ON medicamentos.idmedi=detalle_medi.idmedi
             JOIN tipo_medicamento AS tipo_medicamento
             ON tipo_medicamento.idtipo=detalle_medi.idtipo
-            ")->queryAll();
+            JOIN sede AS sede
+            ON sede.idsede=detalle_pedi.procedencia")->queryAll();
         
             $mpdf = new mPDF();
             //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
@@ -292,21 +295,25 @@ class PedidosController extends Controller
 
             // //Enviar correo a los integrantes
             // //-----------------------------------
-            //     Yii::$app->mailer->compose()
-            //     ->setFrom('jesusaranguren675@gmail.com')
-            //     ->setTo('jesusaranguren675@gmail.com')
-            //     ->setSubject('Se ha registrado un pedido con el N° '.$id_orden.'')
-            //     ->setTextBody('')
-            //     //->setHtmlBody('<b>La Universidad Politécnica Territorial de Caracas "Mariscal Sucre" informa que su proyecto ha sido registrado exitosamente bajo el número '.$id_proyecto.', y se encuentra a la espera de aprobación."</b></br>http://localhost:8080/sigepsi/web/index.php')
-            //     ->setHtmlBody('
-            //                     <strong>Descripción:</strong> '.$descripcion.''.'<br>'.
-            //                     '<strong>Medicamento:</strong> '.$nombre.' '.$presentacion.'<br>'.
-            //                     '<strong>Fecha:</strong> '.$fecha.'<br>'.
-            //                     '<strong>A la espera de aprobación</strong>'
-            //     )
-            //     ->send();
-            // //Fin enviar correo a los integrantes
-            // //-----------------------------------
+
+                /*
+                 Yii::$app->mailer->compose()
+                 ->setFrom('jesusaranguren675@gmail.com')
+                 ->setTo('jesusaranguren675@gmail.com')
+                 ->setSubject('Se ha registrado un pedido con el N° '.$id_orden.'')
+                 ->setTextBody('')
+                 //->setHtmlBody('<b>La Universidad Politécnica Territorial de Caracas "Mariscal Sucre" informa que su proyecto ha sido registrado exitosamente bajo el número '.$id_proyecto.', y se encuentra a la espera de aprobación."</b></br>http://localhost:8080/sigepsi/web/index.php')
+                 ->setHtmlBody('
+                             <strong>Descripción:</strong> '.$descripcion.''.'<br>'.
+                                 '<strong>Medicamento:</strong> '.$nombre.' '.$presentacion.'<br>'.
+                                 '<strong>Fecha:</strong> '.$fecha.'<br>'.
+                                 '<strong>A la espera de aprobación</strong>'
+                 )
+                 ->send();
+
+                 */
+             //Fin enviar correo a los integrantes
+             //-----------------------------------
 
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

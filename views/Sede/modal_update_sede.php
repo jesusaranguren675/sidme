@@ -20,10 +20,10 @@ use Yii\helpers\Url;
         ]) ?>
       </div>
       <div class="modal-footer"><!-- data-dismiss="modal" -->
-        <button id="back" type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
+        <a id="back" type="button" class="btn btn-secondary" href="<?= Url::toRoute('sede/index'); ?>" >Cerrar</a>
         <button id="modificar_sede" type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>
   </div>
 </div>
-<!-- Fin Modal Actualizar Sedes -->
+<!-- Fin Modal Actualizar Sedes -->0.
