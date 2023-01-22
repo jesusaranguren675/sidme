@@ -45,7 +45,6 @@ class DistribucionController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         $model = new Distribucion();
-
         $distribucion = 
         Yii::$app->db->createCommand("SELECT distribucion.iddis,
         detalle_dis.correlativo,
@@ -65,8 +64,9 @@ class DistribucionController extends Controller
         JOIN tipo_medicamento AS tipo_medicamento
         ON tipo_medicamento.idtipo=detalle_medi.idtipo
         JOIN sede AS sede
-        ON sede.idsede=detalle_dis.destino")->queryAll();
-
+        ON sede.idsede=detalle_dis.destino 
+        ORDER BY distribucion.iddis DESC")->queryAll();
+// var_dump($distribucion); die();
         return $this->render('index', [
             'searchModel'                   => $searchModel,
             'dataProvider'                  => $dataProvider,
