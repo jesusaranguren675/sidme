@@ -59,32 +59,31 @@ use yii\helpers\Html;
 
 <table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
 	<tr>
-        <th>N°</th>
         <th>Descripción</th>
-        <th>Nombre</th>
-        <th>Presentación</th>
+        <!--<th>Nombre</th>-->
+        <!--<th>Presentación</th>-->
         <th>Destino</th>
-        <th>Cantidad</th>
+        <!--<th>Cantidad</th>-->
         <th>Estatus</th>
         <th>Fecha</th>
 	</tr>
 	<?php
-    $contador = 1;
+
 	foreach ($pedidos as $pedidos)
 	{
-		
 		?>
         <tr>
-            <td><?= $contador ?></td>
             <td><?= $pedidos['descripcion'] ?></td>
-            <td width="100"><?= $pedidos['nombre'] ?></td>
-            <td><?= $pedidos['presentacion'] ?></td>
-            <td width="100"><?= $pedidos['procedencia'] ?></td>
+            <!--<td width="100"><?= $pedidos['nombre'] ?></td>-->
+            <!--<td><?= $pedidos['presentacion'] ?></td>-->
+            <td><?= $pedidos['procedencia'] ?></td>
+            <!--
             <td style="text-align: center;">
                 <button class="btn btn-warning btn-sm">
                 <?= $pedidos['cantidad'] ?>
                 </button>
             </td>
+            -->
             <td style="text-align: center;">
                 <?php
                     if($pedidos['estatus'] === 1)
@@ -116,8 +115,39 @@ use yii\helpers\Html;
             <td><?= $pedidos['fecha'] ?></td>
         </tr>
 		<?php
-		$contador = $contador + 1;
 	}
 
+	?>
+</table>
+
+<br>
+
+<table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
+	<tr>
+        <th>N°</th>
+        <th>Nombre</th>
+        <th>Presentación</th>
+        <th>Cantidad</th>
+	</tr>
+	<?php
+        $contador = 1;
+        foreach ($medicamentos as $medicamentos)
+        {
+            
+            ?>
+            <tr>
+                <td><?= $contador ?></td>
+                <td><?= $medicamentos['nombre'] ?></td>
+                <td><?= $medicamentos['presentacion'] ?></td>
+                
+                <td style="text-align: center;">
+                    <button class="btn btn-warning btn-sm">
+                    <?= $medicamentos['cantidad'] ?>
+                    </button>
+                </td>
+            </tr>
+            <?php
+            $contador = $contador + 1;
+        }
 	?>
 </table>

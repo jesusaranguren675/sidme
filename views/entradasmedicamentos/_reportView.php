@@ -46,9 +46,10 @@ use yii\helpers\Html;
 <table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
 	<tr>
 		<th>N°</th>
-        <th>Nombre</th>
+        <th>Medicamento</th>
 		<th>Presentación</th>
-		<th>Cantidad</th>
+		<th>Unidades</th>
+		<th>Organización</th>
 		<th>Fecha</th>
 	</tr>
 	<?php
@@ -59,13 +60,14 @@ use yii\helpers\Html;
 		?>
         <tr>
             <td><?= $contador ?></td>
-            <td width="100"><?= $recepciones['nombre'] ?></td>
+            <td><?= $recepciones['nombre'] ?></td>
             <td><?= $recepciones['presentacion'] ?></td>
             <td style="text-align: center;">
                 <button class="btn btn-warning btn-sm">
                     <?= $recepciones['cantidad'] ?>
                 </button>
             </td>
+			<td><?= $recepciones['nombre_sede'] ?></td>
 			<?php 
                 $dateString = $recepciones['fecha_entrada'];
                 $newDateString = date_format(date_create_from_format('Y-m-d', $dateString), 'd-m-Y');

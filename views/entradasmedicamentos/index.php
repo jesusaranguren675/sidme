@@ -13,6 +13,8 @@ $this->title = 'Recepción de Medicamentos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+
+
 <script>
     //Modal ver Pedido
     //----------------
@@ -88,6 +90,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     document.getElementById("identrada-update").setAttribute("value", response.data.identrada);
                     document.getElementById("entradasmedicamentos-descripcion-update").setAttribute("value", response.data.descripcion);
                     document.getElementById("entradasmedicamentos-cantidad-update").setAttribute("value", response.data.cantidad);
+                    document.getElementById("entradasmedicamentos-idmedi-update-view").setAttribute("value", response.data.nombre+' '+response.data.presentacion);
+                    document.getElementById("entradasmedicamentos-idmedi-update").setAttribute("value", response.data.idmedi);
+                    document.getElementById("entradasmedicamentos-idsede-update-view").setAttribute("value", response.data.nombre_sede);
+                    document.getElementById("entradasmedicamentos-idsede-update").setAttribute("value", response.data.procedencia);
+
                     
                     //document.getElementById("viewPedidoLabel").innerHTML = response.data.nombre+ " " + response.data.presentacion;
                 }
@@ -99,6 +106,30 @@ $this->params['breadcrumbs'][] = $this->title;
     //Fin Modificar Modal Recepcion
     //------------------------------
 </script>
+
+<style>
+    .select2-selection--single {
+        background-color: #fff !important;
+        border: 1px solid #d1d3e2 !important;
+        border-radius: 4px !important;
+
+        
+    }
+    .select2-selection--single{
+        height: 38px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #6e707e !important;
+    line-height: 28px !important;
+    }
+    .modal-header .close {
+        display: none;
+    }
+
+</style>
 
 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -123,9 +154,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <thead>
                     <tr>
                         <th>N°</th>
-                        <th>Nombre</th>
+                        <th>Medicamento</th>
                         <th>Presentación</th>
-                        <th>Cantidad</th>
+                        <th>Unidades</th>
+                        <th>Organización</th>
+                        <th>Descripción</th>
                         <th>Fecha</th>
                         <th style="text-align: center;">Acciones</th>
                     </tr>
@@ -135,12 +168,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td><?= $entradas_medicamentos['identrada'] ?></td>
                             <td><?= $entradas_medicamentos['nombre'] ?></td>
-                            <td><?= $entradas_medicamentos['descripcion'] ?></td>
+                            <td><?= $entradas_medicamentos['presentacion'] ?></td>
                             <td style="text-align: center;">
                                 <button class="btn btn-success btn-sm">
                                 <?= $entradas_medicamentos['cantidad'] ?>
                                 </button>
                             </td>
+                            <td><?= $entradas_medicamentos['nombre_sede'] ?></td>
+                            <td><?= $entradas_medicamentos['descripcion'] ?></td>
                             <?php 
                             $dateString = $entradas_medicamentos['fecha_entrada'];
                             $newDateString = date_format(date_create_from_format('Y-m-d', $dateString), 'd-m-Y');
@@ -178,6 +213,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 $script = <<< JS
+
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+            dropdownParent: $('#agregarMedicamentos .modal-body'),
+        });
+    });
       
       //Registrar Ingreso de Medicamento
       //--------------------------------

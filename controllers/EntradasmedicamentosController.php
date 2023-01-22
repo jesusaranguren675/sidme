@@ -49,9 +49,10 @@ class EntradasmedicamentosController extends Controller
         $entradas_medicamentos = 
         Yii::$app->db->createCommand("SELECT entradas_medicamentos.identrada, 
         entradas_medicamentos.descripcion,
-        medicamentos.nombre, tipo_medicamento.descripcion, detalle_entra.fecha_entrada,
+        medicamentos.nombre, tipo_medicamento.descripcion as presentacion,
+        detalle_entra.fecha_entrada,
         /*tipo_medicamento.descripcion as presentacion,*/
-        detalle_entra.cantidad
+        detalle_entra.cantidad, sede.nombre as nombre_sede
         FROM
         entradas_medicamentos as entradas_medicamentos 
         join detalle_entra
@@ -61,7 +62,10 @@ class EntradasmedicamentosController extends Controller
 		join medicamentos as medicamentos
 		on detalle_medi.idmedi=medicamentos.idmedi
 		join tipo_medicamento as tipo_medicamento
-		on detalle_medi.idtipo=tipo_medicamento.idtipo")->queryAll();
+		on detalle_medi.idtipo=tipo_medicamento.idtipo
+        join sede as sede
+        on detalle_entra.procedencia=sede.idsede
+        order by entradas_medicamentos.identrada DESC")->queryAll();
 
         return $this->render('index', [
             'searchModel'               => $searchModel,
@@ -80,7 +84,7 @@ class EntradasmedicamentosController extends Controller
             entradas_medicamentos.descripcion,
             medicamentos.nombre, tipo_medicamento.descripcion as presentacion, detalle_entra.fecha_entrada,
             /*tipo_medicamento.descripcion as presentacion,*/
-            detalle_entra.cantidad
+            detalle_entra.cantidad, sede.nombre as nombre_sede
             FROM
             entradas_medicamentos as entradas_medicamentos 
             join detalle_entra
@@ -91,7 +95,8 @@ class EntradasmedicamentosController extends Controller
             on detalle_medi.idmedi=medicamentos.idmedi
             join tipo_medicamento as tipo_medicamento
             on detalle_medi.idtipo=tipo_medicamento.idtipo
-            ")->queryAll();
+            join sede as sede
+            on detalle_entra.procedencia=sede.idsede")->queryAll();
         
             $mpdf = new mPDF();
             //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
@@ -275,7 +280,9 @@ class EntradasmedicamentosController extends Controller
             entradas_medicamentos.descripcion,
             medicamentos.nombre, tipo_medicamento.descripcion as presentacion, detalle_entra.fecha_entrada,
             /*tipo_medicamento.descripcion as presentacion,*/
-            detalle_entra.cantidad
+            detalle_entra.cantidad, medicamentos, 
+            detalle_entra.idmedi, detalle_entra.procedencia,
+            sede.nombre as nombre_sede
             FROM
             entradas_medicamentos as entradas_medicamentos 
             join detalle_entra
@@ -286,10 +293,15 @@ class EntradasmedicamentosController extends Controller
             on detalle_medi.idmedi=medicamentos.idmedi
             join tipo_medicamento as tipo_medicamento
             on detalle_medi.idtipo=tipo_medicamento.idtipo
+            join sede as sede
+            on sede.idsede=detalle_entra.procedencia
             where entradas_medicamentos.identrada=$identrada")->queryAll();
 
             foreach ($recepciones as $recepciones) {
                 $identrada         = $recepciones['identrada'];
+                $idmedi            = $recepciones['idmedi'];
+                $procedencia       = $recepciones['procedencia'];
+                $nombre_sede       = $recepciones['nombre_sede'];
                 $descripcion       = $recepciones['descripcion'];
                 $nombre            = $recepciones['nombre'];
                 $presentacion      = $recepciones['presentacion'];
@@ -306,6 +318,9 @@ class EntradasmedicamentosController extends Controller
                         'success'           => true,
                         'message'           => 'Consulta Exitosa',
                         'identrada'         => $identrada,
+                        'idmedi'            => $idmedi,
+                        'procedencia'       => $procedencia,
+                        'nombre_sede'       => $nombre_sede,
                         'descripcion'       => $descripcion,
                         'nombre'            => $nombre, 
                         'presentacion'      => $presentacion,
