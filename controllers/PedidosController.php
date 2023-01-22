@@ -66,7 +66,7 @@ class PedidosController extends Controller
         ON tipo_medicamento.idtipo=detalle_medi.idtipo
         JOIN sede AS sede
         ON sede.idsede=detalle_pedi.procedencia
-        ")->queryAll();
+        ORDER BY pedidos.idpedi DESC")->queryAll();
 
         return $this->render('index', [
             'searchModel'               => $searchModel,
