@@ -33,6 +33,10 @@ $rol     = $roles['nombre_rol'];
 
 <script>
 
+    $('#dataTable').dataTable( {
+    "order": [[0,'DESC'],[8,'DESC']]
+    } );
+
     //Modal ver Pedido
     //----------------
     function view(id) 
