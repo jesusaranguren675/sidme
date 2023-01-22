@@ -103,6 +103,23 @@ foreach ($roles as $role)
             {
                 ?>
                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventario"
+                        aria-expanded="true" aria-controls="collapseInventario">
+                        <i class="fas fa-capsules"></i>
+                        <span>Inventarios</span>
+                    </a>
+                    <div id="collapseInventario" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('almacengeneral/index'); ?>"><i class="fas fa-prescription-bottle"></i> Inventario</a>
+                        </div>
+                        
+                    </div>
+                </li>
+                   
+
+
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
                         aria-expanded="true" aria-controls="collapseMedicamentos">
                         <i class="fas fa-capsules"></i>
@@ -110,9 +127,8 @@ foreach ($roles as $role)
                     </a>
                     <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
-                            <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamentos</a>
-                            <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentaciones</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamento</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentación</a>
                         </div>
                         
                     </div>
@@ -176,13 +192,6 @@ foreach ($roles as $role)
             </li>
             -->
 
-    
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= Url::toRoute('almacengeneral/index'); ?>">
-                        <i class="fas fa-file-signature"></i>
-                        <span>Inventario</span>
-                    </a>
-                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
