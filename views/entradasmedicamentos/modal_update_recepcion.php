@@ -9,7 +9,7 @@ use Yii\helpers\Url;
   <div style="position:relative;" class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="actualizarRecepcionesLabel">Modificar Pedido</h5>
+        <h5 class="modal-title" id="actualizarRecepcionesLabel">Modificar Recepción</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -20,7 +20,7 @@ use Yii\helpers\Url;
         ]) ?>
       </div>
       <div class="modal-footer"><!-- data-dismiss="modal" -->
-        <button id="back" type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
+      <a type="button" class="btn btn-secondary" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">Cerrar</a>
         <button id="modificar_repcion" type="button" class="btn btn-primary">Guardar</button>
       </div>
     </div>

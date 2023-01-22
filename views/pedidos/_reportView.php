@@ -48,9 +48,11 @@ use yii\helpers\Html;
 		<th>N°</th>
         <th>Orden</th>
 		<th>Descripción</th>
+        <!--
 		<th>Nombre</th>
 		<th>Presentación</th>
 		<th>Cantidad</th>
+        -->
 		<th>Estatus</th>
 		<th>Fecha</th>
 	</tr>
@@ -65,13 +67,16 @@ use yii\helpers\Html;
             <!--<td><?php // $pedidos['idpedi'] ?></td>-->
             <td><?= $pedidos['correlativo'] ?></td>
             <td><?= $pedidos['descripcion'] ?></td>
+            <!--
             <td width="100"><?= $pedidos['nombre'] ?></td>
             <td><?= $pedidos['presentacion'] ?></td>
+            
             <td style="text-align: center;">
                 <button class="btn btn-warning btn-sm">
                     <?= $pedidos['cantidad'] ?>
                 </button>
             </td>
+            -->
             <td style="text-align: center;">
                 <?php
                     if($pedidos['estatus'] === 1)

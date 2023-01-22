@@ -159,8 +159,17 @@ class MedicamentosController extends Controller
             $presentacion   = $_POST['presentacion'];
             /* VALIDACIÓN */
             $consulta_medicamento = 
-            Yii::$app->db->createCommand("SELECT * 
-            FROM medicamentos WHERE nombre='$nombre'")->queryAll();
+            Yii::$app->db->createCommand("SELECT detalle_medi.id_detalle_medi, medicamentos.idmedi,
+            medicamentos.nombre, 
+            tipo_medicamento.descripcion FROM medicamentos AS medicamentos 
+            JOIN detalle_medi AS detalle_medi
+            ON detalle_medi.idmedi=medicamentos.idmedi
+            JOIN tipo_medicamento AS tipo_medicamento
+            ON detalle_medi.idtipo=tipo_medicamento.idtipo
+            WHERE medicamentos.nombre='$nombre'
+            AND tipo_medicamento.idtipo='$presentacion'")->queryAll();
+
+            //var_dump($consulta_medicamento); die();
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
@@ -170,46 +179,91 @@ class MedicamentosController extends Controller
                     'data' => [
                         'success' => false,
                         'message' => 'El Medicamento Ya Existe.',
+                        'info'    => 'Verifica que la presentación del medicamento no esté repetida.'
                 ],
                     'code' => 0, // Some semantic codes that you know them for yourself
                 ];
             }
             else{
                 /* REGISTRAR MEDICAMENTO */
-                $medicamento = Yii::$app->db->createCommand()->insert('medicamentos', [
-                    'nombre'                  => "$nombre",
-                ])->execute();
 
-                $idmedi = Yii::$app->db->getLastInsertID();
+                $validacion_medicamento = 
+                Yii::$app->db->createCommand("SELECT * FROM medicamentos AS medicamentos
+                WHERE medicamentos.nombre='$nombre'")->queryAll();
 
-                $detalle_medi = Yii::$app->db->createCommand()->insert('detalle_medi', [
-                    'idmedi'                  => $idmedi,
-                    'idtipo'                  => $presentacion,
-                ])->execute();
-                /* FIN REGISTRAR MEDICAMENTO */
-
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-                if($medicamento && $detalle_medi)
+                foreach($validacion_medicamento as $validacion_medicamento) 
                 {
-                    return [
-                        'data' => [
-                            'success' => true,
-                            'message' => 'Medicamento Registrado Exitosamente.',
+                        $idmedi = $validacion_medicamento['idmedi'];
+                }
+
+                if($validacion_medicamento)
+                {
+                    $detalle_medi = Yii::$app->db->createCommand()->insert('detalle_medi', [
+                        'idmedi'                  => $idmedi,
+                        'idtipo'                  => $presentacion,
+                    ])->execute();
+
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                    if($detalle_medi)
+                    {
+                        return [
+                            'data' => [
+                                'success' => true,
+                                'message' => 'Medicamento Registrado Exitosamente.',
+                            ],
+                            'code' => 1,
+                        ];
+                    }
+                    else
+                    {
+                        return [
+                            'data' => [
+                                'success' => false,
+                                'message' => 'Ocurrió un error al registrar el medicamento.',
                         ],
-                        'code' => 1,
-                    ];
+                            'code' => 0, // Some semantic codes that you know them for yourself
+                        ];
+                    }
+
+                }else{
+
+                    
+                    $medicamento = Yii::$app->db->createCommand()->insert('medicamentos', [
+                        'nombre'                  => "$nombre",
+                    ])->execute();
+
+                    $idmedi = Yii::$app->db->getLastInsertID();
+                    
+                    $detalle_medi = Yii::$app->db->createCommand()->insert('detalle_medi', [
+                        'idmedi'                  => $idmedi,
+                        'idtipo'                  => $presentacion,
+                    ])->execute();
+                    
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                    if($medicamento && $detalle_medi)
+                    {
+                        return [
+                            'data' => [
+                                'success' => true,
+                                'message' => 'Medicamento Registrado Exitosamente.',
+                            ],
+                            'code' => 1,
+                        ];
+                    }
+                    else
+                    {
+                        return [
+                            'data' => [
+                                'success' => false,
+                                'message' => 'Ocurrió un error al registrar el medicamento.',
+                        ],
+                            'code' => 0, // Some semantic codes that you know them for yourself
+                        ];
+                    }
                 }
-                else
-                {
-                    return [
-                        'data' => [
-                            'success' => false,
-                            'message' => 'Ocurrió un error al registrar el medicamento.',
-                    ],
-                        'code' => 0, // Some semantic codes that you know them for yourself
-                    ];
-                }
+
             }
 
             /* VALIDACIÓN */

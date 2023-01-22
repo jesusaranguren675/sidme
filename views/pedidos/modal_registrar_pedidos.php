@@ -6,7 +6,7 @@ use Yii\helpers\Url;
 
 <!-- Modal Registrar Pedidos de Medicamentos -->
 <div class="modal fade" id="distribuirMedicamentos" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="distribuirMedicamentosLabel" aria-hidden="true">
-  <div style="position:relative;" class="modal-dialog modal-dialog-centered">
+  <div style="position:relative;" class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="distribuirMedicamentosLabel">Registrar Pedido</h5>
@@ -15,9 +15,11 @@ use Yii\helpers\Url;
         </button>
       </div>
       <div class="modal-body">
+        <br>
         <?= $this->render('create', [
         'model' => $model,
         ]) ?>
+        <br>
       </div>
       <div class="modal-footer"><!-- data-dismiss="modal" -->
         <a id="back" type="button" class="btn btn-secondary"  href="<?= Url::toRoute('pedidos/index'); ?>" >Cerrar</a>

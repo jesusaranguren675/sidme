@@ -31,40 +31,32 @@ FROM public.sede")->queryAll();
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'id' => 'entradasmedicamentos-descripcion-update']) ?>
-        </div>
-
+        
         <input id="identrada-update" type="hidden" value="">
 
         <div class="col-sm-6">
-            <label for="entradasmedicamentos-idmedi">Medicamento</label>
-            <select class="form-control" id="entradasmedicamentos-idmedi-update">
-                <?php foreach ($medicamentos as $medicamentos): ?>
-                    <option value="<?= $medicamentos['id_detalle_medi'] ?>"><?= $medicamentos['nombre'] ?> <?= $medicamentos['descripcion'] ?></option>
-                <?php endforeach; ?>
-            </select>
+            <label for="entradasmedicamentos-idmedi-update-view">Medicamento</label>
+            <input id="entradasmedicamentos-idmedi-update-view" class="form-control" disabled type="text" value="">
+            <input id="entradasmedicamentos-idmedi-update" class="form-control" disabled type="hidden" value="">
         </div>
 
-        <!--<div class="col-sm-4">
-            <?php /* $form->field($model, "idtipo")->dropDownList(
-                             ArrayHelper::map($tipo_medicamento, 'idtipo', 'descripcion'),
-                             ['prompt' => 'Seleccione']); */?>
-        </div>-->
 
         <div class="col-sm-6">
-            <label for="entradasmedicamentos-idsede-update">Procedencia</label>
-            <select class="form-control" id="entradasmedicamentos-idsede-update">
-                <?php foreach ($sedes as $sedes): ?>
-                    <option value="<?= $sedes['idsede'] ?>"><?= $sedes['nombre'] ?></option>
-                <?php endforeach; ?>
-            </select>
+
+            <label for="entradasmedicamentos-idsede-update-view">Organización</label>
+            <input id="entradasmedicamentos-idsede-update-view" class="form-control" disabled type="text" value="">
+            <input id="entradasmedicamentos-idsede-update" class="form-control" disabled type="hidden" value="">
         </div>
 
         <div class="col-sm-6">
             <label for="entradasmedicamentos-cantidad-update">Cantidad</label>
             <input class="form-control" type="text" id="entradasmedicamentos-cantidad-update" maxlength="3">
         </div>
+
+        <div class="col-sm-6">
+            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'id' => 'entradasmedicamentos-descripcion-update']) ?>
+        </div>
+
     </div>
 
 

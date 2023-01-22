@@ -33,6 +33,8 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
     <input id="idpedi-update" type="hidden" value="">
 
     <div class="row">
+
+        
         <div class="col-sm-6">
             <?= $form->field($model, 'descripcion')->textInput([
                 'maxlength'     => true, 
@@ -40,7 +42,8 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
                 'value'         => ""]) 
             ?>
         </div>
-
+        
+        <!--
         <div class="col-sm-6">
             <label for="pedido-idmedi-update">Medicamento</label>
             <select id="pedido-idmedi-update" style="width: 100%" class="js-example-basic-single" name="state">
@@ -49,9 +52,10 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
                 <?php endforeach; ?>
             </select>
         </div>
+        -->
 
         <div class="col-sm-6">
-            <label for="pedido-sede-update">Procedencia</label>
+            <label for="pedido-sede-update">Destino</label>
             <select id="pedido-sede-update" style="width: 100%" class="js-example-basic-single" name="state">
                 <?php foreach ($sedes as $sedes): ?>
                     <option value="<?= $sedes['idsede'] ?>"><?= $sedes['nombre'] ?></option>
@@ -59,6 +63,7 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
             </select>
         </div>
 
+        <!--
         <div class="col-sm-6">
         <label for="pedido-cantidad">Unidades</label>
             <div class="input-group">
@@ -68,6 +73,7 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
                 </div>
             </div>
         </div>
+        -->
 
 
         <div class="col-sm-12">

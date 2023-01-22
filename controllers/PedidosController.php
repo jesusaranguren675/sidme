@@ -132,6 +132,21 @@ class PedidosController extends Controller
 			WHERE pedidos.idpedi=$id
             ")->queryAll();
 
+            $medicamentos = 
+            Yii::$app->db->createCommand("SELECT mp.id_mpedi, medicamentos.nombre, tipo_medicamento.descripcion as presentacion,
+            mp.cantidad, 
+            pedidos.descripcion, detalle_pedi.procedencia, pedidos.idusu
+            from medicamentos_pedidos as mp
+            join pedidos as pedidos on pedidos.idpedi=mp.idpedi
+            join detalle_pedi as detalle_pedi on detalle_pedi.idpedi=mp.idpedi
+            join detalle_medi as detalle_medi
+            on detalle_medi.id_detalle_medi=mp.idmedi
+            join medicamentos as medicamentos
+            on medicamentos.idmedi=detalle_medi.idmedi
+            join tipo_medicamento as tipo_medicamento
+            on tipo_medicamento.idtipo=detalle_medi.idtipo
+            where pedidos.idpedi=$id")->queryAll();
+
             foreach ($pedidos as $pedidos_p) {
                 $orden = $pedidos_p['orden'];
             }
@@ -139,7 +154,7 @@ class PedidosController extends Controller
             $mpdf = new mPDF();
             //$mpdf->SetHeader(Html::img('@web/img/cintillo_pdf.jpg')); 
             $mpdf->setFooter('{PAGENO}'); 
-            $mpdf->WriteHTML($this->renderPartial('_notaEntrega', ['pedidos' => $pedidos, 'orden' => $orden]));
+            $mpdf->WriteHTML($this->renderPartial('_notaEntrega', ['pedidos' => $pedidos, 'orden' => $orden, 'medicamentos' => $medicamentos]));
             $mpdf->Output();
             exit;
     }
@@ -187,21 +202,43 @@ class PedidosController extends Controller
                 $id_orden       = $pedidos['id_orden'];
             }
 
+            $medicamentos = 
+            Yii::$app->db->createCommand("SELECT mp.id_mpedi, medicamentos.nombre, tipo_medicamento.descripcion as presentacion,
+            mp.cantidad, 
+            pedidos.descripcion, detalle_pedi.procedencia, pedidos.idusu
+            from medicamentos_pedidos as mp
+            join pedidos as pedidos on pedidos.idpedi=mp.idpedi
+            join detalle_pedi as detalle_pedi on detalle_pedi.idpedi=mp.idpedi
+            join detalle_medi as detalle_medi
+            on detalle_medi.id_detalle_medi=mp.idmedi
+            join medicamentos as medicamentos
+            on medicamentos.idmedi=detalle_medi.idmedi
+            join tipo_medicamento as tipo_medicamento
+            on tipo_medicamento.idtipo=detalle_medi.idtipo
+            where pedidos.idpedi=$idpedi")->queryAll();
+
+           //$mensaje = "Hola Mundo";
+            //$tabla_medicamentos = "<p><p>";
+
+           
+
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
             if($pedidos)
             {
                 return [
                     'data' => [
-                        'success'           => true,
-                        'message'           => 'Consulta Exitosa',
-                        'idpedi'            => $idpedi,
-                        'descripcion'       => $descripcion,
-                        'nombre'            => $nombre, 
-                        'presentacion'      => $presentacion,
-                        'cantidad'          => $cantidad,
-                        'estatus'           => $estatus,
-                        'fecha'             => $fecha,  
+                        'success'            => true,
+                        'message'            => 'Consulta Exitosa',
+                        'idpedi'             => $idpedi,
+                        'descripcion'        => $descripcion,
+                        'nombre'             => $nombre, 
+                        'presentacion'       => $presentacion,
+                        'cantidad'           => $cantidad,
+                        'estatus'            => $estatus,
+                        'fecha'              => $fecha,  
+                        'id_orden'           => $id_orden,
+                        'medicamentos'      => $medicamentos,
                     ],
                     'code' => 1,
                 ];
@@ -213,7 +250,7 @@ class PedidosController extends Controller
                         'success' => false,
                         'message' => 'Ocurrió un error en la consulta',
                 ],
-                    'code' => 0, // Some semantic codes that you know them for yourself
+                    'code' => 0, 
                 ];
             }
         }
@@ -231,6 +268,9 @@ class PedidosController extends Controller
 
         if (Yii::$app->request->isAjax) 
         {
+
+            //var_dump($_POST); die();
+
             $descripcion            = strtolower($_POST['descripcion']);
             $idmedi                 = $_POST['idmedi'];
             $procedencia            = $_POST['procedencia'];
@@ -260,8 +300,25 @@ class PedidosController extends Controller
             $idpedi = Yii::$app->db->getLastInsertID();
             /* FIN REGISTRAR PEDIDO */
 
-            /* CONSULTAR PEDIDO REGISTRADO ANTERIORMENTE */
+            /* REGISTRAR MULTIPLES MEDICAMENTOS */
 
+            $temporal_multiples_medicamentos = 
+            Yii::$app->db->createCommand("SELECT * FROM temporal_medicamentos_pedidos")->queryAll();
+
+            foreach ($temporal_multiples_medicamentos as $temporal_multiples_medicamentos) {
+                $idmedi_mltp         = $temporal_multiples_medicamentos['idmedi'];
+                $cantidad_mltp       = $temporal_multiples_medicamentos['cantidad'];
+
+                $insert_multiples_medicamentos = 
+                Yii::$app->db->createCommand("INSERT INTO public.medicamentos_pedidos(
+                idpedi, idmedi, cantidad)
+                VALUES ($idpedi, $idmedi_mltp, $cantidad_mltp);")->queryAll();
+
+            }
+
+            /* FIN REGISTRAR MULTIPLES MEDICAMENTOS /*
+
+            /* CONSULTAR PEDIDO REGISTRADO ANTERIORMENTE */
             $pedidos = 
             Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
             pedidos.descripcion,
@@ -290,7 +347,6 @@ class PedidosController extends Controller
                 $fecha          = $pedidos['fecha'];
                 $id_orden       = $pedidos['id_orden'];
             }
-
             /* FIN CONSULTAR PEDIDO REGISTRADO ANTERIORMENTE */
 
             // //Enviar correo a los integrantes
@@ -363,6 +419,176 @@ class PedidosController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
 
+    public function actionFiltromedicamentos()
+    {
+        $pedido_idmedi      = $_POST['pedido_idmedi'];
+        $pedido_cantidad    = $_POST['pedido_cantidad'];
+
+        if (Yii::$app->request->isAjax) 
+        {
+           
+            $medicamento = 
+            Yii::$app->db->createCommand("SELECT
+            detalle_medi.id_detalle_medi,
+            medicamentos.nombre, tipo_medicamento.idtipo,
+            tipo_medicamento.descripcion as presentacion
+            FROM detalle_medi AS detalle_medi
+            JOIN medicamentos AS medicamentos
+            ON medicamentos.idmedi=detalle_medi.idmedi
+            JOIN tipo_medicamento AS tipo_medicamento
+            ON detalle_medi.idtipo=tipo_medicamento.idtipo
+            WHERE detalle_medi.id_detalle_medi=$pedido_idmedi")->queryAll();
+
+            foreach ($medicamento as $medicina) {
+                $id_detalle_medi      = $medicina['id_detalle_medi'];
+                $nombre               = $medicina['nombre'];
+                $presentacion         = $medicina['presentacion'];
+                $idtipo               = $medicina['idtipo'];
+            }
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($medicamento)
+            {
+                //validacion
+                $consulta_medicamento = 
+                Yii::$app->db->createCommand("SELECT * FROM 
+                temporal_medicamentos_pedidos WHERE idmedi=$id_detalle_medi")->queryAll();
+
+                foreach ($consulta_medicamento as $consulta_medicamento) {
+                    $unidades = $consulta_medicamento['idmedi'];
+                    $idal_gral = $consulta_medicamento['cantidad'];
+                }
+                //Fin validación
+
+                if($consulta_medicamento)
+                {
+                    return [
+                        'data' => [
+                            'success' => false,
+                            'message' => 'El Medicamento Ya Existe',
+                            'info'    => 'El Medicamento que intentas agregar ya existe en la lista.'
+                    ],
+                        'code' => 0,
+                    ];
+                }
+                else
+                {
+                    $temporal_medicamentos_pedidos = 
+                    Yii::$app->db->createCommand()
+                    ->insert('temporal_medicamentos_pedidos', 
+                    [
+                        'idmedi'                  => $id_detalle_medi,
+                        'cantidad'                => $pedido_cantidad,
+                    ])->execute();
+
+                    if($temporal_medicamentos_pedidos)
+                    {   
+                        return [
+                            'data' => [
+                                'success'           => true,
+                                'message'           => 'Consulta Exitosa',
+                                'id_detalle_medi'   => $id_detalle_medi,
+                                'nombre'            => $nombre, 
+                                'presentacion'      => $presentacion,
+                                'idtipo'            => $idtipo,
+        
+                            ],
+                            'code' => 1,
+                        ];
+                    }
+                }
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error en la consulta',
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+            }
+        }
+    }
+
+    public function actionRemovermedicamento()
+    {
+        if (Yii::$app->request->isAjax) 
+        {
+
+            $data_id_detalle_medi = $_POST['data_id_detalle_medi'];
+           
+            $remover_medicamento = 
+            Yii::$app->db->
+            createCommand("DELETE FROM public.temporal_medicamentos_pedidos
+            WHERE idmedi=$data_id_detalle_medi")->queryAll();
+
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if($remover_medicamento)
+            {
+        
+                return [
+                    'data' => [
+                        'success' => true,
+                        'message' => 'El Medicamento Ha Sido Removido',
+                ],
+                    'code' => 0,
+                ];
+            }
+            else
+            {
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'Ocurrió un error al remover el medicamento.',
+                ],
+                    'code' => 0, 
+                ];
+            }
+        }
+    }
+
+
+    public function actionLimpiardatostemporales()
+    {
+        if (Yii::$app->request->isAjax) 
+        {
+
+            $parametro = $_POST['parametro'];
+           
+                
+                $datos_temporales = Yii::$app->db->createCommand()->truncateTable("temporal_medicamentos_pedidos")->execute();
+         
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                if($datos_temporales == 0)
+                {
+            
+                    return [
+                        'data' => [
+                            'success' => true,
+                            'message' => 'Los datos temporales fueron removidos',
+                    ],
+                        'code' => 0,
+                    ];
+                }
+                else
+                {
+                    return [
+                        'data' => [
+                            'success' => false,
+                            'message' => 'Ocurrió un error al remover los datos temporales.',
+                    ],
+                        'code' => 0, 
+                    ];
+                }
+            
+        }
+    }
+
      public function actionQueryupdate()
      {
  
@@ -389,7 +615,8 @@ class PedidosController extends Controller
              ON tipo_medicamento.idtipo=detalle_medi.idtipo
              WHERE pedidos.idpedi=$idpedi")->queryAll();
  
-             foreach ($pedidos as $pedidos) {
+             foreach ($pedidos as $pedidos) 
+             {
                  $idpedi         = $pedidos['idpedi'];
                  $descripcion    = $pedidos['descripcion'];
                  $nombre         = $pedidos['nombre'];
@@ -439,9 +666,9 @@ class PedidosController extends Controller
         {
             $idpedi                 = $_POST['idpedi_update'];
             $descripcion            = $_POST['pedido_descripcion_update'];
-            $idmedi                 = $_POST['pedido_idmedi_update'];
+            //$idmedi                 = $_POST['pedido_idmedi_update'];
             $procedencia            = $_POST['pedido_sede_update'];
-            $cantidad               = $_POST['pedido_cantidad_update'];
+            //$cantidad               = $_POST['pedido_cantidad_update'];
             $estatus                = $_POST['pedido_estatus_update'];
             $idusu                  = Yii::$app->user->identity->id;
 
@@ -451,7 +678,7 @@ class PedidosController extends Controller
             WHERE idpedi=$idpedi")->queryAll();
 
             $update_detalle_pedido = Yii::$app->db->createCommand("UPDATE public.detalle_pedi
-            SET idmedi=$idmedi, procedencia=$procedencia, cantidad=$cantidad, estatus=$estatus
+            SET procedencia=$procedencia, estatus=$estatus
             WHERE idpedi=$idpedi")->queryAll();
             /* FIN ACTUALIZAR PEDIDO */
 

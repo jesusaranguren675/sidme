@@ -113,7 +113,14 @@ $rol     = $roles['nombre_rol'];
     }
     //Fin Modificar Modal Recepcion
     //------------------------------
+    
 </script>
+
+<style>
+    .modal-header .close {
+        display: none;
+    }
+</style>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -275,7 +282,7 @@ $script = <<< JS
              document.querySelector(".preloader").style.display = 'none';
              Swal.fire(
              response.data.message,
-             '',
+             response.data.info,
              'error'
              )
           }
