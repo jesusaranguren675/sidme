@@ -32,11 +32,6 @@ $rol     = $roles['nombre_rol'];
 ?>
 
 <script>
-
-    $('#dataTable').dataTable( {
-    "order": [[0,'DESC'],[8,'DESC']]
-    } );
-
     //Modal ver Pedido
     //----------------
     function view(id) 
@@ -296,7 +291,7 @@ $rol     = $roles['nombre_rol'];
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>N°</th>
@@ -624,9 +619,6 @@ $(document).ready(function() {
     //Fin registrar Pedido de Medicamento
    //-------------------------------------------
 
-   $('#dataTable2').dataTable( {
-    "order": [[0,'DESC'],[8,'DESC']]
-    } );
    //Actualizar Pedido de Medicamento
    //--------------------------------
    $("#modificar_pedido").click(function(event) {

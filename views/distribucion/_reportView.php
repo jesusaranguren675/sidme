@@ -43,40 +43,30 @@ use yii\helpers\Html;
 <b style="font-size: 9pt; color: #333;">Hora de Reporte: <?php echo date("h:i a") ?></b><br><br>
 
 
-<table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
-	<tr>
-		<th>N°</th>
-		<th>Descripción</th>
-        <th>Nombre</th>
-		<th>Presentación</th>
-		<th>Cantidad</th>
-		<th>Fecha</th>
-	</tr>
-	<?php
-    $contador = 1;
-	foreach ($distribuciones as $distribuciones)
-	{
-		
-		?>
-        <tr>
-            <td><?= $contador ?></td>
-			<td><?= $distribuciones['descripcion'] ?></td>
-            <td width="100"><?= $distribuciones['nombre'] ?></td>
-            <td><?= $distribuciones['presentacion'] ?></td>
-            <td style="text-align: center;">
-                <button class="btn btn-warning btn-sm">
-                    <?= $distribuciones['cantidad'] ?>
-                </button>
-            </td>
-			<?php 
-                $dateString = $distribuciones['fecha'];
-                $newDateString = date_format(date_create_from_format('Y-m-d', $dateString), 'd-m-Y');
-            ?>
-            <td><?= $newDateString ?></td>
-        </tr>
-		<?php
-		$contador = $contador + 1;
-	}
-
-	?>
-</table>
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>Entrega</th>
+                                <th>Destino</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($distribuciones as $distribuciones): ?>
+                                <tr>
+                                    <td><?= $distribuciones['iddis'] ?></td>
+                                    <td><?= $distribuciones['correlativo'] ?></td>
+                                    </td>
+                                    <td><?= $distribuciones['destino'] ?></td>
+                                    <td width="200"><?= $distribuciones['descripcion'] ?></td>
+                                    <?php 
+                                    $dateString = $distribuciones['fecha'];
+                                    $newDateString = date_format(date_create_from_format('Y-m-d', $dateString), 'd-m-Y');
+                                    ?>
+                                    <td><?= $newDateString ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>

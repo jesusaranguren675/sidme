@@ -11,7 +11,7 @@ use yii\helpers\Url;
 $this->title = 'sidmed';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-    <div class="container-fluid contenedor-form-login">
+    <div style="height: 100%;" class="container-fluid contenedor-form-login">
         <div class="container">
             <!-- Outer Row -->
             <div class="row justify-content-center">

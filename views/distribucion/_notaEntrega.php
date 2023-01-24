@@ -62,10 +62,7 @@ use yii\helpers\Html;
         <th>N°</th>
         <th>Entrega</th>
         <th>Descripción</th>
-        <th>Nombre</th>
-        <th>Presentación</th>
         <th>Destino</th>
-        <th>Cantidad</th>
         <th>Fecha</th>
 	</tr>
 	<?php
@@ -78,15 +75,39 @@ use yii\helpers\Html;
             <td><?= $contador ?></td>
             <td><?= $distribucion['correlativo'] ?></td>
             <td><?= $distribucion['descripcion'] ?></td>
-            <td><?= $distribucion['nombre'] ?></td>
-            <td><?= $distribucion['presentacion'] ?></td>
             <td><?= $distribucion['destino'] ?></td>
+            <td><?= $distribucion['fecha'] ?></td>
+        </tr>
+		<?php
+		$contador = $contador + 1;
+	}
+
+	?>
+</table>
+<br><br>
+
+<table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
+	<tr>
+        <th>N°</th>
+        <th>Medicamento</th>
+        <th>Presentación</th>
+        <th>Unidades</th>
+	</tr>
+	<?php
+    $contador = 1;
+	foreach ($medicamentos as $medicamentos)
+	{
+		
+		?>
+        <tr>
+            <td><?= $contador ?></td>
+            <td><?= $medicamentos['nombre'] ?></td>
+            <td><?= $medicamentos['presentacion'] ?></td>
             <td style="text-align: center;">
                 <button class="btn btn-warning btn-sm">
-                <?= $distribucion['cantidad'] ?>
+                <?= $medicamentos['cantidad'] ?>
                 </button>
             </td>
-            <td><?= $distribucion['fecha'] ?></td>
         </tr>
 		<?php
 		$contador = $contador + 1;
