@@ -282,6 +282,80 @@ class PedidosController extends Controller
             $mes                    = date('m');
             $anio                   = date('y');
 
+            /* VALIDAR QUE EXISTA MINIMO UN MEDICAMENTO EN EL PEDIDO */
+
+            $consulta_temporal_medicamentos_pedidos = 
+            Yii::$app->db->createCommand("SELECT * FROM 
+            temporal_medicamentos_pedidos")->queryAll();
+
+            if($consulta_temporal_medicamentos_pedidos == true)
+            {
+                
+            }
+            else
+            {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                return [
+                    'data' => [
+                        'success' => false,
+                        'message' => 'No existen medicamentos en la lista',
+                        'info'    => 'Debes registrar minimo un medicamento a la lista de pedidos.'
+                ],
+                    'code' => 0, // Some semantic codes that you know them for yourself
+                ];
+                exit;
+            }
+
+             /* VALIDAR QUE EXISTA LA CANTIDAD DE MEDICAMENTOS SOLICITADA */
+
+             $val_multiples_medicamentos = 
+             Yii::$app->db->createCommand("SELECT * FROM temporal_medicamentos_pedidos")->queryAll();
+ 
+             foreach ($val_multiples_medicamentos as $val_multiples_medicamentos) {
+                 $idmedi_mltp         = $val_multiples_medicamentos['idmedi'];
+                 $cantidad_mltp       = $val_multiples_medicamentos['cantidad'];
+ 
+                 $consulta_almacen = 
+                 Yii::$app->db->createCommand("SELECT almacen_general.idmedi, 
+                 medicamentos.nombre, tipo_medicamento.descripcion AS presentacion,
+                 almacen_general.cantidad
+                 FROM almacen_general AS almacen_general
+                 JOIN detalle_medi AS detalle_medi
+                 ON detalle_medi.id_detalle_medi=almacen_general.idmedi
+                 JOIN medicamentos AS medicamentos
+                 ON medicamentos.idmedi=detalle_medi.idmedi
+                 JOIN tipo_medicamento AS tipo_medicamento
+                 ON tipo_medicamento.idtipo=detalle_medi.idtipo
+                 WHERE almacen_general.idmedi=$idmedi_mltp")->queryAll();
+ 
+                 foreach ($consulta_almacen as $consulta_almacen)
+                 {
+                     $unidades       = $consulta_almacen['cantidad'];
+                     $nombre_medi    = $consulta_almacen['nombre'];
+                     $nombre_pre     = $consulta_almacen['presentacion'];
+                 }
+                 
+                 if($consulta_almacen == true)
+                 {
+                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+ 
+                     if($unidades < $cantidad_mltp )
+                     {
+                         return [
+                             'data' => [
+                                 'success' => false,
+                                 'message' => 'No contamos con la cantidad solicitada',
+                                 'info'    => 'No contamos con la cantidad solicitada para el medicamento '.$nombre_medi.' '.$nombre_pre.'',
+                         ],
+                             'code' => 0, // Some semantic codes that you know them for yourself
+                         ];
+                         exit;
+                     }
+                 }
+ 
+             }
+
             /* REGISTRAR PEDIDO */
             $pedido = Yii::$app->db->createCommand()->insert('pedidos', [
                 'descripcion'                  => $descripcion,
@@ -601,6 +675,8 @@ class PedidosController extends Controller
              Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
              pedidos.descripcion,
              medicamentos.nombre,
+             detalle_pedi.procedencia AS destino,
+             sede.nombre AS sede,
              tipo_medicamento.descripcion AS presentacion,
              detalle_pedi.cantidad, detalle_pedi.estatus,
              detalle_pedi.fecha
@@ -613,6 +689,8 @@ class PedidosController extends Controller
              ON medicamentos.idmedi=detalle_medi.idmedi
              JOIN tipo_medicamento AS tipo_medicamento
              ON tipo_medicamento.idtipo=detalle_medi.idtipo
+             JOIN sede AS sede
+             ON sede.idsede=detalle_pedi.procedencia
              WHERE pedidos.idpedi=$idpedi")->queryAll();
  
              foreach ($pedidos as $pedidos) 
@@ -622,6 +700,8 @@ class PedidosController extends Controller
                  $nombre         = $pedidos['nombre'];
                  $presentacion   = $pedidos['presentacion'];
                  $cantidad       = $pedidos['cantidad'];
+                 $destino        = $pedidos['destino'];
+                 $sede           = $pedidos['sede'];
                  $estatus        = $pedidos['estatus'];
                  $fecha          = $pedidos['fecha'];
              }
@@ -638,6 +718,8 @@ class PedidosController extends Controller
                          'descripcion'       => $descripcion,
                          'nombre'            => $nombre, 
                          'presentacion'      => $presentacion,
+                         'destino'           => $destino,
+                         'sede'              => $sede,
                          'cantidad'          => $cantidad,
                          'estatus'           => $estatus,
                          'fecha'             => $fecha,  

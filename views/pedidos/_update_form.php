@@ -57,6 +57,7 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
         <div class="col-sm-6">
             <label for="pedido-sede-update">Destino</label>
             <select id="pedido-sede-update" style="width: 100%" class="js-example-basic-single" name="state">
+                <option id="destino_name_id_update" value="">Seleccione</option>
                 <?php foreach ($sedes as $sedes): ?>
                     <option value="<?= $sedes['idsede'] ?>"><?= $sedes['nombre'] ?></option>
                 <?php endforeach; ?>

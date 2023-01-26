@@ -84,9 +84,10 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
     
     <?php ActiveForm::end(); ?>
 
+    <br>
     <div id="multiples-medicamentos" class="multiples-medicamentos">
 
     </div>
-    <br><br>
+    <br><br><br><br>
 
 </div>

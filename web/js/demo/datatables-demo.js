@@ -2,7 +2,7 @@
 
 
 $(document).ready( function () {
-   $('#dataTable').DataTable({
+   $('.dataTable').DataTable({
    language: {
        "decimal": "",
        "emptyTable": "No hay información",
@@ -25,3 +25,5 @@ $(document).ready( function () {
    },
 });
 } );
+
+

@@ -17,7 +17,7 @@
     });
 })(jQuery);
 
-
+/*
 $(document).ready(function() {
     $('#example').DataTable( {
         dom: 'Bfrtip',
@@ -26,10 +26,11 @@ $(document).ready(function() {
         ]
     } );
 } );
+*/
 
 
 $(document).ready( function () {
-    $('#dataTable').DataTable({
+    $('.dataTable').DataTable({
     dom: 'Bfrtip',
     language: {
         "decimal": "",

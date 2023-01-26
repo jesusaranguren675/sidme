@@ -181,6 +181,8 @@ $rol     = $roles['nombre_rol'];
                     document.getElementById("pedido-descripcion-update").setAttribute("value", response.data.descripcion);
                     //document.getElementById("pedido-cantidad-update").setAttribute("value", response.data.cantidad);
                     document.getElementById("idpedi-update").setAttribute("value", response.data.idpedi);
+                    document.getElementById("destino_name_id_update").setAttribute("value", response.data.destino);
+                    document.getElementById("destino_name_id_update").innerHTML = response.data.sede;
 
 
                     //document.getElementById("viewPedidoLabel").innerHTML = response.data.nombre+ " " + response.data.presentacion;
@@ -372,13 +374,20 @@ $rol     = $roles['nombre_rol'];
                                    }
                                    else if($rol == 'Administrador')
                                    {
-                                    ?>
-                                    <a onclick="updatePedi(<?php echo $pedidos['idpedi']; ?>)"
-                                    href="#" 
-                                    class="btn btn-primary btn-sm update_btn">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <?php
+                                        if($pedidos['estatus'] === 4 || $pedidos['estatus'] === 3)
+                                        {
+                                            
+                                        }
+                                        else
+                                        {
+                                            ?>
+                                            <a onclick="updatePedi(<?php echo $pedidos['idpedi']; ?>)"
+                                            href="#" 
+                                            class="btn btn-primary btn-sm update_btn">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <?php
+                                        }
                                    }
                                 ?>
 
@@ -596,16 +605,20 @@ $(document).ready(function() {
               'success'
               );
 
-              $('#distribuirMedicamentos').modal('hide')
-              $('input[type="text"]').val('');
-              $('input[type="text"]').style.borderColor = '#d1d3e2';
+            $('#distribuirMedicamentos').modal('hide')
+              
+            const myInterval = setInterval(myTimer, 2000);
+
+            function myTimer() {
+              location.reload();
+            }
           }
           else
           {
              document.querySelector(".preloader").style.display = 'none';
              Swal.fire(
              response.data.message,
-             '',
+             response.data.info,
              'error'
              )
           }
@@ -797,6 +810,35 @@ $(document).ready(function() {
         let pedido_cantidad = document.getElementById("pedido-cantidad").value;
 
         var url = window.location.protocol+"/index.php?r=pedidos/filtromedicamentos";
+
+        //Verificar validacion
+        //---------------------
+        var VerficarValidacion = 
+        [
+            validateNumber("pedido-idmedi"),
+            validateNumber("pedido-cantidad"),
+        ];
+
+        for (ver = 0; ver < VerficarValidacion.length; ver++) {
+            if(VerficarValidacion[ver] === false)
+            {
+                document.querySelector(".preloader").style.display = 'none';
+                event.preventDefault();
+                Swal.fire(
+                    'Error',
+                    'Verifica que los campos tengan los valores correspondientes.',
+                    'warning'
+                );
+                console.log(VerficarValidacion[ver]);
+                return false;
+            }
+            else
+            {
+
+            }
+        }
+        //Fin verificar validación
+        //------------------------
 
         $.ajax({
             url: url,

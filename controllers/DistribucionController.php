@@ -87,6 +87,36 @@ class DistribucionController extends Controller
         ]);
     }
 
+    public function actionPedidospordistribuir()
+    {
+
+        $pedidos = 
+        Yii::$app->db->createCommand("SELECT pedidos.idpedi, 
+        pedidos.descripcion,
+        medicamentos.nombre,
+        detalle_pedi.procedencia,
+        sede.nombre AS destino,
+        tipo_medicamento.descripcion AS presentacion,
+        detalle_pedi.cantidad, detalle_pedi.estatus,
+        detalle_pedi.fecha, detalle_pedi.correlativo as id_orden
+        FROM pedidos AS pedidos
+        JOIN detalle_pedi AS detalle_pedi
+        ON detalle_pedi.idpedi=pedidos.idpedi
+        JOIN detalle_medi AS detalle_medi
+        ON detalle_medi.id_detalle_medi=detalle_pedi.idmedi
+        JOIN medicamentos AS medicamentos
+        ON medicamentos.idmedi=detalle_medi.idmedi
+        JOIN tipo_medicamento AS tipo_medicamento
+        ON tipo_medicamento.idtipo=detalle_medi.idtipo
+        JOIN sede AS sede
+        ON sede.idsede=detalle_pedi.procedencia
+        WHERE estatus=1")->queryAll();
+
+        return $this->render('tablapedidospordistribuir', [
+            'pedidos'                       => $pedidos,
+        ]);
+    }
+
     public function actionReport() {
 
         $distribuciones = 

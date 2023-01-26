@@ -372,7 +372,7 @@ $rol     = $roles['nombre_rol'];
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>N°</th>
@@ -492,7 +492,7 @@ $rol     = $roles['nombre_rol'];
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>N°</th>
@@ -717,6 +717,11 @@ $script = <<< JS
                     'success'
                     );
                     $('#viewMedicamento').modal({ show:false });
+                    const myInterval = setInterval(myTimer, 2000);
+
+                    function myTimer() {
+                        location.reload();
+                    }
                 }
                 else
                 {
@@ -810,7 +815,11 @@ $("#responder_pedido").click(function(event) {
             'success'
             );
             $('#reponderPedidos').modal('hide');
-            $('input[type="text"]').val('');
+            const myInterval = setInterval(myTimer, 2000);
+
+            function myTimer() {
+                location.reload();
+            }
         }
         else
         {
@@ -984,7 +993,13 @@ $("#distribuir_pedido").click(function(event) {
             'El N° de entrega es '+ response.data.correlativo +'',
             'success'
             );
-            $('#aprobardistribucion').modal('hide');
+
+            const myInterval = setInterval(myTimer, 2000);
+
+            function myTimer() {
+                location.reload();
+            }
+        
         }
         else
         {
