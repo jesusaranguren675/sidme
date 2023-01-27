@@ -10,8 +10,9 @@ use yii\widgets\ActiveForm;
 
 
     <?php $form = ActiveForm::begin(); ?>
+    <input id="id_rol_update" type="hidden" value="">
 
-    <?= $form->field($model, 'nombre_rol')->textInput(['maxlength' => true]) ?>
+    <input id="nombre_rol_update" class="form-control" maxlength="15" type="text">
 
     <?php ActiveForm::end(); ?>
 
