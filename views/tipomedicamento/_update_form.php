@@ -16,8 +16,9 @@ use yii\helpers\ArrayHelper;
     <input id="idtipo-update" type="hidden" value="">
 
     <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'id' => 'tipomedicamento-descripcion-update']) ?>
+        <div class="col-sm-12">
+            <label for="tipomedicamento-descripcion-update">Nombre</label>
+            <input id="tipomedicamento-descripcion-update" class="form-control" type="text" maxlength="30">
         </div>
     </div>
 

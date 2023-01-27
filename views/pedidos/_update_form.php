@@ -80,6 +80,7 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
         <div class="col-sm-12">
             <label for="pedido-estatus-update">Estatus</label>
             <select id="pedido-estatus-update" style="width: 100%" class="js-example-basic-single" name="state">
+                <option value="">Seleccione</option>
                 <option value="1">Aprobado</option>
                 <option value="2">Pendiente</option>
                 <option value="3">Rechazado</option>

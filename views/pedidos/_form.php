@@ -46,7 +46,7 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
             <div class="col-sm-6">
             <label for="pedido-cantidad">Unidades</label>
                 <div class="input-group">
-                    <input maxlength="3" id="pedido-cantidad" type="text" type="number" class="form-control">
+                    <input maxlength="4" id="pedido-cantidad" type="text" type="number" class="form-control">
                     <div class="input-group-append">
                         <span id="cantidad_de_unidades" class="input-group-text">Disponible 0.00</span>
                     </div>
@@ -72,12 +72,14 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
             </select>
         </div>
 
+        
         <div class="col-sm-6">
             <?= $form->field($model, 'descripcion')->textInput([
                 'maxlength'     => true, 
                 'id'            => 'pedido-descripcion',
                 'value'         => "",
-                'class'         => "form-control pedido-descripcion"]) 
+                'class'         => "form-control pedido-descripcion",
+                'maxlength'     => "40"]) 
             ?>
         </div>
     </div>

@@ -25,11 +25,11 @@ FROM public.tipo_medicamento;")->queryAll();
 
         <div class="col-sm-6">
             <label for="presentacion">Medicamento</label>
-            <select class="form-control" name="presentacion" id="presentacion">
-                <option>Seleccionar</option>
-                <?php foreach ($presentaciones as $presentaciones): ?>
+            <select id="presentacion" style="width: 100%" class="js-example-basic-single" name="state">
+                    <option>Seleccione</option>
+                    <?php foreach ($presentaciones as $presentaciones): ?>
                     <option value="<?= $presentaciones['idtipo'] ?>"><?= $presentaciones['descripcion'] ?></option>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
             </select>
         </div>
     </div>

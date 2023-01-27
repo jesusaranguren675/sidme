@@ -53,6 +53,7 @@ use yii\helpers\Html;
 		<th>Presentación</th>
 		<th>Cantidad</th>
         -->
+        <th>Destino</th>
 		<th>Estatus</th>
 		<th>Fecha</th>
 	</tr>
@@ -77,6 +78,7 @@ use yii\helpers\Html;
                 </button>
             </td>
             -->
+            <td><?= $pedidos['procedencia'] ?></td>
             <td style="text-align: center;">
                 <?php
                     if($pedidos['estatus'] === 1)

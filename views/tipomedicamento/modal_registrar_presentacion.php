@@ -5,7 +5,7 @@ use Yii\helpers\Url;
 ?>
 <!-- Modal Registrar Presentacion del Medicamentos -->
 <div class="modal fade" id="modalPresentacion" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modalPresentacionLabel" aria-hidden="true">
-  <div style="position:relative;" class="modal-dialog modal-dialog-centered">
+  <div style="position:relative; width:30%;" class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modalPresentacionLabel">Registrar Presentación</h5>

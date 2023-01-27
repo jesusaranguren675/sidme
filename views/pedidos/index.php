@@ -182,7 +182,8 @@ $rol     = $roles['nombre_rol'];
                     //document.getElementById("pedido-cantidad-update").setAttribute("value", response.data.cantidad);
                     document.getElementById("idpedi-update").setAttribute("value", response.data.idpedi);
                     document.getElementById("destino_name_id_update").setAttribute("value", response.data.destino);
-                    document.getElementById("destino_name_id_update").innerHTML = response.data.sede;
+
+                    let destino = response.data.destino;
 
 
                     //document.getElementById("viewPedidoLabel").innerHTML = response.data.nombre+ " " + response.data.presentacion;
@@ -293,7 +294,7 @@ $rol     = $roles['nombre_rol'];
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>N°</th>

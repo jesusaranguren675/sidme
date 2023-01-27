@@ -14,8 +14,9 @@ use yii\widgets\ActiveForm;
             'enableAjaxValidation' => false,]); ?>
 
     <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+        <div class="col-sm-12">
+            <label for="tipomedicamento-descripcion">Nombre</label>
+            <input id="tipomedicamento-descripcion" class="form-control" type="text" maxlength="30">
         </div>
     </div>
 

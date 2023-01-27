@@ -35,6 +35,7 @@ Yii::$app->db->createCommand("SELECT * FROM sede")->queryAll();
             <label for="entradasmedicamentos-idmedi">Medicamento</label>
             <select id="entradasmedicamentos-idmedi" style="width: 100%" class="js-example-basic-single" name="state">
                 <?php foreach ($medicamentos as $medicamentos): ?>
+                    <option>Seleccione</option>
                     <option value="<?= $medicamentos['id_detalle_medi'] ?>"><?= $medicamentos['nombre'] ?> <?= $medicamentos['descripcion'] ?></option>
                 <?php endforeach; ?>
             </select>

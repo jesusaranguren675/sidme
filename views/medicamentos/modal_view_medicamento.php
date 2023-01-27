@@ -1,6 +1,6 @@
 <!-- Modal Ver Registros Medicamento -->
 <div class="modal fade" id="viewMedicamento" tabindex="-1" aria-labelledby="viewMedicamentoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered" style="width: 50%;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="viewMedicamentoLabel"></h5>
@@ -13,8 +13,8 @@
             <table class="table table-bordered">
                 <tr>
                     <th>N°</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
+                    <th>Medicamento</th>
+                    <th>Presentación</th>
                 </tr>
                 <tr>
                     <td id="data_1"></td>

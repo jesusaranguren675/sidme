@@ -46,9 +46,9 @@ use yii\helpers\Html;
 <table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
 	<tr>
 		<th>N°</th>
-        <th>Nombre</th>
+        <th>Medicamento</th>
 		<th>Presentación</th>
-		<th>Cantidad</th>
+		<th>Unidades</th>
 	</tr>
 	<?php
     $contador = 1;

@@ -117,6 +117,23 @@ $rol     = $roles['nombre_rol'];
 </script>
 
 <style>
+    .select2-selection--single {
+        background-color: #fff !important;
+        border: 1px solid #d1d3e2 !important;
+        border-radius: 4px !important;
+
+        
+    }
+    .select2-selection--single{
+        height: 38px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #6e707e !important;
+    line-height: 28px !important;
+    }
     .modal-header .close {
         display: none;
     }
@@ -214,6 +231,12 @@ $script = <<< JS
 
     validateStringBlur("medicamentos-nombre");
     validateStringBlur("presentacion");
+
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+            dropdownParent: $('#medicamento .modal-body'),
+        });
+    });
 
     //Registrar Medicamento
     //--------------------------------

@@ -20,7 +20,8 @@ FROM public.tipo_medicamento;")->queryAll();
 
     <div class="row">
         <div class="col-sm-6">
-            <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'id' => 'nombre-update']) ?>
+            <label for="nombre-update">Medicamento</label>
+            <input id="nombre-update" class="form-control" maxlength="20" type="text">
         </div>
 
         <input id="id_detalle_medi-update" type="hidden" value="">
@@ -28,9 +29,9 @@ FROM public.tipo_medicamento;")->queryAll();
         <input id="idmedi-update" type="hidden" value="">
 
         <div class="col-sm-6">
-            <label for="presentacion">Medicamento</label>
+            <label for="presentacion">Presentación</label>
             <select class="form-control" name="presentacion" id="presentacion-update">
-                <option>Seleccionar</option>
+                <option>Seleccione</option>
                 <?php foreach ($presentaciones as $presentaciones): ?>
                     <option value="<?= $presentaciones['idtipo'] ?>"><?= $presentaciones['descripcion'] ?></option>
                 <?php endforeach; ?>

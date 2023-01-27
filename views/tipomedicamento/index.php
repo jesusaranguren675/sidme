@@ -114,7 +114,14 @@ $rol     = $roles['nombre_rol'];
     }
     //Fin Modificar Modal Modificar Presentaciones
     //--------------------------------------------
+
 </script>
+
+<style>
+    .modal-header .close {
+        display: none;
+    }
+</style>
 
 <div class="card shadow mb-4">
     <div class="container-fluid">
@@ -270,6 +277,11 @@ $script = <<< JS
               '',
               'success'
               );
+              const myInterval = setInterval(myTimer, 2000);
+
+                function myTimer() {
+                location.reload();
+                }
           }
           else
           {
@@ -349,6 +361,11 @@ $script = <<< JS
                 '',
                 'success'
                 );
+                const myInterval = setInterval(myTimer, 2000);
+
+                function myTimer() {
+                location.reload();
+                }
             }
             else
             {
