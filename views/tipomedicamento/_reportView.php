@@ -46,7 +46,7 @@ use yii\helpers\Html;
 <table id="table_reportes" class="table table-bordered table-hover table-striped table_reportes">
 	<tr>
 		<th>N°</th>
-		<th>Descripción</th>
+		<th>Presentación</th>
 	</tr>
 	<?php
     $contador = 1;
@@ -54,7 +54,7 @@ use yii\helpers\Html;
 	{
 		
 		?>
-        <tr>
+        <tr width="50">
             <td><?= $contador ?></td>
             <td><?= $presentaciones['descripcion'] ?></td>
         </tr>

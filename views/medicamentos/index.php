@@ -151,7 +151,7 @@ $rol     = $roles['nombre_rol'];
     {
         
     }
-    else if($rol == 'Administrador')
+    else if($rol == 'Administrador' || $rol == 'Coordinador')
     {
         ?>
         <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#medicamento">
@@ -168,7 +168,7 @@ $rol     = $roles['nombre_rol'];
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>N°</th>
@@ -181,8 +181,8 @@ $rol     = $roles['nombre_rol'];
                     <?php foreach ($medicamentos as $medicamentos): ?>
                         <tr>
                             <td><?= $medicamentos['id_detalle_medi'] ?></td>
-                            <td><?= $medicamentos['nombre'] ?></td>
-                            <td><?= $medicamentos['descripcion'] ?></td>
+                            <td><?= ucwords($medicamentos['nombre']) ?></td>
+                            <td><?= ucwords($medicamentos['descripcion']) ?></td>
                             <td style="text-align: center;">
                                 <a onclick="view(<?= $medicamentos['id_detalle_medi']; ?>)" href="#" class="btn btn-primary btn-sm">
                                     <i class="far fa-eye"></i>
@@ -192,7 +192,7 @@ $rol     = $roles['nombre_rol'];
                                 {
 
                                 }
-                                else if($rol == 'Administrador')
+                                else if($rol == 'Administrador' || $rol == 'Coordinador')
                                 {
                                     ?>
                                     <a onclick="updateMe(<?= $medicamentos['id_detalle_medi']; ?>)" href="#" class="btn btn-primary btn-sm">
@@ -299,6 +299,12 @@ $script = <<< JS
               '',
               'success'
               );
+
+              const myInterval = setInterval(myTimer, 2000);
+
+                    function myTimer() {
+                        location.reload();
+                    }
           }
           else
           {
@@ -381,6 +387,12 @@ $.ajax({
         '',
         'success'
         );
+
+        const myInterval = setInterval(myTimer, 2000);
+
+                    function myTimer() {
+                        location.reload();
+                    }
     }
     else
     {

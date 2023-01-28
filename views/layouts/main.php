@@ -97,6 +97,55 @@ foreach ($roles as $role)
 
             <!-- Nav Item - Pages Collapse Menu -->
             <?php
+
+            if($rol == 'Coordinador')
+            {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventario"
+                        aria-expanded="true" aria-controls="collapseInventario">
+                        <i class="fas fa-capsules"></i>
+                        <span>Inventarios</span>
+                    </a>
+                    <div id="collapseInventario" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>"><i class="fas fa-capsules"></i> Recepción</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('almacengeneral/index'); ?>"><i class="fas fa-prescription-bottle"></i> Inventario</a>
+                        </div>
+                        
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
+                        aria-expanded="true" aria-controls="collapseMedicamentos">
+                        <i class="fas fa-capsules"></i>
+                        <span>Medicamentos</span>
+                    </a>
+                    <div id="collapseMedicamentos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= Url::toRoute('medicamentos/index'); ?>"><i class="fas fa-capsules"></i> Medicamento</a>
+                            <a class="collapse-item" href="<?= Url::toRoute('tipomedicamento/index'); ?>"><i class="fas fa-prescription-bottle"></i> Presentación</a>
+                        </div>
+                        
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
+                        <i class="fas fa-file-signature"></i>
+                        <span>Pedidos</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= Url::toRoute('distribucion/index'); ?>">
+                        <i class="fas fa-truck-loading"></i>
+                        <span>Distribución</span>
+                    </a>
+                </li>   
+                <?php
+            }
             
             
             if($rol == 'Administrador')
@@ -117,8 +166,6 @@ foreach ($roles as $role)
                     </div>
                 </li>
                    
-
-
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicamentos"
                         aria-expanded="true" aria-controls="collapseMedicamentos">
@@ -132,6 +179,53 @@ foreach ($roles as $role)
                         </div>
                         
                     </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
+                        <i class="fas fa-file-signature"></i>
+                        <span>Pedidos</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= Url::toRoute('distribucion/index'); ?>">
+                        <i class="fas fa-truck-loading"></i>
+                        <span>Distribución</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('sede/index'); ?>">
+                    <i class="fas fa-university"></i>
+                    <span>Sedes</span>
+                </a>
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    CONFIGURACIÓN
+                </div>
+                
+                <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRolesypermisos"
+                    aria-expanded="true" aria-controls="collapseRolesypermisos">
+                    <i class="fas fa-user-lock"></i>
+                    <span>Usuarios y Roles</span>
+                </a>
+                <div id="collapseRolesypermisos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="<?= Url::toRoute('user/index'); ?>"><i class="fas fa-users"></i> Usuarios</a>
+                        <a class="collapse-item" href="<?= Url::toRoute('roles/index'); ?>"><i class="fas fa-user-lock"></i> Roles</a>
+                        <!--
+                        <a class="collapse-item" href="<?= Url::toRoute('asignacionroles/index'); ?>"><i class="fas fa-people-arrows"></i> Asignaciones</a>
+                        -->
+                    </div>
+                    
+                </div>
                 </li>
                 <?php
             }
@@ -152,46 +246,6 @@ foreach ($roles as $role)
                         
                     </div>
                 </li>
-                <?php
-            }
-            ?>
-            
-            <!--
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('entradasmedicamentos/index'); ?>">
-                    <i class="fas fa-capsules"></i>
-                    <span>Recepción de Medicamentos</span>
-                </a>
-            </li>
-            -->
-
-            <!--
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('medicamentos/index'); ?>">
-                    <i class="fas fa-capsules"></i>
-                    <span>Medicamentos</span>
-                </a>
-            </li>
-            -->
-
-            <!--
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDistribucion"
-                    aria-expanded="true" aria-controls="collapseDistribucion">
-                    <i class="fas fa-capsules"></i>
-                    <span>Distribución</span>
-                </a>
-                <div id="collapseDistribucion" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= Url::toRoute('almacengeneral/index'); ?>"><i class="fas fa-warehouse"></i> Inventario</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('pedidos/index'); ?>"><i class="fas fa-file-signature"></i> Pedidos</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('distribucion/index'); ?>"><i class="fas fa-truck-loading"></i> Distribución</a>
-                    </div>
-                    
-                </div>
-            </li>
-            -->
-
 
                 <li class="nav-item">
                     <a class="nav-link" href="<?= Url::toRoute('pedidos/index'); ?>">
@@ -200,58 +254,24 @@ foreach ($roles as $role)
                     </a>
                 </li>
 
-   
-        
-            <li class="nav-item">
-                <a class="nav-link" href="<?= Url::toRoute('distribucion/index'); ?>">
-                    <i class="fas fa-truck-loading"></i>
-                    <span>Distribución</span>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= Url::toRoute('distribucion/index'); ?>">
+                        <i class="fas fa-truck-loading"></i>
+                        <span>Distribución</span>
+                    </a>
+                </li>
 
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                CONFIGURACIÓN
-            </div>
-
-            <li class="nav-item">
+                <li class="nav-item">
                 <a class="nav-link" href="<?= Url::toRoute('sede/index'); ?>">
                     <i class="fas fa-university"></i>
                     <span>Sedes</span>
                 </a>
-            </li>
-
-            <?php
-            if($rol == 'Empleado')
-            {
-                
-            }
-            else if($rol == 'Administrador')
-            {
-                ?>
-                <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRolesypermisos"
-                    aria-expanded="true" aria-controls="collapseRolesypermisos">
-                    <i class="fas fa-user-lock"></i>
-                    <span>Usuarios y Roles</span>
-                </a>
-                <div id="collapseRolesypermisos" class="collapse" aria-labelledby="headingFarmacia" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="<?= Url::toRoute('user/index'); ?>"><i class="fas fa-users"></i> Usuarios</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('roles/index'); ?>"><i class="fas fa-user-lock"></i> Roles</a>
-                        <a class="collapse-item" href="<?= Url::toRoute('asignacionroles/index'); ?>"><i class="fas fa-people-arrows"></i> Asignaciones</a>
-                    </div>
-                    
-                </div>
                 </li>
                 <?php
             }
             ?>
-            
+    
+
             <!-- Nav Item - Pages Collapse Menu -->
             <!--
             <li class="nav-item">
@@ -306,6 +326,7 @@ foreach ($roles as $role)
                     </button>
 
                     <!-- Topbar Search -->
+                    <!--
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
@@ -318,6 +339,7 @@ foreach ($roles as $role)
                             </div>
                         </div>
                     </form>
+                    -->
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -368,6 +390,7 @@ foreach ($roles as $role)
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
+                                <!--
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
@@ -381,6 +404,7 @@ foreach ($roles as $role)
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
+                                -->
 
 
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -418,13 +442,14 @@ foreach ($roles as $role)
             <!-- End of Main Content -->
 
             <!-- Footer -->
+            <!--
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; Your Website 2021</span>
                     </div>
                 </div>
-            </footer>
+            </footer>-->
             <!-- End of Footer -->
 
         </div>
@@ -467,6 +492,7 @@ foreach ($roles as $role)
 $this->endBody() 
 
 ?>
+
 </body>
 </html>
 <?php $this->endPage() ?>

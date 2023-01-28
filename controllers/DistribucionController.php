@@ -351,6 +351,8 @@ class DistribucionController extends Controller
             $mes                    = date('m');
             $anio                   = date('y');
 
+            //var_dump($_POST); die();
+
             $consulta_destino = 
             Yii::$app->db->createCommand("SELECT sede.idsede from pedidos as pedidos
             join detalle_pedi
@@ -369,9 +371,13 @@ class DistribucionController extends Controller
             $val_multiples_medicamentos = 
             Yii::$app->db->createCommand("SELECT * FROM medicamentos_pedidos WHERE idpedi=$idpedi")->queryAll();
 
+            //var_dump($val_multiples_medicamentos); die();
+
             foreach ($val_multiples_medicamentos as $val_multiples_medicamentos) {
                 $idmedi_mltp         = $val_multiples_medicamentos['idmedi'];
                 $cantidad_mltp       = $val_multiples_medicamentos['cantidad'];
+
+
 
                 $consulta_almacen = 
                 Yii::$app->db->createCommand("SELECT almacen_general.idmedi, 
@@ -386,6 +392,8 @@ class DistribucionController extends Controller
                 ON tipo_medicamento.idtipo=detalle_medi.idtipo
                 WHERE almacen_general.idmedi=$idmedi_mltp")->queryAll();
 
+                //var_dump($consulta_almacen); die();
+
 
                 foreach ($consulta_almacen as $consulta_almacen)
                 {
@@ -394,11 +402,11 @@ class DistribucionController extends Controller
                     $nombre_pre     = $consulta_almacen['presentacion'];
                 }
                 
-                if($consulta_almacen == true)
+                if($consulta_almacen = true)
                 {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-                    if($unidades < $cantidad_mltp )
+                    if($unidades < $cantidad_mltp)
                     {
                         return [
                             'data' => [
@@ -454,6 +462,8 @@ class DistribucionController extends Controller
                 JOIN tipo_medicamento AS tipo_medicamento
                 ON tipo_medicamento.idtipo=detalle_medi.idtipo
                 WHERE almacen_general.idmedi=$idmedi_mltp")->queryAll();
+
+                //var_dump($consulta_almacen); die();
 
                 foreach ($consulta_almacen as $consulta_almacen)
                 {
@@ -560,8 +570,9 @@ class DistribucionController extends Controller
             {
                 return [
                     'data' => [
-                        'success' => true,
-                        'message' => 'Distribución Realizada.',
+                        'success'       => true,
+                        'message'       => 'Distribución Realizada.',
+                        'correlativo'   => $correlativo,
                     ],
                     'code' => 1,
                 ];

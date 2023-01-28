@@ -990,7 +990,7 @@ $("#distribuir_pedido").click(function(event) {
             document.querySelector(".preloader").style.display = 'none';
             Swal.fire(
             response.data.message,
-            'El N° de entrega es '+ response.data.correlativo +'',
+            'La entrega se registro con el N° '+ response.data.correlativo +'',
             'success'
             );
 

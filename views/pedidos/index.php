@@ -318,7 +318,7 @@ $rol     = $roles['nombre_rol'];
                             <td><?= ucwords($pedidos['descripcion']) ?></td>
                             <!--<td width="100"><?= $pedidos['nombre'] ?></td>-->
                             <!--<td><?= $pedidos['presentacion'] ?></td>-->
-                            <td width="100"><?= $pedidos['procedencia'] ?></td>
+                            <td><?= $pedidos['procedencia'] ?></td>
                             <!--
                             <td style="text-align: center;">
                                 <button class="btn btn-success btn-sm">
@@ -373,7 +373,7 @@ $rol     = $roles['nombre_rol'];
                                    {
                                        
                                    }
-                                   else if($rol == 'Administrador')
+                                   else if($rol == 'Administrador' || $rol == 'Coordinador')
                                    {
                                         if($pedidos['estatus'] === 4 || $pedidos['estatus'] === 3)
                                         {
@@ -602,7 +602,7 @@ $(document).ready(function() {
               document.querySelector(".preloader").style.display = 'none';
               Swal.fire(
               response.data.message,
-              'El pedido se registro con el N° de Orden '+ response.data.id_orden +'',
+              'El pedido se registro con el N° de Orden ' + response.data.id_orden + '',
               'success'
               );
 
@@ -705,6 +705,12 @@ $(document).ready(function() {
                 '',
                 'success'
                 );
+
+                const myInterval = setInterval(myTimer, 2000);
+
+                function myTimer() {
+                location.reload();
+                }
             }
             else
             {

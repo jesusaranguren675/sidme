@@ -299,6 +299,12 @@ $script = <<< JS
                     'success'
                     )
 
+                    const myInterval = setInterval(myTimer, 2000);
+
+                    function myTimer() {
+                        location.reload();
+                    }
+
                 }
                 else
                 {

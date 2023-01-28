@@ -130,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>N°</th>
@@ -142,17 +142,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <th style="text-align: center;">Acciones</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>N°</th>
-                        <th>Usuario</th>
-                        <th>Correo</th>
-                        <th>Rol</th>
-                        <th>Estatus</th>
-                        <th>Fecha</th>
-                        <th style="text-align: center;">Acciones</th>
-                    </tr>
-                </tfoot>
                 <tbody>
                     <?php foreach ($usuarios as $usuarios): ?>
                         <tr>

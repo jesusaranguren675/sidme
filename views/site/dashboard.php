@@ -47,18 +47,17 @@ $this->title = 'Panel';
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"></h1>
+                        <!--
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Reporte Diario</a>
+                                class="fas fa-download fa-sm text-white-50"></i> Reporte Diario</a>-->
                     </div>
 
                     <!-- Content Row -->
                     <div class="row">
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <?php  
-                        if(accesoRol('Administrador'))
-                        {
-                            ?>
+                        
+                            
                             <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
@@ -75,9 +74,7 @@ $this->title = 'Panel';
                                 </div>
                             </div>
                         </div>
-                            <?php
-                        }
-                        ?>
+                          
                     
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -140,12 +137,13 @@ $this->title = 'Panel';
                     <div class="row">
 
                         <!-- Area Chart -->
+                        
                         <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
+     
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Distribución Anual</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Distribución Mensual</h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -161,19 +159,21 @@ $this->title = 'Panel';
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Card Body -->
+ 
                                 <div class="card-body">
                                     <div class="chart-area">
                                         <canvas id="myAreaChart"></canvas>
+                  
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    
 
                         <!-- Pie Chart -->
+                        
                         <div class="col-xl-4 col-lg-5">
                             <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Medicamentos Mas Distribuidos</h6>
@@ -192,7 +192,7 @@ $this->title = 'Panel';
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Card Body -->
+
                                 <div class="card-body">
                                     <div class="chart-pie pt-4 pb-2">
                                         <canvas id="myPieChart"></canvas>
@@ -212,6 +212,7 @@ $this->title = 'Panel';
                             </div>
                         </div>
                     </div>
+                    
 
                     <!-- Content Row -->
                     <div class="row">
