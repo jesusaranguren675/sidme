@@ -367,7 +367,7 @@ class DistribucionController extends Controller
             /* REGISTRAR DISTRIBUCIÓN */
 
             $val_multiples_medicamentos = 
-            Yii::$app->db->createCommand("SELECT * FROM medicamentos_pedidos")->queryAll();
+            Yii::$app->db->createCommand("SELECT * FROM medicamentos_pedidos WHERE idpedi=$idpedi")->queryAll();
 
             foreach ($val_multiples_medicamentos as $val_multiples_medicamentos) {
                 $idmedi_mltp         = $val_multiples_medicamentos['idmedi'];
@@ -385,6 +385,7 @@ class DistribucionController extends Controller
                 JOIN tipo_medicamento AS tipo_medicamento
                 ON tipo_medicamento.idtipo=detalle_medi.idtipo
                 WHERE almacen_general.idmedi=$idmedi_mltp")->queryAll();
+
 
                 foreach ($consulta_almacen as $consulta_almacen)
                 {

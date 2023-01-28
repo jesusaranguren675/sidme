@@ -162,7 +162,7 @@ $rol     = $roles['nombre_rol'];
                     <?php foreach ($presentaciones as $presentaciones): ?>
                         <tr>
                             <td><?= $contador ?></td>
-                            <td><?= $presentaciones['descripcion'] ?></td>
+                            <td><?= ucwords($presentaciones['descripcion']) ?></td>
                             <td style="text-align: center;">
                                 <a onclick="view(<?php echo $presentaciones['idtipo']; ?>)" id="view_<?php echo $presentaciones['idtipo']; ?>"
                                    data-idpedi="<?php echo $presentaciones['idtipo']; ?>" 

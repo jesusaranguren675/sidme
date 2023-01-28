@@ -134,7 +134,7 @@ class TipomedicamentoController extends Controller
     {
         if (Yii::$app->request->isAjax) 
         {
-            $descripcion            = $_POST['descripcion'];
+            $descripcion            = strtolower($_POST['descripcion']);
 
             /* VALIDACIÓN */
             $consulta_pre = 
