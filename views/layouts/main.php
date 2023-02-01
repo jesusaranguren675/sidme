@@ -144,6 +144,13 @@ foreach ($roles as $role)
                         <span>Distribución</span>
                     </a>
                 </li>   
+
+                <li class="nav-item">
+                <a class="nav-link" href="<?= Url::toRoute('sede/index'); ?>">
+                    <i class="fas fa-university"></i>
+                    <span>Sedes</span>
+                </a>
+                </li>
                 <?php
             }
             
